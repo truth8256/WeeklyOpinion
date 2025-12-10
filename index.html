@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터 프레젠테이션 슬라이드 (총 4페이지)</title>
+    <title>데이터 프레젠테이션 슬라이드 (총 5페이지)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <style>
@@ -57,7 +57,7 @@
         .slide-navigator {
             position: absolute;
             bottom: -40px; 
-            right: 0;      
+            right: 0;     
             display: flex;
             align-items: center;
             gap: 10px;
@@ -152,8 +152,6 @@
             height: 100%;
         }
         
-        /* ⭐️ 푸터 스타일 제거 */
-
     </style>
 </head>
 <body>
@@ -162,33 +160,27 @@
         
         <div class="slide-navigator">
             <button id="nav-prev" class="nav-arrow" onclick="navigateSlides(-1)" disabled>&lt;</button>
-            <span id="page-indicator">1 / 4</span>
+            <span id="page-indicator">1 / 5</span>
             <button id="nav-next" class="nav-arrow" onclick="navigateSlides(1)">&gt;</button>
         </div>
 
-        <div class="presentation-wrapper">
-            <div id="weekly-trend-slide" class="slide-container">
-                <div class="header">
-                    <div id="weekly-trend-title" class="title">대통령 직무 수행 평가 추이 (갤럽)</div>
-                    <div class="subtitle">기간: 주간 단위 | 자료: 갤럽/리얼미터</div>
-                </div>
-
-                <div id="weekly-trend-controls" class="controls">
-                    <button class="btn active" data-mode="gallup" onclick="updateWeeklyTrendView('gallup', this)">갤럽</button>
-                    <button class="btn" data-mode="realmeter" onclick="updateWeeklyTrendView('realmeter', this)">리얼미터</button>
-                </div>
-
-                <div class="chart-wrapper">
-                    <canvas id="weeklyTrendChart"></canvas>
-                </div>
-            </div>
-            
-            <div id="pres-slide-full" class="slide-container hidden">
-                </div>
-            
+        <div id="weekly-trend-slide" class="slide-container">
+            <div class="header">
+                <div id="weekly-trend-title" class="title">대통령 직무 수행 평가 추이 (갤럽)</div>
+                <div class="subtitle">기간: 주간 단위 | 자료: 갤럽/리얼미터</div>
             </div>
 
-        <div id="pres-slide-full" class="slide-container">
+            <div id="weekly-trend-controls" class="controls">
+                <button class="btn active" data-mode="gallup" onclick="updateWeeklyTrendView('gallup', this)">갤럽</button>
+                <button class="btn" data-mode="realmeter" onclick="updateWeeklyTrendView('realmeter', this)">리얼미터</button>
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="weeklyTrendChart"></canvas>
+            </div>
+        </div>
+
+        <div id="pres-slide-full" class="slide-container hidden">
             <div class="header">
                 <div class="title">대통령 직무 수행 평가 추이 (월별 통합)</div>
                 <div class="subtitle">기간: 2025년 7월 ~ 11월 | 자료: 한국갤럽</div>
@@ -199,7 +191,6 @@
             <div class="chart-wrapper">
                 <canvas id="presChartFull"></canvas>
             </div>
-
         </div>
 
         <div id="party-slide-full" class="slide-container hidden">
@@ -213,7 +204,6 @@
             <div class="chart-wrapper">
                 <canvas id="partyChartFull"></canvas>
             </div>
-
         </div>
 
         <div id="pres-slide" class="slide-container hidden">
@@ -223,11 +213,11 @@
             </div>
 
             <div id="pres-controls" class="controls">
-                <button class="btn active" onclick="updatePresView('total', this)">전체 보기</button>
-                <button class="btn" onclick="updatePresView('gender', this)">성별</button>
-                <button class="btn" onclick="updatePresView('age', this)">연령별</button>
-                <button class="btn" onclick="updatePresView('region_main', this)">주요 지역별</button>
-                <button class="btn" onclick="updatePresView('gender_age_2030', this)">성/연령별 (2030)</button>
+                <button class="btn active" data-mode="total" onclick="updatePresView('total', this)">전체 보기</button>
+                <button class="btn" data-mode="gender" onclick="updatePresView('gender', this)">성별</button>
+                <button class="btn" data-mode="age" onclick="updatePresView('age', this)">연령별</button>
+                <button class="btn" data-mode="region_main" onclick="updatePresView('region_main', this)">주요 지역별</button>
+                <button class="btn" data-mode="gender_age_2030" onclick="updatePresView('gender_age_2030', this)">성/연령별 (2030)</button>
             </div>
 
             <div class="chart-wrapper">
@@ -249,7 +239,6 @@
             <div class="chart-wrapper">
                 <canvas id="partyChart"></canvas>
             </div>
-
         </div>
 
     </div>
@@ -261,17 +250,19 @@
         const labelsPartial = ['9월', '10월', '11월'];
         
         // --- 차트 데이터 및 객체 ---
-        let presChartFull = null; // 월간 국정수행평가 차트
-        let partyChartFull = null; // 월간 정당지지율 차트
-        let presChart = null; // 갤럽 월별통합 국정수행평가 차트
-        let partyChart = null; // 갤럽 월별통합 정당지지율 차트
-        let weeklyTrendChart = null; // 주간 국정수행평가 차트
-        let weeklyTrendData = {};    // 주간 국정수행평가 데이터
+        let presChartFull = null; 
+        let partyChartFull = null; 
+        let presChart = null; 
+        let partyChart = null; 
+        
+        // ⭐️ 새로운 변수 추가
+        let weeklyTrendChart = null; // 주간 국정수행평가 차트 객체
+        let weeklyTrendData = {};    // 주간 국정수행평가 데이터 저장소
         
         const pres_controls = document.getElementById('pres-controls');
         
-        // ⭐️ 슬라이드 순서 및 상태 관리 (총 4개)
-        const slideOrder = ['weekly-trend-slide','pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide'];
+        // ⭐️ 슬라이드 순서 및 상태 관리 (총 5개로 증가)
+        const slideOrder = ['weekly-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide'];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
         const navPrev = document.getElementById('nav-prev');
@@ -279,14 +270,14 @@
 
 
         // ===========================================================
-        // ⭐️ NEW 1, 2 페이지 데이터 (7월~11월, 5개월 추이) - 수정 반영됨
+        // 2, 3 페이지 데이터 (7월~11월, 5개월 추이)
         // ===========================================================
 
-        // [1페이지: 직무 평가 전체 데이터 - 긍정/부정]
+        // [2페이지: 직무 평가 전체 데이터 - 긍정/부정]
         const pres_data_Full = [
             { 
                 label: '긍정 평가', 
-                data: [64, 58, 59, 56, 60], // 7월, 8월(New), 9월, 10월, 11월
+                data: [64, 58, 59, 56, 60], // 7월, 8월, 9월, 10월, 11월
                 borderColor: '#0056b3',
                 backgroundColor: '#0056b3',
                 borderWidth: 3,
@@ -297,7 +288,7 @@
             },
             {
                 label: '부정 평가',
-                data: [23, 32, 32, 34, 30], // 7월, 8월(New), 9월, 10월, 11월
+                data: [23, 32, 32, 34, 30], // 7월, 8월, 9월, 10월, 11월
                 borderColor: '#C9151E',
                 backgroundColor: '#C9151E',
                 borderWidth: 3,
@@ -308,33 +299,25 @@
             }
         ];
 
-        // [2페이지: 정당 지지율 데이터 - 7월 포함, 수정된 값]
+        // [3페이지: 정당 지지율 데이터 - 7월 포함]
         const partyData_Full = [
-            // 7월: 45% (수정됨)
             { label: '민주당', data: [45, 43, 40, 41, 42], borderColor: '#0056b3', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 }, 
-            // 7월: 20% (수정됨)
             { label: '국민의힘', data: [20, 23, 24, 25, 25], borderColor: '#C9151E', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 }, 
-            // 7월: 25% (수정됨)
             { label: '무당층', data: [25, 25, 27, 26, 26], borderColor: '#666666', borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 } 
         ];
 
-        // ===========================================================
-        // 3, 4 페이지 데이터 (9월~11월, 3개월 추이)
-        // ===========================================================
-
-        // [3페이지: 직무 평가 세부 카테고리 (9~11월)]
+        // ... (4, 5페이지 데이터는 그대로 유지) ...
         const pres_totalData_Partial = {
-            label: '직무 평가 전체',
-            data: [59, 56, 60], // 9월, 10월, 11월 (긍정 평가만 표시)
-            borderColor: '#000000',
-            backgroundColor: '#000000',
-            borderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0,
-            order: 1
+             label: '직무 평가 전체',
+             data: [59, 56, 60], // 9월, 10월, 11월 (긍정 평가만 표시)
+             borderColor: '#000000',
+             backgroundColor: '#000000',
+             borderWidth: 2,
+             pointRadius: 5,
+             pointHoverRadius: 7,
+             tension: 0,
+             order: 1
         };
-        
         const pres_categories_Partial = {
             'total': [],
             'gender': [
@@ -363,8 +346,6 @@
                 { label: '여성 30대', data: [74, 55, 63], borderColor: '#e67e22', borderWidth: 2 }
             ]
         };
-        
-        // [4페이지: 정당 지지율 (9~11월)]
         const partyData_Partial = [
             { label: '민주당', data: [40, 41, 42], borderColor: '#0056b3', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
             { label: '국민의힘', data: [24, 25, 25], borderColor: '#C9151E', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
@@ -372,10 +353,9 @@
         ];
 
         // -----------------------------------------------------------
-        // ⭐️ [새로운 코드 시작 지점 A] 새로운 파싱 로직 및 로드 함수
+        // ⭐️ 1페이지 주간 데이터 로직 (parse, load)
         // -----------------------------------------------------------
 
-        // CSV 텍스트를 Chart.js 데이터셋 구조로 변환하는 함수
         function parseCombinedCSV(csvText) {
             const lines = csvText.trim().split('\n');
             const headers = lines[0].split(',');
@@ -397,11 +377,9 @@
                     gallupData.bad.push(parseInt(values[5].trim()));
                 }
             }
-
             return { labels, gallupData, realmeterData };
         }
 
-        // 주간 추이 CSV 파일을 불러오는 함수
         function loadWeeklyTrendChart() {
             const DATA_URL = './data/presidential_approval_real_gal.csv'; 
 
@@ -423,7 +401,9 @@
                 });
         }
 
+        // -----------------------------------------------------------
         // ⭐️ 차트 초기화 함수 (재사용)
+        // -----------------------------------------------------------
         function initChart(canvasId, labels, initialDatasets, yMin, yMax) {
             const ctx = document.getElementById(canvasId).getContext('2d');
             
@@ -445,11 +425,9 @@
             if (useDataLabels) {
                 plugins.datalabels = {
                     align: function(context) {
-                        // '국민의힘' 데이터셋일 경우 'bottom' 정렬
                         if (context.dataset.label === '국민의힘') {
                             return 'bottom';
                         }
-                        // 그 외 데이터셋 (긍정 평가, 부정 평가, 민주당, 무당층)은 'top' 정렬
                         return 'top';
                     },
                     font: {
@@ -471,7 +449,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
-                    layout: { padding: { left: 10, right: 20, top: useDataLabels ? 20 : 10 } }, // 데이터 레이블 공간 확보
+                    layout: { padding: { left: 10, right: 20, top: useDataLabels ? 20 : 10 } },
                     plugins: plugins,
                     scales: {
                         y: {
@@ -490,18 +468,17 @@
                         line: { tension: 0 }
                     }
                 },
-                // 플러그인 등록 (1, 2 페이지에만 적용되도록 옵션에서 분리)
                 plugins: useDataLabels ? [ChartDataLabels] : []
             });
         }
         
         // -----------------------------------------------------------
-        // ⭐️ [새로운 코드 시작 지점 B] 차트 전환 함수
+        // ⭐️ 1페이지: 주간 차트 데이터 업데이트 (버튼 클릭 시)
         // -----------------------------------------------------------
-
         function updateWeeklyTrendView(mode, btnElement) {
             if (!weeklyTrendData.labels) return; 
 
+            // 버튼 활성화 상태 업데이트
             document.querySelectorAll('#weekly-trend-controls .btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
@@ -510,6 +487,7 @@
             const isGallup = mode === 'gallup';
             const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
 
+            // 제목 업데이트
             document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
 
             const newDatasets = [
@@ -532,15 +510,20 @@
             ];
 
             if (!weeklyTrendChart) {
+                // 첫 렌더링 시 차트 초기화 (Y축 범위 0~80)
                 weeklyTrendChart = initChart('weeklyTrendChart', weeklyTrendData.labels, newDatasets, 0, 80);
             } else {
+                // 데이터 업데이트
                 weeklyTrendChart.data.labels = weeklyTrendData.labels;
                 weeklyTrendChart.data.datasets = newDatasets;
                 weeklyTrendChart.update();
             }
         }
 
-        // ⭐️ 슬라이드 전환 및 표시 업데이트 (이하 동일)
+
+        // -----------------------------------------------------------
+        // ⭐️ 슬라이드 전환 및 표시 업데이트 (핵심 수정)
+        // -----------------------------------------------------------
         function updateSlideDisplay(index) {
             document.querySelectorAll('.slide-container').forEach(slide => {
                 slide.classList.add('hidden');
@@ -549,6 +532,7 @@
             const slideId = slideOrder[index];
             document.getElementById(slideId).classList.remove('hidden');
 
+            // 페이지 인디케이터 업데이트 (슬라이드가 5개이므로 slideOrder.length 사용)
             pageIndicator.textContent = `${index + 1} / ${slideOrder.length}`;
 
             navPrev.disabled = (index === 0);
@@ -556,23 +540,32 @@
 
             // 차트 렌더링
             switch(slideId) {
+                case 'weekly-trend-slide': // ⭐️ 1페이지: 주간 차트
+                    if (weeklyTrendData.labels) {
+                        const currentMode = document.querySelector('#weekly-trend-controls .btn.active').dataset.mode;
+                        updateWeeklyTrendView(currentMode, document.querySelector('#weekly-trend-controls .btn.active'));
+                    } else {
+                        // 데이터 로드 요청 (최초 진입 시)
+                        loadWeeklyTrendChart();
+                    }
+                    break;
                 case 'pres-slide-full':
-                    // 1페이지 (7~11월 긍정/부정)
-                    if (!presChartFull) presChartFull = initChart('presChartFull', labelsFull, pres_data_Full, 0, 90); // Y축 범위 0~90
+                    // 2페이지 (7~11월 긍정/부정)
+                    if (!presChartFull) presChartFull = initChart('presChartFull', labelsFull, pres_data_Full, 0, 90);
                     else presChartFull.update();
                     break;
                 case 'party-slide-full':
-                    // 2페이지 (7~11월 정당 지지율)
+                    // 3페이지 (7~11월 정당 지지율)
                     if (!partyChartFull) partyChartFull = initChart('partyChartFull', labelsFull, partyData_Full, 0, 50);
                     else partyChartFull.update();
                     break;
                 case 'pres-slide':
-                    // 3페이지 (9~11월 직무 평가 세부)
+                    // 4페이지 (9~11월 직무 평가 세부)
                     const currentActiveBtn = pres_controls.querySelector('.btn.active');
                     updatePresView(currentActiveBtn ? currentActiveBtn.dataset.mode || 'total' : 'total', currentActiveBtn);
                     break;
                 case 'party-slide':
-                    // 4페이지 (9~11월 정당 지지율)
+                    // 5페이지 (9~11월 정당 지지율)
                     if (!partyChart) partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50);
                     else partyChart.update();
                     break;
@@ -589,15 +582,14 @@
             }
         }
         
-        // 3페이지: 직무 평가 차트 데이터 업데이트 (카테고리 버튼 클릭 시)
+        // 4페이지: 직무 평가 차트 데이터 업데이트 (카테고리 버튼 클릭 시)
         function updatePresView(mode, btnElement) {
             pres_controls.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
             if(btnElement) {
                 btnElement.classList.add('active');
-                btnElement.dataset.mode = mode; // 모드를 버튼에 저장
+                btnElement.dataset.mode = mode;
             }
 
-            // 3페이지는 긍정 평가 '전체' 또는 '전체' + '세부 카테고리'를 보여줌
             const newDatasets = [pres_totalData_Partial]; 
 
             if (pres_categories_Partial[mode]) {
