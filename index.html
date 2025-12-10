@@ -403,4 +403,221 @@
 
         // -----------------------------------------------------------
         // ⭐️ 차트 초기화 함수 (재사용)
-        //
+        // -----------------------------------------------------------
+        function initChart(canvasId, labels, initialDatasets, yMin, yMax) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // 1, 2 페이지에만 Data Labels 플러그인 적용
+            const useDataLabels = (canvasId === 'presChartFull' || canvasId === 'partyChartFull');
+            
+            const plugins = {
+                legend: { position: 'right', align: 'start', labels: { usePointStyle: true, boxWidth: 8, padding: 15 } },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + '%';
+                        }
+                    }
+                }
+            };
+
+            // Data Labels 플러그인 설정
+            if (useDataLabels) {
+                plugins.datalabels = {
+                    align: function(context) {
+                        if (context.dataset.label === '국민의힘') {
+                            return 'bottom';
+                        }
+                        return 'top';
+                    },
+                    font: {
+                        size: 12
+                    },
+                    formatter: function(value, context) {
+                        return value + '%';
+                    }
+                };
+            }
+
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: initialDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    layout: { padding: { left: 10, right: 20, top: useDataLabels ? 20 : 10 } },
+                    plugins: plugins,
+                    scales: {
+                        y: {
+                            min: yMin, 
+                            max: yMax, 
+                            grid: { color: '#e0e0e0', drawBorder: false },
+                            ticks: { stepSize: 10, font: { size: 11 } }
+                        },
+                        x: {
+                            offset: true,
+                            grid: { display: false },
+                            ticks: { font: { size: 12 } }
+                        }
+                    },
+                    elements: {
+                        line: { tension: 0 }
+                    }
+                },
+                plugins: useDataLabels ? [ChartDataLabels] : []
+            });
+        }
+        
+        // -----------------------------------------------------------
+        // ⭐️ 1페이지: 주간 차트 데이터 업데이트 (버튼 클릭 시)
+        // -----------------------------------------------------------
+        function updateWeeklyTrendView(mode, btnElement) {
+            if (!weeklyTrendData.labels) return; 
+
+            // 버튼 활성화 상태 업데이트
+            document.querySelectorAll('#weekly-trend-controls .btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            const isGallup = mode === 'gallup';
+            const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
+
+            // 제목 업데이트
+            document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
+
+            const newDatasets = [
+                {
+                    label: '잘하고 있다 (긍정)',
+                    data: source.good,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderWidth: 3,
+                    pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1
+                },
+                {
+                    label: '잘못하고 있다 (부정)',
+                    data: source.bad,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderWidth: 3,
+                    pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2
+                }
+            ];
+
+            if (!weeklyTrendChart) {
+                // 첫 렌더링 시 차트 초기화 (Y축 범위 0~80)
+                weeklyTrendChart = initChart('weeklyTrendChart', weeklyTrendData.labels, newDatasets, 0, 80);
+            } else {
+                // 데이터 업데이트
+                weeklyTrendChart.data.labels = weeklyTrendData.labels;
+                weeklyTrendChart.data.datasets = newDatasets;
+                weeklyTrendChart.update();
+            }
+        }
+
+
+        // -----------------------------------------------------------
+        // ⭐️ 슬라이드 전환 및 표시 업데이트 (핵심 수정)
+        // -----------------------------------------------------------
+        function updateSlideDisplay(index) {
+            document.querySelectorAll('.slide-container').forEach(slide => {
+                slide.classList.add('hidden');
+            });
+            
+            const slideId = slideOrder[index];
+            document.getElementById(slideId).classList.remove('hidden');
+
+            // 페이지 인디케이터 업데이트 (슬라이드가 5개이므로 slideOrder.length 사용)
+            pageIndicator.textContent = `${index + 1} / ${slideOrder.length}`;
+
+            navPrev.disabled = (index === 0);
+            navNext.disabled = (index === slideOrder.length - 1);
+
+            // 차트 렌더링
+            switch(slideId) {
+                case 'weekly-trend-slide': // ⭐️ 1페이지: 주간 차트
+                    if (weeklyTrendData.labels) {
+                        const currentMode = document.querySelector('#weekly-trend-controls .btn.active').dataset.mode;
+                        updateWeeklyTrendView(currentMode, document.querySelector('#weekly-trend-controls .btn.active'));
+                    } else {
+                        // 데이터 로드 요청 (최초 진입 시)
+                        loadWeeklyTrendChart();
+                    }
+                    break;
+                case 'pres-slide-full':
+                    // 2페이지 (7~11월 긍정/부정)
+                    if (!presChartFull) presChartFull = initChart('presChartFull', labelsFull, pres_data_Full, 0, 90);
+                    else presChartFull.update();
+                    break;
+                case 'party-slide-full':
+                    // 3페이지 (7~11월 정당 지지율)
+                    if (!partyChartFull) partyChartFull = initChart('partyChartFull', labelsFull, partyData_Full, 0, 50);
+                    else partyChartFull.update();
+                    break;
+                case 'pres-slide':
+                    // 4페이지 (9~11월 직무 평가 세부)
+                    const currentActiveBtn = pres_controls.querySelector('.btn.active');
+                    updatePresView(currentActiveBtn ? currentActiveBtn.dataset.mode || 'total' : 'total', currentActiveBtn);
+                    break;
+                case 'party-slide':
+                    // 5페이지 (9~11월 정당 지지율)
+                    if (!partyChart) partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50);
+                    else partyChart.update();
+                    break;
+            }
+        }
+
+        // ⭐️ 화살표를 통한 슬라이드 이동 함수
+        function navigateSlides(direction) {
+            let newIndex = currentSlideIndex + direction;
+
+            if (newIndex >= 0 && newIndex < slideOrder.length) {
+                currentSlideIndex = newIndex;
+                updateSlideDisplay(currentSlideIndex);
+            }
+        }
+        
+        // 4페이지: 직무 평가 차트 데이터 업데이트 (카테고리 버튼 클릭 시)
+        function updatePresView(mode, btnElement) {
+            pres_controls.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) {
+                btnElement.classList.add('active');
+                btnElement.dataset.mode = mode;
+            }
+
+            const newDatasets = [pres_totalData_Partial]; 
+
+            if (pres_categories_Partial[mode]) {
+                pres_categories_Partial[mode].forEach(ds => {
+                    newDatasets.push(Object.assign({}, ds, {
+                        tension: 0,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        order: 2
+                    }));
+                });
+            }
+            
+            if (!presChart) {
+                // 차트 초기화 (Y축 범위 20~90)
+                presChart = initChart('presChart', labelsPartial, newDatasets, 20, 90);
+            } else {
+                // 차트 데이터 업데이트
+                presChart.data.datasets = newDatasets;
+                presChart.update();
+            }
+        }
+
+        // 초기 로드 시 첫 번째 슬라이드 활성화
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSlideDisplay(currentSlideIndex);
+        });
+
+    </script>
+</body>
+</html>
