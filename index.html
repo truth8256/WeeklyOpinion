@@ -378,10 +378,10 @@
                 const values = lines[i].split(',');
                 if (values.length === headers.length) {
                     labels.push(values[0].trim()); // week (X축 라벨)
-                    
-                    // realmeter 데이터 (인덱스 1, 2)
-                    realmeterData.good.push(parseInt(values[1].trim()));
-                    realmeterData.bad.push(parseInt(values[2].trim()));
+                            
+                    // ⭐️ realmeter 데이터: parseFloat을 사용하여 소수점 유지!
+                    realmeterData.good.push(parseFloat(values[1].trim()));
+                    realmeterData.bad.push(parseFloat(values[2].trim()));
 
                     // gallup 데이터 (인덱스 4, 5)
                     gallupData.good.push(parseInt(values[4].trim()));
