@@ -244,17 +244,21 @@
     </div>
 
     <script>
-        // ⭐️ 1. 한글 폰트 전역 설정 (이전 요청사항)
-        Chart.defaults.font.family = 'Pretendard, sans-serif';
+        // -----------------------------------------------------------
+        // ⭐️ 전역 설정 및 상수 (색상 통일 적용)
+        // -----------------------------------------------------------
+        
+        // Chart.js 전역 폰트 설정 (한글 깨짐 방지 및 폰트 통일)
+        Chart.defaults.font.family = 'Pretendard', sans-serif';
         Chart.defaults.font.size = 12;
-    
-        // ⭐️ 2. 사용할 색상 정의
-        const POSITIVE_COLOR = '#0056b3'; // 파란색 (긍정)
-        const NEGATIVE_COLOR = '#C9151E'; // 빨간색 (부정)
-    
-        // ⭐️ 3. DataLabels 플러그인 등록 (사용하지 않았다면 필수)
-        Chart.register(ChartDataLabels);
-            
+        
+        // ⭐️ 사용할 색상 정의 (presChartFull 기준)
+        const POSITIVE_COLOR = '#0056b3'; // 파란색 (긍정, 민주당)
+        const NEGATIVE_COLOR = '#C9151E'; // 빨간색 (부정, 국민의힘)
+
+        // DataLabels 플러그인 등록
+        Chart.register(ChartDataLabels); 
+
         // 전체 기간 (7월, 8월, 9월, 10월, 11월)
         const labelsFull = ['7월', '8월', '9월', '10월', '11월'];
         // 기존 기간 (9월, 10월, 11월)
@@ -265,8 +269,6 @@
         let partyChartFull = null; 
         let presChart = null; 
         let partyChart = null; 
-        
-        // ⭐️ 새로운 변수 추가
         let weeklyTrendChart = null; // 주간 국정수행평가 차트 객체
         let weeklyTrendData = {};    // 주간 국정수행평가 데이터 저장소
         
@@ -281,7 +283,7 @@
 
 
         // ===========================================================
-        // 2, 3 페이지 데이터 (7월~11월, 5개월 추이)
+        // 2, 3 페이지 데이터 (7월~11월, 5개월 추이) - 색상 상수 적용 확인
         // ===========================================================
 
         // [2페이지: 직무 평가 전체 데이터 - 긍정/부정]
@@ -289,8 +291,8 @@
             { 
                 label: '긍정 평가', 
                 data: [64, 58, 59, 56, 60], // 7월, 8월, 9월, 10월, 11월
-                borderColor: '#0056b3',
-                backgroundColor: '#0056b3',
+                borderColor: POSITIVE_COLOR, // ⭐️ 통일된 색상 상수 적용
+                backgroundColor: POSITIVE_COLOR,
                 borderWidth: 3,
                 pointRadius: 6,
                 pointHoverRadius: 8,
@@ -300,8 +302,8 @@
             {
                 label: '부정 평가',
                 data: [23, 32, 32, 34, 30], // 7월, 8월, 9월, 10월, 11월
-                borderColor: '#C9151E',
-                backgroundColor: '#C9151E',
+                borderColor: NEGATIVE_COLOR, // ⭐️ 통일된 색상 상수 적용
+                backgroundColor: NEGATIVE_COLOR,
                 borderWidth: 3,
                 pointRadius: 6,
                 pointHoverRadius: 8,
@@ -310,10 +312,10 @@
             }
         ];
 
-        // [3페이지: 정당 지지율 데이터 - 7월 포함]
+        // [3페이지: 정당 지지율 데이터 - 7월 포함] - 색상 상수 적용 확인
         const partyData_Full = [
-            { label: '민주당', data: [45, 43, 40, 41, 42], borderColor: '#0056b3', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 }, 
-            { label: '국민의힘', data: [20, 23, 24, 25, 25], borderColor: '#C9151E', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 }, 
+            { label: '민주당', data: [45, 43, 40, 41, 42], borderColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 }, 
+            { label: '국민의힘', data: [20, 23, 24, 25, 25], borderColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 }, 
             { label: '무당층', data: [25, 25, 27, 26, 26], borderColor: '#666666', borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 } 
         ];
 
@@ -358,13 +360,13 @@
             ]
         };
         const partyData_Partial = [
-            { label: '민주당', data: [40, 41, 42], borderColor: '#0056b3', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
-            { label: '국민의힘', data: [24, 25, 25], borderColor: '#C9151E', borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
+            { label: '민주당', data: [40, 41, 42], borderColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
+            { label: '국민의힘', data: [24, 25, 25], borderColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
             { label: '무당층', data: [27, 26, 26], borderColor: '#666666', borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 }
         ];
 
         // -----------------------------------------------------------
-        // ⭐️ 1페이지 주간 데이터 로직 (parse, load)
+        // ⭐️ 1페이지 주간 데이터 로직 (parseCombinedCSV 수정: parseFloat 적용)
         // -----------------------------------------------------------
 
         function parseCombinedCSV(csvText) {
@@ -378,12 +380,12 @@
                 const values = lines[i].split(',');
                 if (values.length === headers.length) {
                     labels.push(values[0].trim()); // week (X축 라벨)
-                            
+                    
                     // ⭐️ realmeter 데이터: parseFloat을 사용하여 소수점 유지!
                     realmeterData.good.push(parseFloat(values[1].trim()));
                     realmeterData.bad.push(parseFloat(values[2].trim()));
 
-                    // gallup 데이터 (인덱스 4, 5)
+                    // gallup 데이터 (갤럽은 정수이므로 parseInt 유지)
                     gallupData.good.push(parseInt(values[4].trim()));
                     gallupData.bad.push(parseInt(values[5].trim()));
                 }
@@ -413,115 +415,108 @@
         }
 
         // -----------------------------------------------------------
-        // ⭐️ 차트 초기화 함수 (재사용)
+        // ⭐️ 차트 초기화 함수 (재사용) - 최종 수정 버전
         // -----------------------------------------------------------
         function initChart(canvasId, labels, initialDatasets, yMin, yMax) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                
-                // DataLabels 플러그인 적용 기준:
-                // 1. 주간 추이 차트 ('weeklyTrendChart')
-                // 2. 월별 통합 차트 ('presChartFull', 'partyChartFull')
-                const useDataLabels = (
-                    canvasId === 'weeklyTrendChart' || 
-                    canvasId === 'presChartFull' || 
-                    canvasId === 'partyChartFull'
-                );
-                
-                const plugins = {
-                    legend: { 
-                        position: 'right', 
-                        align: 'start', 
-                        labels: { 
-                            usePointStyle: true, 
-                            boxWidth: 8, 
-                            padding: 15 
-                        } 
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                // 소수점 한 자리까지 표시 (주간 데이터 고려)
-                                const value = context.parsed.y % 1 === 0 ? context.parsed.y : context.parsed.y.toFixed(1);
-                                return context.dataset.label + ': ' + value + '%';
-                            }
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // DataLabels 플러그인 적용 기준:
+            const useDataLabels = (
+                canvasId === 'weeklyTrendChart' || 
+                canvasId === 'presChartFull' || 
+                canvasId === 'partyChartFull'
+            );
+            
+            const plugins = {
+                legend: { 
+                    position: 'right', 
+                    align: 'start', 
+                    labels: { 
+                        usePointStyle: true, 
+                        boxWidth: 8, 
+                        padding: 15 
+                    } 
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            // 툴팁은 원래대로 소수점과 %를 포함하여 표시
+                            const value = context.parsed.y % 1 === 0 ? context.parsed.y : context.parsed.y.toFixed(1);
+                            return context.dataset.label + ': ' + value + '%';
                         }
                     }
-                };
-        
-                // Data Labels 플러그인 설정
-                if (useDataLabels) {
-                    plugins.datalabels = {
-                        display: true, // 레이블 표시
-                        color: '#333',
-                        font: {size: 11},
-                        // ⭐️ 포맷터: 소수점 처리
-                        formatter: function(value, context) {
-                            return value.toString();
-                        },
-                        // ⭐️ 위치 설정: 주간/통합 직무 평가 vs 정당 지지율
-                        align: function(context) {
-                            const label = context.dataset.label;
-                            
-                            // 1. 주간 차트 및 통합 직무 평가 (긍정/부정)
-                            if (canvasId === 'weeklyTrendChart' || canvasId === 'presChartFull') {
-                                // 긍정(파랑)은 위쪽 ('end')
-                                if (label.includes('긍정') || label.includes('잘하고')) { 
-                                    return 'end'; 
-                                }
-                                // 부정(빨강)은 아래쪽 ('start')
-                                if (label.includes('부정') || label.includes('잘못하고')) { 
-                                    return 'start'; 
-                                }
-                            }
-                            
-                            // 2. 정당 지지율 (국민의힘만 아래쪽)
-                            if (canvasId === 'partyChartFull' && label === '국민의힘') {
-                                return 'start'; // 아래쪽
-                            }
-                            
-                            // 기본값: 위쪽 (민주당, 무당층 등)
-                            return 'end';
-                        },
-                        offset: 5 // 데이터 포인트에서 5px 이격
-                    };
                 }
-        
-                return new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: initialDatasets
+            };
+
+            // Data Labels 플러그인 설정
+            if (useDataLabels) {
+                plugins.datalabels = {
+                    display: true, // 레이블 표시
+                    color: '#333',
+                    font: {
+                        size: 11,
+                        // weight: 'normal' (볼드체 제거)
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { mode: 'index', intersect: false },
-                        layout: { padding: { left: 10, right: 20, top: useDataLabels ? 25 : 10 } }, // DataLabel 시 상단 여백 추가
-                        plugins: plugins,
-                        scales: {
-                            y: {
-                                min: yMin, 
-                                max: yMax, 
-                                grid: { color: '#e0e0e0', drawBorder: false },
-                                ticks: { stepSize: 10, font: { size: 11 } }
-                            },
-                            x: {
-                                offset: true,
-                                grid: { display: false },
-                                ticks: { font: { size: 12 } }
-                            }
+                    // ⭐️ 포맷터: 값을 문자열로 변환하여 그대로 표시 (소수점 유지, % 제거)
+                    formatter: function(value, context) {
+                        return value.toString(); 
+                    },
+                    // 위치 설정 (기존 로직 유지)
+                    align: function(context) {
+                        const label = context.dataset.label;
+                        
+                        // 1. 주간 차트 및 통합 직무 평가 (긍정/부정)
+                        if (canvasId === 'weeklyTrendChart' || canvasId === 'presChartFull') {
+                            if (label.includes('긍정') || label.includes('잘하고')) { return 'end'; }
+                            if (label.includes('부정') || label.includes('잘못하고')) { return 'start'; }
+                        }
+                        
+                        // 2. 정당 지지율 (국민의힘만 아래쪽)
+                        if (canvasId === 'partyChartFull' && label === '국민의힘') {
+                            return 'start';
+                        }
+                        
+                        return 'end';
+                    },
+                    offset: 5 // 데이터 포인트에서 5px 이격
+                };
+            }
+
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: initialDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    layout: { padding: { left: 10, right: 20, top: useDataLabels ? 25 : 10 } },
+                    plugins: plugins,
+                    scales: {
+                        y: {
+                            min: yMin, 
+                            max: yMax, 
+                            grid: { color: '#e0e0e0', drawBorder: false },
+                            ticks: { stepSize: 10, font: { size: 11 } }
                         },
-                        elements: {
-                            line: { tension: 0 }
+                        x: {
+                            offset: true,
+                            grid: { display: false },
+                            ticks: { font: { size: 12 } }
                         }
                     },
-                    // DataLabels 플러그인을 plugins 배열에 추가
-                    plugins: useDataLabels ? [ChartDataLabels] : []
-                });
-            }
+                    elements: {
+                        line: { tension: 0 }
+                    }
+                },
+                plugins: useDataLabels ? [ChartDataLabels] : []
+            });
+        }
         
         // -----------------------------------------------------------
-        // ⭐️ 1페이지: 주간 차트 데이터 업데이트 (버튼 클릭 시)
+        // ⭐️ 1페이지: 주간 차트 데이터 업데이트 (색상 통일 적용)
         // -----------------------------------------------------------
         function updateWeeklyTrendView(mode, btnElement) {
             if (!weeklyTrendData.labels) return; 
@@ -539,25 +534,25 @@
             document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
 
             const newDatasets = [
-                        {
-                            label: '잘하고 있다 (긍정)',
-                            data: source.good,
-                            // ⭐️ 긍정은 POSITIVE_COLOR (파란색)
-                            borderColor: POSITIVE_COLOR,
-                            backgroundColor: POSITIVE_COLOR,
-                            borderWidth: 3,
-                            pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1
-                        },
-                        {
-                            label: '잘못하고 있다 (부정)',
-                            data: source.bad,
-                            // ⭐️ 부정은 NEGATIVE_COLOR (빨간색)
-                            borderColor: NEGATIVE_COLOR,
-                            backgroundColor: NEGATIVE_COLOR,
-                            borderWidth: 3,
-                            pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2
-                        }
-                    ];
+                {
+                    label: '잘하고 있다 (긍정)',
+                    data: source.good,
+                    // ⭐️ 긍정은 POSITIVE_COLOR (파란색) 적용
+                    borderColor: POSITIVE_COLOR, 
+                    backgroundColor: POSITIVE_COLOR,
+                    borderWidth: 3,
+                    pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1
+                },
+                {
+                    label: '잘못하고 있다 (부정)',
+                    data: source.bad,
+                    // ⭐️ 부정은 NEGATIVE_COLOR (빨간색) 적용
+                    borderColor: NEGATIVE_COLOR,
+                    backgroundColor: NEGATIVE_COLOR,
+                    borderWidth: 3,
+                    pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2
+                }
+            ];
 
             if (!weeklyTrendChart) {
                 // 첫 렌더링 시 차트 초기화 (Y축 범위 0~80)
@@ -640,6 +635,7 @@
                 btnElement.dataset.mode = mode;
             }
 
+            // ... (기존 updatePresView 로직 유지) ...
             const newDatasets = [pres_totalData_Partial]; 
 
             if (pres_categories_Partial[mode]) {
@@ -655,6 +651,7 @@
             
             if (!presChart) {
                 // 차트 초기화 (Y축 범위 20~90)
+                // 4페이지는 DataLabels 비활성 (initChart의 useDataLabels 조건으로 처리됨)
                 presChart = initChart('presChart', labelsPartial, newDatasets, 20, 90);
             } else {
                 // 차트 데이터 업데이트
