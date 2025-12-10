@@ -467,8 +467,8 @@
                         
                         // 1. 주간 차트 및 통합 직무 평가 (긍정/부정)
                         if (canvasId === 'weeklyTrendChart' || canvasId === 'presChartFull') {
-                            if (label.includes('긍정') || label.includes('잘하고')) { return 'end'; }
-                            if (label.includes('부정') || label.includes('잘못하고')) { return 'start'; }
+                            if (label.includes('긍정')) { return 'end'; }
+                            if (label.includes('부정')) { return 'start'; }
                         }
                         
                         // 2. 정당 지지율 (국민의힘만 아래쪽)
