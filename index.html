@@ -166,6 +166,28 @@
             <button id="nav-next" class="nav-arrow" onclick="navigateSlides(1)">&gt;</button>
         </div>
 
+        <div class="presentation-wrapper">
+            <div id="weekly-trend-slide" class="slide-container">
+                <div class="header">
+                    <div id="weekly-trend-title" class="title">대통령 직무 수행 평가 추이 (갤럽)</div>
+                    <div class="subtitle">기간: 주간 단위 | 자료: 갤럽/리얼미터</div>
+                </div>
+
+                <div id="weekly-trend-controls" class="controls">
+                    <button class="btn active" data-mode="gallup" onclick="updateWeeklyTrendView('gallup', this)">갤럽</button>
+                    <button class="btn" data-mode="realmeter" onclick="updateWeeklyTrendView('realmeter', this)">리얼미터</button>
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="weeklyTrendChart"></canvas>
+                </div>
+            </div>
+            
+            <div id="pres-slide-full" class="slide-container hidden">
+                </div>
+            
+            </div>
+
         <div id="pres-slide-full" class="slide-container">
             <div class="header">
                 <div class="title">대통령 직무 수행 평가 추이 (월별 통합)</div>
@@ -239,15 +261,17 @@
         const labelsPartial = ['9월', '10월', '11월'];
         
         // --- 차트 데이터 및 객체 ---
-        let presChartFull = null; // 1페이지 차트
-        let partyChartFull = null; // 2페이지 차트
-        let presChart = null; // 3페이지 차트
-        let partyChart = null; // 4페이지 차트
-
+        let presChartFull = null; // 월간 국정수행평가 차트
+        let partyChartFull = null; // 월간 정당지지율 차트
+        let presChart = null; // 갤럽 월별통합 국정수행평가 차트
+        let partyChart = null; // 갤럽 월별통합 정당지지율 차트
+        let weeklyTrendChart = null; // 주간 국정수행평가 차트
+        let weeklyTrendData = {};    // 주간 국정수행평가 데이터
+        
         const pres_controls = document.getElementById('pres-controls');
         
         // ⭐️ 슬라이드 순서 및 상태 관리 (총 4개)
-        const slideOrder = ['pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide'];
+        const slideOrder = ['weekly-trend-slide','pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide'];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
         const navPrev = document.getElementById('nav-prev');
@@ -347,6 +371,57 @@
             { label: '무당층', data: [27, 26, 26], borderColor: '#666666', borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 }
         ];
 
+        // -----------------------------------------------------------
+        // ⭐️ [새로운 코드 시작 지점 A] 새로운 파싱 로직 및 로드 함수
+        // -----------------------------------------------------------
+
+        // CSV 텍스트를 Chart.js 데이터셋 구조로 변환하는 함수
+        function parseCombinedCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',');
+            const labels = [];
+            const gallupData = { good: [], bad: [] };
+            const realmeterData = { good: [], bad: [] };
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length === headers.length) {
+                    labels.push(values[0].trim()); // week (X축 라벨)
+                    
+                    // realmeter 데이터 (인덱스 1, 2)
+                    realmeterData.good.push(parseInt(values[1].trim()));
+                    realmeterData.bad.push(parseInt(values[2].trim()));
+
+                    // gallup 데이터 (인덱스 4, 5)
+                    gallupData.good.push(parseInt(values[4].trim()));
+                    gallupData.bad.push(parseInt(values[5].trim()));
+                }
+            }
+
+            return { labels, gallupData, realmeterData };
+        }
+
+        // 주간 추이 CSV 파일을 불러오는 함수
+        function loadWeeklyTrendChart() {
+            const DATA_URL = './data/presidential_approval_real_gal.csv'; 
+
+            fetch(DATA_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('주간 추이 데이터 로드 실패: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    weeklyTrendData = parseCombinedCSV(csvText);
+                    
+                    // 초기 차트 (갤럽) 렌더링
+                    updateWeeklyTrendView('gallup', document.querySelector('#weekly-trend-controls .btn.active'));
+                })
+                .catch(error => {
+                    console.error("주간 추이 데이터 로드 오류:", error);
+                });
+        }
 
         // ⭐️ 차트 초기화 함수 (재사용)
         function initChart(canvasId, labels, initialDatasets, yMin, yMax) {
@@ -420,6 +495,51 @@
             });
         }
         
+        // -----------------------------------------------------------
+        // ⭐️ [새로운 코드 시작 지점 B] 차트 전환 함수
+        // -----------------------------------------------------------
+
+        function updateWeeklyTrendView(mode, btnElement) {
+            if (!weeklyTrendData.labels) return; 
+
+            document.querySelectorAll('#weekly-trend-controls .btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            const isGallup = mode === 'gallup';
+            const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
+
+            document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
+
+            const newDatasets = [
+                {
+                    label: '잘하고 있다 (긍정)',
+                    data: source.good,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderWidth: 3,
+                    pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1
+                },
+                {
+                    label: '잘못하고 있다 (부정)',
+                    data: source.bad,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderWidth: 3,
+                    pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2
+                }
+            ];
+
+            if (!weeklyTrendChart) {
+                weeklyTrendChart = initChart('weeklyTrendChart', weeklyTrendData.labels, newDatasets, 0, 80);
+            } else {
+                weeklyTrendChart.data.labels = weeklyTrendData.labels;
+                weeklyTrendChart.data.datasets = newDatasets;
+                weeklyTrendChart.update();
+            }
+        }
+
         // ⭐️ 슬라이드 전환 및 표시 업데이트 (이하 동일)
         function updateSlideDisplay(index) {
             document.querySelectorAll('.slide-container').forEach(slide => {
