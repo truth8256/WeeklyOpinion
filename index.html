@@ -644,34 +644,76 @@
         // ===========================================================
         function initChart(canvasId, labels, initialDatasets, yMin, yMax, useLabels = true) {
             const ctx = document.getElementById(canvasId).getContext('2d');
-
+            
+            // ✅ DataLabels 적용 대상에 weeklyPartyTrendChart 추가
             const useDataLabels = useLabels && (
-                canvasId === 'weeklyTrendChart' ||
-                canvasId === 'presChartFull' ||
-                canvasId === 'partyChartFull'
+                canvasId === 'weeklyTrendChart' || 
+                canvasId === 'presChartFull' || 
+                canvasId === 'partyChartFull' ||
+                canvasId === 'weeklyPartyTrendChart'
             );
-
+            
             const plugins = {
-                legend: { position: 'right', align: 'start', labels: { usePointStyle: true, boxWidth: 8, padding: 15 } },
+                legend: { 
+                    position: 'right', 
+                    align: 'start', 
+                    labels: { 
+                        usePointStyle: true, 
+                        boxWidth: 8, 
+                        padding: 15 
+                    } 
+                },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const value = context.parsed.y % 1 === 0 ? context.parsed.y : context.parsed.y.toFixed(1);
-                            return context.dataset.label + ': ' + value + '%';
+                            const value = context.parsed.y;
+                            // 리얼미터 쪽 소수 1자리 유지
+                            const shown = (value % 1 === 0) ? value.toString() : value.toFixed(1);
+                            return context.dataset.label + ': ' + shown + '%';
                         }
                     }
                 }
             };
-
+        
             if (useDataLabels) {
-                plugins.datalabels = { /* ... 기존 로직 ... */
-                    display: true,
+                plugins.datalabels = {
+                    // ✅ 어떤 데이터셋에 레이블을 띄울지 결정
+                    display: function(context) {
+                        const label = context.dataset.label;
+        
+                        // 2페이지(weeklyPartyTrendChart) 전용 규칙
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (label === '더불어민주당' || label === '국민의힘' || label === '무당층') {
+                                return true;   // 이 세 개만 표시
+                            }
+                            return false;      // 나머지 정당은 숨김
+                        }
+
+                        // 4,5,6페이지(presChart, partyChart)는 호출 시 useLabels=false라 여기 안 옴
+                        // 1,3페이지는 전부 표시
+                        return true;
+                    },
                     color: '#333',
                     font: { size: 11 },
-                    formatter: function(value, context) { return value.toString(); },
+                    formatter: function(value, context) {
+                        // 리얼미터는 소수 1자리, 정수는 그냥 정수
+                        if (value == null) return '';
+                        return (value % 1 === 0) ? value.toString() : value.toFixed(1);
+                    },
                     align: function(context) {
                         const label = context.dataset.label;
-
+        
+                        // ✅ 2페이지: 위치 규칙
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (label === '국민의힘') {
+                                return 'start';   // 아래쪽
+                            }
+                            if (label === '더불어민주당' || label === '무당층') {
+                                return 'end';     // 위쪽
+                            }
+                        }
+        
+                        // 1, 3페이지 등 기존 규칙 유지
                         if (canvasId === 'weeklyTrendChart' || canvasId === 'presChartFull') {
                             if (label.includes('긍정')) { return 'end'; }
                             if (label.includes('부정')) { return 'start'; }
@@ -679,16 +721,18 @@
                         if (canvasId === 'partyChartFull' && label === '국민의힘') {
                             return 'start';
                         }
-
                         return 'end';
                     },
                     offset: 5
                 };
             }
-
+        
             return new Chart(ctx, {
                 type: 'line',
-                data: { labels: labels, datasets: initialDatasets },
+                data: {
+                    labels: labels,
+                    datasets: initialDatasets
+                },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -697,8 +741,8 @@
                     plugins: plugins,
                     scales: {
                         y: {
-                            min: yMin,
-                            max: yMax,
+                            min: yMin, 
+                            max: yMax, 
                             grid: { color: '#e0e0e0', drawBorder: false },
                             ticks: { stepSize: 10, font: { size: 11 } }
                         },
@@ -708,11 +752,14 @@
                             ticks: { font: { size: 12 } }
                         }
                     },
-                    elements: { line: { tension: 0 } }
+                    elements: {
+                        line: { tension: 0 }
+                    }
                 },
                 plugins: useDataLabels ? [ChartDataLabels] : []
             });
         }
+
 
 
         // -----------------------------------------------------------
