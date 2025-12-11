@@ -750,15 +750,14 @@
         
         // 4페이지: 직무 평가 차트 데이터 업데이트 (카테고리 버튼 클릭 시)
         function updatePresView(mode, btnElement) {
-            // ... (기존 로직 유지) ...
             pres_controls.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) {
+            if (btnElement) {
                 btnElement.classList.add('active');
                 btnElement.dataset.mode = mode;
             }
-
-            const newDatasets = [pres_totalData_Partial]; 
-
+        
+            const newDatasets = [pres_totalData_Partial];
+        
             if (pres_categories_Partial[mode]) {
                 pres_categories_Partial[mode].forEach(ds => {
                     newDatasets.push(Object.assign({}, ds, {
@@ -771,17 +770,14 @@
             }
             
             if (!presChart) {
-                // 4페이지는 DataLabels 비활성 (initChart의 useDataLabels 조건으로 처리됨)
+                // presChart만 생성 (레이블 off)
                 presChart = initChart('presChart', labelsPartial, newDatasets, 20, 90, false);
-                // partyChart (6페이지)
-                if (!partyChart) {
-                    partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50, false);
-                //    
             } else {
                 presChart.data.datasets = newDatasets;
                 presChart.update();
             }
         }
+
 
         // -----------------------------------------------------------
         // ⭐️ 슬라이드 전환 및 표시 업데이트 (전체 6페이지로 변경)
