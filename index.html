@@ -22,8 +22,8 @@
 
         /* ⭐️ 프레젠테이션 뷰를 감싸는 래퍼 (고정 크기 유지) */
         .presentation-wrapper {
-            width: 960px;
-            height: 540px;
+            width: 1280px;
+            height: 720px;
             position: relative; 
         }
 
@@ -284,14 +284,15 @@
         const labelsPartial = ['9월', '10월', '11월'];
         
         // --- 차트 데이터 및 객체 ---
-        let presChartFull = null; 
-        let partyChartFull = null; 
-        let presChart = null; 
-        let partyChart = null; 
         let weeklyTrendChart = null; // 1페이지: 주간 국정수행평가 차트 객체
         let weeklyTrendData = {};    // 1페이지: 주간 국정수행평가 데이터 저장소
         let weeklyPartyTrendChart = null; // ⭐️ 2페이지: 주간 정당 지지율 차트 객체
         let weeklyPartyTrendData = {};    // ⭐️ 2페이지: 주간 정당 지지율 데이터 저장소
+        let presChartFull = null;       // 국정수행평가 차트 월별통합 (롱텀) 3페이지
+        let partyChartFull = null;      // 정당지지율 차트 월별통합 (롱텀)  4페이지
+        let presChart = null;             // 국정수행평가 차트 월별통합 (3개월, 세부) 5페이지
+        let partyChart = null;            // 정당지지율 차트 월별통합 (3개월, 세부)  6페이지
+
         let currentWeeklyTrendMode = 'gallup';     // ⭐️ 1페이지 모드
         let currentWeeklyPartyMode = 'gallup';     // ⭐️ 2페이지 모드
         
@@ -629,11 +630,9 @@
                     }
                 }
             };
-
-        
+            
             if (useDataLabels) {
                 plugins.datalabels = {
-                    // ✅ 어떤 데이터셋에 레이블을 띄울지 결정
                     display: function(context) {
                         const label = context.dataset.label;
             
@@ -647,28 +646,33 @@
                             return label === '긍정 평가' || label === '부정 평가';
                         }
             
-                        // 3페이지 정당 월간 + 2페이지 정당 주간: 민주/국힘/무당층만
-                        if (canvasId === 'partyChartFull' || canvasId === 'weeklyPartyTrendChart') {
+                        // 3페이지: 정당 월간 (민주당/국민의힘/무당층만)
+                        if (canvasId === 'partyChartFull') {
+                            // ⭐ 여기서 '민주당' 과 '더불어민주당' 둘 다 인정
+                            return ['민주당', '더불어민주당', '국민의힘', '무당층'].includes(label);
+                        }
+            
+                        // 2페이지: 정당 주간 (더불어민주당/국민의힘/무당층만)
+                        if (canvasId === 'weeklyPartyTrendChart') {
                             return ['더불어민주당', '국민의힘', '무당층'].includes(label);
                         }
             
-                        // 그 외는 기본적으로 표시 안 함
+                        // presChart, partyChart(5·6페이지)는
+                        // initChart 호출 시 useLabels=false 로 오므로 여기까지 아예 안 들어옴
                         return false;
                     },
                     color: '#333',
                     font: { size: 11 },
-            
-                    // ✅ 값 표시 형식
+                    // 이하 formatter / align / offset 그대로 유지
                     formatter: function(value, context) {
                         // 1페이지: 직무 주간
                         if (canvasId === 'weeklyTrendChart') {
                             if (currentWeeklyTrendMode === 'realmeter') {
-                                return value.toFixed(1);  // 리얼미터
+                                return value.toFixed(1);
                             } else {
                                 return Number.isInteger(value) ? value.toString() : value.toFixed(1);
                             }
                         }
-            
                         // 2페이지: 정당 주간
                         if (canvasId === 'weeklyPartyTrendChart') {
                             if (currentWeeklyPartyMode === 'realmeter') {
@@ -677,19 +681,16 @@
                                 return Number.isInteger(value) ? value.toString() : value.toFixed(1);
                             }
                         }
-            
                         // 나머지 차트들
                         return Number.isInteger(value) ? value.toString() : value.toFixed(1);
                     },
-            
-                    // ✅ 위치 규칙
                     align: function(context) {
                         const label = context.dataset.label;
             
                         // 1페이지(직무 주간): 긍정 위, 부정 아래
                         if (canvasId === 'weeklyTrendChart') {
-                            if (label === '긍정') return 'end';   // 위쪽
-                            if (label === '부정') return 'start'; // 아래쪽
+                            if (label === '긍정') return 'end';
+                            if (label === '부정') return 'start';
                         }
             
                         // 3페이지(직무 월간): 긍정 평가 위, 부정 평가 아래
@@ -698,22 +699,21 @@
                             if (label.includes('부정')) return 'start';
                         }
             
-                        // 3페이지/2페이지 정당 차트: 국민의힘 아래, 민주당/무당층 위
+                        // 3페이지 정당 월간 + 2페이지 정당 주간
+                        // 국민의힘 아래, 민주당/더불어민주당/무당층 위
                         if (canvasId === 'partyChartFull' || canvasId === 'weeklyPartyTrendChart') {
-                            if (label === '국민의힘') return 'start';               // 아래
-                            if (label === '더불어민주당' || label === '무당층') {
-                                return 'end';                                      // 위
+                            if (label === '국민의힘') return 'start'; // 아래
+                            if (label === '민주당' || label === '더불어민주당' || label === '무당층') {
+                                return 'end';                        // 위
                             }
                         }
             
-                        // 그 외 (혹시 남아있다면) 기본은 위
                         return 'end';
                     },
                     offset: 5
                 };
             }
 
-        
             return new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -773,6 +773,10 @@
             if (!presChart) {
                 // 4페이지는 DataLabels 비활성 (initChart의 useDataLabels 조건으로 처리됨)
                 presChart = initChart('presChart', labelsPartial, newDatasets, 20, 90, false);
+                // partyChart (6페이지)
+                if (!partyChart) {
+                    partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50, false);
+                //    
             } else {
                 presChart.data.datasets = newDatasets;
                 presChart.update();
