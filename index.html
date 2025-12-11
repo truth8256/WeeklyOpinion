@@ -382,25 +382,29 @@
                 '진보당': [], 
                 '무당층': []
             };
-
+        
             const partyNames = ['더불어민주당', '국민의힘', '조국혁신당', '개혁신당', '진보당', '무당층'];
-            const startColumn = 1; // 'week' 다음 컬럼부터 데이터 시작
-
+            const startColumn = 1; // 0: week, 1~6: 정당
+        
             for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',');
-                if (values.length > startColumn + partyNames.length) {
+        
+                // ✅ >= 로 변경해서 week + 6개 정당 컬럼이 정확히 있을 때 통과
+                if (values.length >= startColumn + partyNames.length) {
                     labels.push(values[0].trim());
-                    
+        
                     partyNames.forEach((party, index) => {
                         const rawValue = values[startColumn + index].trim();
-                        // 갤럽은 정수, 리얼미터는 소수일 수 있으므로 parseFloat 사용 (CSV에 맞게 조정 필요)
-                        const parsedValue = isGallup ? parseInt(rawValue) : parseFloat(rawValue);
+                        // 갤럽(정수) / 리얼미터(소수점) 둘 다 대응 위해 parseFloat 사용해도 무방
+                        const parsedValue = rawValue === '' ? null : (isGallup ? parseInt(rawValue) : parseFloat(rawValue));
                         data[party].push(parsedValue);
                     });
                 }
             }
+        
             return { labels, partyData: data };
         }
+
         
         // ⭐️ CSV 데이터 로드
         function loadWeeklyPartyTrendChart() {
