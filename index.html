@@ -292,6 +292,7 @@
         let weeklyTrendData = {};    // 1페이지: 주간 국정수행평가 데이터 저장소
         let weeklyPartyTrendChart = null; // ⭐️ 2페이지: 주간 정당 지지율 차트 객체
         let weeklyPartyTrendData = {};    // ⭐️ 2페이지: 주간 정당 지지율 데이터 저장소
+        let currentWeeklyPartyMode = 'gallup';  // ⭐️ 현재 2페이지 모드 (갤럽/리얼미터)
         
         const pres_controls = document.getElementById('pres-controls');
         
@@ -483,6 +484,7 @@
             }
 
             const isGallup = mode === 'gallup';
+            currentWeeklyPartyMode = mode;   // ⭐️ 현재 모드를 전역에 저장
             const source = isGallup ? weeklyPartyTrendData.gallup : weeklyPartyTrendData.realmeter;
             
             document.getElementById('party-trend-title').textContent = `주요 정당 지지율 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
@@ -582,25 +584,40 @@
                 canvasId === 'weeklyPartyTrendChart'
             );
             
-            const plugins = {
-                legend: { 
-                    position: 'right', 
-                    align: 'start', 
-                    labels: { 
-                        usePointStyle: true, 
-                        boxWidth: 8, 
-                        padding: 15 
-                    } 
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const value = context.parsed.y % 1 === 0 ? context.parsed.y : context.parsed.y.toFixed(1);
-                            return context.dataset.label + ': ' + value + '%';
+        const plugins = {
+            legend: { 
+                position: 'right', 
+                align: 'start', 
+                labels: { 
+                    usePointStyle: true, 
+                    boxWidth: 8, 
+                    padding: 15 
+                } 
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let value = context.parsed.y;
+        
+                        // ✅ 2페이지 정당 주간 차트인 경우
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (currentWeeklyPartyMode === 'realmeter') {
+                                // 리얼미터: 항상 소수 1자리로
+                                value = value.toFixed(1);
+                            } else {
+                                // 갤럽: 정수면 정수, 아니면 소수 1자리
+                                value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
+                            }
+                        } else {
+                            // 다른 차트: 정수면 정수, 아니면 소수 1자리
+                            value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
                         }
+        
+                        return context.dataset.label + ': ' + value + '%';
                     }
                 }
-            };
+            }
+        };
         
             if (useDataLabels) {
                 plugins.datalabels = {
@@ -622,8 +639,21 @@
                     color: '#333',
                     font: { size: 11 },
                     formatter: function(value, context) {
-                        return value.toString();
+                        // ✅ 2페이지: 정당 주간 차트일 때
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (currentWeeklyPartyMode === 'realmeter') {
+                                // 리얼미터: 항상 소수 1자리
+                                return value.toFixed(1);
+                            } else {
+                                // 갤럽: 정수면 정수, 아니면 소수 1자리
+                                return Number.isInteger(value) ? value.toString() : value.toFixed(1);
+                            }
+                        }
+                    
+                        // 그 외 차트: 정수면 정수, 아니면 소수 1자리
+                        return Number.isInteger(value) ? value.toString() : value.toFixed(1);
                     },
+
                     align: function(context) {
                         const label = context.dataset.label;
         
