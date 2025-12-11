@@ -507,8 +507,8 @@
             ];
 
             if (!weeklyPartyTrendChart) {
-                // Y축 범위 0~50, DataLabels 비활성화
-                weeklyPartyTrendChart = initChart('weeklyPartyTrendChart', source.labels, newDatasets, 0, 50, false); 
+                // ✅ useLabels=true (또는 생략) 로 변경
+                weeklyPartyTrendChart = initChart('weeklyPartyTrendChart', source.labels, newDatasets, 0, 50, true); 
             } else {
                 weeklyPartyTrendChart.data.labels = source.labels;
                 weeklyPartyTrendChart.data.datasets = newDatasets;
@@ -574,12 +574,12 @@
         function initChart(canvasId, labels, initialDatasets, yMin, yMax, useLabels = true) {
             const ctx = document.getElementById(canvasId).getContext('2d');
             
-            // DataLabels 플러그인 적용 기준:
-            // ⭐️ party-trend-slide를 제외하고, useLabels 인자가 true일 때만 적용
+            // ✅ DataLabels 적용 대상에 weeklyPartyTrendChart 추가
             const useDataLabels = useLabels && (
                 canvasId === 'weeklyTrendChart' || 
                 canvasId === 'presChartFull' || 
-                canvasId === 'partyChartFull'
+                canvasId === 'partyChartFull' ||
+                canvasId === 'weeklyPartyTrendChart'
             );
             
             const plugins = {
@@ -601,34 +601,56 @@
                     }
                 }
             };
-
-            // Data Labels 플러그인 설정
+        
             if (useDataLabels) {
                 plugins.datalabels = {
-                    display: true,
+                    // ✅ 어떤 데이터셋에 레이블을 띄울지 결정
+                    display: function(context) {
+                        const label = context.dataset.label;
+        
+                        // 2페이지(weeklyPartyTrendChart) 전용 규칙
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (label === '더불어민주당' || label === '국민의힘' || label === '무당층') {
+                                return true;   // 이 세 개만 표시
+                            }
+                            return false;      // 나머지 정당은 숨김
+                        }
+        
+                        // 다른 차트들은 기존대로 모두 표시
+                        return true;
+                    },
                     color: '#333',
                     font: { size: 11 },
-                    formatter: function(value, context) { return value.toString(); },
+                    formatter: function(value, context) {
+                        return value.toString();
+                    },
                     align: function(context) {
                         const label = context.dataset.label;
-                        
-                        // 1. 직무 평가 (긍정/부정)
+        
+                        // ✅ 2페이지: 위치 규칙
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (label === '국민의힘') {
+                                return 'start';   // 아래쪽
+                            }
+                            if (label === '더불어민주당' || label === '무당층') {
+                                return 'end';     // 위쪽
+                            }
+                        }
+        
+                        // 1, 3페이지 등 기존 규칙 유지
                         if (canvasId === 'weeklyTrendChart' || canvasId === 'presChartFull') {
                             if (label.includes('긍정')) { return 'end'; }
                             if (label.includes('부정')) { return 'start'; }
                         }
-                        
-                        // 2. 정당 지지율 (국민의힘만 아래쪽, 다른 주요 정당은 위쪽)
                         if (canvasId === 'partyChartFull' && label === '국민의힘') {
                             return 'start';
                         }
-                        
                         return 'end';
                     },
                     offset: 5
                 };
             }
-
+        
             return new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -661,6 +683,7 @@
                 plugins: useDataLabels ? [ChartDataLabels] : []
             });
         }
+
         
         // 4페이지: 직무 평가 차트 데이터 업데이트 (카테고리 버튼 클릭 시)
         function updatePresView(mode, btnElement) {
