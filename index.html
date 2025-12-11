@@ -292,7 +292,8 @@
         let weeklyTrendData = {};    // 1페이지: 주간 국정수행평가 데이터 저장소
         let weeklyPartyTrendChart = null; // ⭐️ 2페이지: 주간 정당 지지율 차트 객체
         let weeklyPartyTrendData = {};    // ⭐️ 2페이지: 주간 정당 지지율 데이터 저장소
-        let currentWeeklyPartyMode = 'gallup';  // ⭐️ 현재 2페이지 모드 (갤럽/리얼미터)
+        let currentWeeklyTrendMode = 'gallup';     // ⭐️ 1페이지 모드
+        let currentWeeklyPartyMode = 'gallup';     // ⭐️ 2페이지 모드
         
         const pres_controls = document.getElementById('pres-controls');
         
@@ -350,6 +351,7 @@
             }
 
             const isGallup = mode === 'gallup';
+            currentWeeklyTrendMode = mode;   // ⭐️ 현재 1페이지 모드 저장
             const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
             document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
 
@@ -584,102 +586,133 @@
                 canvasId === 'weeklyPartyTrendChart'
             );
             
-        const plugins = {
-            legend: { 
-                position: 'right', 
-                align: 'start', 
-                labels: { 
-                    usePointStyle: true, 
-                    boxWidth: 8, 
-                    padding: 15 
-                } 
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        let value = context.parsed.y;
-        
-                        // ✅ 2페이지 정당 주간 차트인 경우
-                        if (canvasId === 'weeklyPartyTrendChart') {
-                            if (currentWeeklyPartyMode === 'realmeter') {
-                                // 리얼미터: 항상 소수 1자리로
-                                value = value.toFixed(1);
-                            } else {
-                                // 갤럽: 정수면 정수, 아니면 소수 1자리
+            const plugins = {
+                legend: { 
+                    position: 'right', 
+                    align: 'start', 
+                    labels: { 
+                        usePointStyle: true, 
+                        boxWidth: 8, 
+                        padding: 15 
+                    } 
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.parsed.y;
+            
+                            // ✅ 1페이지: 직무 주간 차트
+                            if (canvasId === 'weeklyTrendChart') {
+                                if (currentWeeklyTrendMode === 'realmeter') {
+                                    // 리얼미터: 항상 소수 1자리
+                                    value = value.toFixed(1);
+                                } else {
+                                    // 갤럽: 정수면 정수, 아니면 소수 1자리
+                                    value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
+                                }
+                            }
+                            // ✅ 2페이지: 정당 주간 차트
+                            else if (canvasId === 'weeklyPartyTrendChart') {
+                                if (currentWeeklyPartyMode === 'realmeter') {
+                                    value = value.toFixed(1);
+                                } else {
+                                    value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
+                                }
+                            }
+                            // ✅ 그 외 차트들
+                            else {
                                 value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
                             }
-                        } else {
-                            // 다른 차트: 정수면 정수, 아니면 소수 1자리
-                            value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
+            
+                            return context.dataset.label + ': ' + value + '%';
                         }
-        
-                        return context.dataset.label + ': ' + value + '%';
                     }
                 }
-            }
-        };
+            };
+
         
             if (useDataLabels) {
                 plugins.datalabels = {
                     // ✅ 어떤 데이터셋에 레이블을 띄울지 결정
                     display: function(context) {
                         const label = context.dataset.label;
-        
-                        // 2페이지(weeklyPartyTrendChart) 전용 규칙
-                        if (canvasId === 'weeklyPartyTrendChart') {
-                            if (label === '더불어민주당' || label === '국민의힘' || label === '무당층') {
-                                return true;   // 이 세 개만 표시
-                            }
-                            return false;      // 나머지 정당은 숨김
+            
+                        // 1페이지: 직무 주간 (긍정/부정만)
+                        if (canvasId === 'weeklyTrendChart') {
+                            return label === '긍정' || label === '부정';
                         }
-        
-                        // 다른 차트들은 기존대로 모두 표시
-                        return true;
+            
+                        // 3페이지: 직무 월간 (긍정 평가/부정 평가만)
+                        if (canvasId === 'presChartFull') {
+                            return label === '긍정 평가' || label === '부정 평가';
+                        }
+            
+                        // 3페이지 정당 월간 + 2페이지 정당 주간: 민주/국힘/무당층만
+                        if (canvasId === 'partyChartFull' || canvasId === 'weeklyPartyTrendChart') {
+                            return ['더불어민주당', '국민의힘', '무당층'].includes(label);
+                        }
+            
+                        // 그 외는 기본적으로 표시 안 함
+                        return false;
                     },
                     color: '#333',
                     font: { size: 11 },
+            
+                    // ✅ 값 표시 형식
                     formatter: function(value, context) {
-                        // ✅ 2페이지: 정당 주간 차트일 때
-                        if (canvasId === 'weeklyPartyTrendChart') {
-                            if (currentWeeklyPartyMode === 'realmeter') {
-                                // 리얼미터: 항상 소수 1자리
-                                return value.toFixed(1);
+                        // 1페이지: 직무 주간
+                        if (canvasId === 'weeklyTrendChart') {
+                            if (currentWeeklyTrendMode === 'realmeter') {
+                                return value.toFixed(1);  // 리얼미터
                             } else {
-                                // 갤럽: 정수면 정수, 아니면 소수 1자리
                                 return Number.isInteger(value) ? value.toString() : value.toFixed(1);
                             }
                         }
-                    
-                        // 그 외 차트: 정수면 정수, 아니면 소수 1자리
+            
+                        // 2페이지: 정당 주간
+                        if (canvasId === 'weeklyPartyTrendChart') {
+                            if (currentWeeklyPartyMode === 'realmeter') {
+                                return value.toFixed(1);
+                            } else {
+                                return Number.isInteger(value) ? value.toString() : value.toFixed(1);
+                            }
+                        }
+            
+                        // 나머지 차트들
                         return Number.isInteger(value) ? value.toString() : value.toFixed(1);
                     },
-
+            
+                    // ✅ 위치 규칙
                     align: function(context) {
                         const label = context.dataset.label;
-        
-                        // ✅ 2페이지: 위치 규칙
-                        if (canvasId === 'weeklyPartyTrendChart') {
-                            if (label === '국민의힘') {
-                                return 'start';   // 아래쪽
-                            }
+            
+                        // 1페이지(직무 주간): 긍정 위, 부정 아래
+                        if (canvasId === 'weeklyTrendChart') {
+                            if (label === '긍정') return 'end';   // 위쪽
+                            if (label === '부정') return 'start'; // 아래쪽
+                        }
+            
+                        // 3페이지(직무 월간): 긍정 평가 위, 부정 평가 아래
+                        if (canvasId === 'presChartFull') {
+                            if (label.includes('긍정')) return 'end';
+                            if (label.includes('부정')) return 'start';
+                        }
+            
+                        // 3페이지/2페이지 정당 차트: 국민의힘 아래, 민주당/무당층 위
+                        if (canvasId === 'partyChartFull' || canvasId === 'weeklyPartyTrendChart') {
+                            if (label === '국민의힘') return 'start';               // 아래
                             if (label === '더불어민주당' || label === '무당층') {
-                                return 'end';     // 위쪽
+                                return 'end';                                      // 위
                             }
                         }
-        
-                        // 1, 3페이지 등 기존 규칙 유지
-                        if (canvasId === 'weeklyTrendChart' || canvasId === 'presChartFull') {
-                            if (label.includes('긍정')) { return 'end'; }
-                            if (label.includes('부정')) { return 'start'; }
-                        }
-                        if (canvasId === 'partyChartFull' && label === '국민의힘') {
-                            return 'start';
-                        }
+            
+                        // 그 외 (혹시 남아있다면) 기본은 위
                         return 'end';
                     },
                     offset: 5
                 };
             }
+
         
             return new Chart(ctx, {
                 type: 'line',
