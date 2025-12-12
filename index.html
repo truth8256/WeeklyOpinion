@@ -431,217 +431,272 @@
         // ===========================================================
         // ⭐️ 1-6 페이지 (정치 데이터) 관련 함수 (기존 코드 유지)
         // ===========================================================
-        // (편의상 함수 내용은 생략합니다. 원본 코드를 그대로 사용합니다.)
+ 
+        function parseCombinedCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',');
+            const labels = [];
+            const gallupData = { good: [], bad: [] };
+            const realmeterData = { good: [], bad: [] };
 
-        function parseCombinedCSV(csvText) { /* ... 기존 로직 ... */ }
-        function loadWeeklyTrendChart() { /* ... 기존 로직 ... */ }
-        function updateWeeklyTrendView(mode, btnElement) { /* ... 기존 로직 ... */ }
-        function parsePartyCSV(csvText, isGallup) { /* ... 기존 로직 ... */ }
-        function loadWeeklyPartyTrendChart() { /* ... 기존 로직 ... */ }
-        function updateWeeklyPartyTrendView(mode, btnElement) { /* ... 기존 로직 ... */ }
-        function updatePresView(mode, btnElement) { /* ... 기존 로직 ... */ }
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length === headers.length) {
+                    labels.push(values[0].trim());
+                    realmeterData.good.push(parseFloat(values[1].trim()));
+                    realmeterData.bad.push(parseFloat(values[2].trim()));
+                    gallupData.good.push(parseInt(values[4].trim()));
+                    gallupData.bad.push(parseInt(values[5].trim()));
+                }
+            }
+            return { labels, gallupData, realmeterData };
+        }
+
+        function loadWeeklyTrendChart() {
+            const DATA_URL = './data/presidential_approval_real_gal.csv'; 
+
+            fetch(DATA_URL)
+                .then(response => response.ok ? response.text() : Promise.reject('주간 직무 데이터 로드 실패: ' + response.statusText))
+                .then(csvText => {
+                    weeklyTrendData = parseCombinedCSV(csvText);
+                    updateWeeklyTrendView('gallup', document.querySelector('#weekly-trend-controls .btn.active'));
+                })
+                .catch(error => console.error("주간 직무 데이터 로드 오류:", error));
+        }
+
+        function updateWeeklyTrendView(mode, btnElement) {
+            if (!weeklyTrendData.labels) return; 
+
+            document.querySelectorAll('#weekly-trend-controls .btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            const isGallup = mode === 'gallup';
+            currentWeeklyTrendMode = mode;   // ⭐️ 현재 1페이지 모드 저장
+            const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
+            document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
+
+            const newDatasets = [
+                { label: '긍정', data: source.good, borderColor: POSITIVE_COLOR, backgroundColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
+                { label: '부정', data: source.bad, borderColor: NEGATIVE_COLOR, backgroundColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 }
+            ];
+
+            if (!weeklyTrendChart) {
+                weeklyTrendChart = initChart('weeklyTrendChart', weeklyTrendData.labels, newDatasets, 0, 80);
+            } else {
+                weeklyTrendChart.data.labels = weeklyTrendData.labels;
+                weeklyTrendChart.data.datasets = newDatasets;
+                weeklyTrendChart.update();
+            }
+        }
 
 
+        // ===========================================================
+        // ⭐️ 2페이지: 정당 지지율 주간 로직 (새로 추가됨)
+        // ===========================================================
+
+        function parsePartyCSV(csvText, isGallup) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) {
+                return {
+                    labels: [],
+                    partyData: {
+                        '더불어민주당': [],
+                        '국민의힘': [],
+                        '조국혁신당': [],
+                        '개혁신당': [],
+                        '진보당': [],
+                        '무당층': []
+                    }
+                };
+            }
+        
+            // ① 헤더 행 파싱
+            const headers = lines[0].split(',').map(h => h.trim());
+        
+            // week / 정당별 컬럼 인덱스를 헤더 이름으로 찾기
+            const idxWeek   = headers.indexOf('week');
+            const idxDem    = headers.indexOf('더불어민주당');
+            const idxCon    = headers.indexOf('국민의힘');
+            const idxCho    = headers.indexOf('조국혁신당');
+            const idxReform = headers.indexOf('개혁신당');
+            const idxProg   = headers.indexOf('진보당');
+            const idxNone   = headers.indexOf('무당층');
+        
+            const labels = [];
+            const data = {
+                '더불어민주당': [],
+                '국민의힘': [],
+                '조국혁신당': [],
+                '개혁신당': [],
+                '진보당': [],
+                '무당층': []
+            };
+        
+            // ② 실제 데이터 행 파싱
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;    // 빈 줄 건너뛰기
+        
+                const values = line.split(',').map(v => v.trim());
+        
+                // 라벨(week)
+                if (idxWeek >= 0) {
+                    labels.push(values[idxWeek]);
+                } else {
+                    labels.push('');    // 혹시라도 week 헤더를 못 찾으면 빈 문자열
+                }
+        
+                // 값 파싱 함수: 갤럽은 정수, 리얼미터는 소수(둘 다 parseFloat 써도 큰 문제는 없음)
+                const parseVal = v => {
+                    if (v === '' || v == null) return null;  // 결측은 null
+                    return isGallup ? parseInt(v) : parseFloat(v);
+                };
+        
+                if (idxDem    >= 0) data['더불어민주당'].push(parseVal(values[idxDem]));
+                if (idxCon    >= 0) data['국민의힘'].push(parseVal(values[idxCon]));
+                if (idxCho    >= 0) data['조국혁신당'].push(parseVal(values[idxCho]));
+                if (idxReform >= 0) data['개혁신당'].push(parseVal(values[idxReform]));
+                if (idxProg   >= 0) data['진보당'].push(parseVal(values[idxProg]));
+                if (idxNone   >= 0) data['무당층'].push(parseVal(values[idxNone]));
+            }
+        
+            // 디버깅용으로 첫 몇 개만 찍어서 확인해볼 수도 있어요.
+            console.log("parsePartyCSV labels (first 5):", labels.slice(0, 5));
+            console.log("parsePartyCSV 더불어민주당 (first 5):", data['더불어민주당'].slice(0, 5));
+        
+            return { labels, partyData: data };
+        }
+
+        
+        // ⭐️ CSV 데이터 로드
+        function loadWeeklyPartyTrendChart() {
+            console.log("2페이지 데이터 로드 함수 시작.");
+            const GALLUP_URL = './data/party_approval_gal_week.csv';
+            const REALMETER_URL = './data/party_approval_real_week.csv';
+            
+            // 갤럽 데이터 로드
+            const fetchGallup = fetch(GALLUP_URL)
+                .then(response => response.ok ? response.text() : Promise.reject('갤럽 정당 데이터 로드 실패: ' + response.statusText))
+                .then(csvText => parsePartyCSV(csvText, true));
+
+            // 리얼미터 데이터 로드
+            const fetchRealmeter = fetch(REALMETER_URL)
+                .then(response => response.ok ? response.text() : Promise.reject('리얼미터 정당 데이터 로드 실패: ' + response.statusText))
+                .then(csvText => parsePartyCSV(csvText, false));
+
+            Promise.all([fetchGallup, fetchRealmeter])
+                .then(([gallupResult, realmeterResult]) => {
+                    weeklyPartyTrendData = {
+                        gallup: gallupResult,
+                        realmeter: realmeterResult
+                    };
+                    // 초기 차트 (갤럽) 렌더링
+                    updateWeeklyPartyTrendView('gallup', document.querySelector('#party-trend-controls .btn.active'));
+                })
+                .catch(error => console.error("주간 정당 지지율 데이터 로드 오류:", error));
+        }
+
+        // ⭐️ 차트 뷰 업데이트
+        function updateWeeklyPartyTrendView(mode, btnElement) {
+            if (!weeklyPartyTrendData.gallup) return;
+
+            document.querySelectorAll('#party-trend-controls .btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            const isGallup = mode === 'gallup';
+            currentWeeklyPartyMode = mode;   // ⭐️ 현재 모드를 전역에 저장
+            const source = isGallup ? weeklyPartyTrendData.gallup : weeklyPartyTrendData.realmeter;
+            
+            document.getElementById('party-trend-title').textContent = `주요 정당 지지율 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
+
+            const partyColors = {
+                '더불어민주당': POSITIVE_COLOR,
+                '국민의힘': NEGATIVE_COLOR,
+                '조국혁신당': JO_GUK_COLOR,
+                '개혁신당': REFORM_COLOR,
+                '진보당': PROGRESSIVE_COLOR,
+                '무당층': NON_PARTISAN_COLOR
+            };
+            
+            // 정당별 데이터셋 생성 (순서 지정)
+            const newDatasets = [
+                { label: '더불어민주당', data: source.partyData['더불어민주당'], borderColor: partyColors['더불어민주당'], borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
+                { label: '국민의힘', data: source.partyData['국민의힘'], borderColor: partyColors['국민의힘'], borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
+                { label: '무당층', data: source.partyData['무당층'], borderColor: partyColors['무당층'], borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 6 },
+                { label: '조국혁신당', data: source.partyData['조국혁신당'], borderColor: partyColors['조국혁신당'], borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 },
+                { label: '개혁신당', data: source.partyData['개혁신당'], borderColor: partyColors['개혁신당'], borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 4 },
+                { label: '진보당', data: source.partyData['진보당'], borderColor: partyColors['진보당'], borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 5 }
+            ];
+
+            if (!weeklyPartyTrendChart) {
+                // ✅ useLabels=true (또는 생략) 로 변경
+                weeklyPartyTrendChart = initChart('weeklyPartyTrendChart', source.labels, newDatasets, 0, 50, true); 
+            } else {
+                weeklyPartyTrendChart.data.labels = source.labels;
+                weeklyPartyTrendChart.data.datasets = newDatasets;
+                weeklyPartyTrendChart.update();
+            }
+        }
+
+
+        // ===========================================================
+        // 재사용 함수들 (initChart, 월간 데이터 등)
+        // ===========================================================
+        
         // [2페이지: 직무 평가 전체 데이터 - 긍정/부정]
         const pres_data_Full = [
-             { label: '긍정 평가', data: [64, 58, 59, 56, 60], borderColor: POSITIVE_COLOR, backgroundColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 6, pointHoverRadius: 8, tension: 0, order: 1 },
-             { label: '부정 평가', data: [23, 32, 32, 34, 30], borderColor: NEGATIVE_COLOR, backgroundColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 6, pointHoverRadius: 8, tension: 0, order: 2 }
+            { label: '긍정 평가', data: [64, 58, 59, 56, 60], borderColor: POSITIVE_COLOR, backgroundColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 6, pointHoverRadius: 8, tension: 0, order: 1 },
+            { label: '부정 평가', data: [23, 32, 32, 34, 30], borderColor: NEGATIVE_COLOR, backgroundColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 6, pointHoverRadius: 8, tension: 0, order: 2 }
         ];
 
         // [3페이지: 정당 지지율 데이터 - 7월 포함]
         const partyData_Full = [
-             { label: '민주당', data: [45, 43, 40, 41, 42], borderColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
-             { label: '국민의힘', data: [20, 23, 24, 25, 25], borderColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
-             { label: '무당층', data: [25, 25, 27, 26, 26], borderColor: NON_PARTISAN_COLOR, borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 }
+            { label: '민주당', data: [45, 43, 40, 41, 42], borderColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 }, 
+            { label: '국민의힘', data: [20, 23, 24, 25, 25], borderColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 }, 
+            { label: '무당층', data: [25, 25, 27, 26, 26], borderColor: NON_PARTISAN_COLOR, borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 } 
         ];
 
         // 4, 5, 6페이지에 사용되는 데이터셋 (생략)
         const pres_totalData_Partial = { label: '직무 평가 전체', data: [59, 56, 60], borderColor: '#000000', backgroundColor: '#000000', borderWidth: 2, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 };
-        const pres_categories_Partial = { /* ... 데이터셋 정의 유지 ... */
-             'total': [],
-             'gender': [
-                 { label: '남성', data: [56, 56, 60], borderColor: '#36A2EB', borderWidth: 2 },
-                 { label: '여성', data: [62, 56, 61], borderColor: '#FF6384', borderWidth: 2 }
-             ],
-             'age': [
-                 { label: '18~29세', data: [43, 41, 51], borderColor: '#4BC0C0', borderWidth: 2 },
-                 { label: '30대', data: [62, 51, 57], borderColor: '#FF9F40', borderWidth: 2 },
-                 { label: '40대', data: [75, 74, 76], borderColor: '#9966FF', borderWidth: 2 },
-                 { label: '50대', data: [71, 70, 72], borderColor: '#FFCD56', borderWidth: 2 },
-                 { label: '60대', data: [53, 47, 55], borderColor: '#C9CBCF', borderWidth: 2 },
-                 { label: '70대 이상', data: [44, 46, 47], borderColor: '#8c8c8c', borderWidth: 2, borderDash: [5, 5] }
-             ],
-             'region_main': [
-                 { label: '서울', data: [60, 50, 61], borderColor: '#E91E63', borderWidth: 3 },
-                 { label: '인천/경기', data: [61, 58, 60], borderColor: '#3F51B5', borderWidth: 2 },
-                 { label: '대구/경북', data: [41, 40, 45], borderColor: '#009688', borderWidth: 2 },
-                 { label: '부산/울산/경남', data: [51, 52, 56], borderColor: '#795548', borderWidth: 2 },
-                 { label: '광주/전라', data: [84, 80, 85], borderColor: '#4CAF50', borderWidth: 2, borderDash: [5, 5] }
-             ],
-             'gender_age_2030': [
-                 { label: '남성 20대', data: [30, 32, 45], borderColor: '#2980b9', borderWidth: 2, borderDash: [5, 2] },
-                 { label: '여성 20대', data: [57, 52, 58], borderColor: '#e74c3c', borderWidth: 2, borderDash: [5, 2] },
-                 { label: '남성 30대', data: [52, 48, 52], borderColor: '#3498db', borderWidth: 2 },
-                 { label: '여성 30대', data: [74, 55, 63], borderColor: '#e67e22', borderWidth: 2 }
-             ]
+        const pres_categories_Partial = { /* ... 데이터셋 정의 유지 ... */ 
+            'total': [],
+            'gender': [
+                { label: '남성', data: [56, 56, 60], borderColor: '#36A2EB', borderWidth: 2 },
+                { label: '여성', data: [62, 56, 61], borderColor: '#FF6384', borderWidth: 2 }
+            ],
+            'age': [
+                { label: '18~29세', data: [43, 41, 51], borderColor: '#4BC0C0', borderWidth: 2 },
+                { label: '30대', data: [62, 51, 57], borderColor: '#FF9F40', borderWidth: 2 },
+                { label: '40대', data: [75, 74, 76], borderColor: '#9966FF', borderWidth: 2 },
+                { label: '50대', data: [71, 70, 72], borderColor: '#FFCD56', borderWidth: 2 },
+                { label: '60대', data: [53, 47, 55], borderColor: '#C9CBCF', borderWidth: 2 },
+                { label: '70대 이상', data: [44, 46, 47], borderColor: '#8c8c8c', borderWidth: 2, borderDash: [5, 5] }
+            ],
+            'region_main': [
+                { label: '서울', data: [60, 50, 61], borderColor: '#E91E63', borderWidth: 3 },
+                { label: '인천/경기', data: [61, 58, 60], borderColor: '#3F51B5', borderWidth: 2 },
+                { label: '대구/경북', data: [41, 40, 45], borderColor: '#009688', borderWidth: 2 },
+                { label: '부산/울산/경남', data: [51, 52, 56], borderColor: '#795548', borderWidth: 2 },
+                { label: '광주/전라', data: [84, 80, 85], borderColor: '#4CAF50', borderWidth: 2, borderDash: [5, 5] }
+            ],
+            'gender_age_2030': [
+                { label: '남성 20대', data: [30, 32, 45], borderColor: '#2980b9', borderWidth: 2, borderDash: [5, 2] },
+                { label: '여성 20대', data: [57, 52, 58], borderColor: '#e74c3c', borderWidth: 2, borderDash: [5, 2] },
+                { label: '남성 30대', data: [52, 48, 52], borderColor: '#3498db', borderWidth: 2 },
+                { label: '여성 30대', data: [74, 55, 63], borderColor: '#e67e22', borderWidth: 2 }
+            ]
         };
         const partyData_Partial = [
-             { label: '민주당', data: [40, 41, 42], borderColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
-             { label: '국민의힘', data: [24, 25, 25], borderColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
-             { label: '무당층', data: [27, 26, 26], borderColor: NON_PARTISAN_COLOR, borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 }
+            { label: '민주당', data: [40, 41, 42], borderColor: POSITIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 1 },
+            { label: '국민의힘', data: [24, 25, 25], borderColor: NEGATIVE_COLOR, borderWidth: 3, pointRadius: 5, pointHoverRadius: 7, tension: 0, order: 2 },
+            { label: '무당층', data: [27, 26, 26], borderColor: NON_PARTISAN_COLOR, borderWidth: 2, borderDash: [5, 5], pointRadius: 4, pointHoverRadius: 6, tension: 0, order: 3 }
         ];
 
-        // -----------------------------------------------------------
-        // ⭐️ 7-11 페이지 (자립준비청년 데이터) 관련 함수 (새로 추가)
-        // -----------------------------------------------------------
-
-        function createBarChart(canvasId, labels, datasets, yMin, yMax, unit, colorSet) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            return new Chart(ctx, {
-                type: 'bar',
-                data: { labels, datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: canvasId === 'chartEcon' ? 'y' : 'x', // 경제지표는 가로 막대
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
-                    plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10, padding: 15 } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) { label += ': '; }
-                                    label += context.parsed.y.toLocaleString() + unit;
-                                    return label;
-                                }
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: (value) => value.toLocaleString() + unit
-                        }
-                    },
-                    scales: {
-                        x: {
-                            min: 0,
-                            max: canvasId === 'chartEcon' ? 1400 : yMax,
-                            grid: { color: '#e0e0e0' },
-                            ticks: { font: { size: 11 }, display: canvasId === 'chartEcon' ? true : true }
-                        },
-                        y: {
-                            min: yMin,
-                            max: canvasId === 'chartEcon' ? undefined : yMax,
-                            grid: { color: '#e0e0e0', drawBorder: false },
-                            ticks: { font: { size: 11 } }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-        }
-
-        function createWelfareChart() {
-            const labels = ['아동양육시설', '청소년쉼터', '소년보호시설'];
-            const data = [51.5, 34.7, 24.8];
-            const colors = ['#3b82f6', '#f97316', '#dc2626']; // 소년보호시설(가장 낮은 수급률) 강조
-
-            return createBarChart('chartWelfare', labels, [{
-                label: '기초생활수급 비율',
-                data: data,
-                backgroundColor: colors,
-                barThickness: 60
-            }], 0, 60, '%', colors);
-        }
-
-        // 7. 경제적 상황 차트
-        function createEconChart() {
-            const labels = ['월평균 소득 (만원)', '평균 부채액 (만원)', '부채 보유율 (%)'];
-            const datasets = [
-                {
-                    label: '일반 청년 (29세 이하)',
-                    data: [365, 514, 16.3],
-                    backgroundColor: POSITIVE_COLOR,
-                    borderRadius: 4
-                },
-                {
-                    label: '시설 퇴소 청년',
-                    data: [170, 1366, 36.4],
-                    backgroundColor: NEGATIVE_COLOR,
-                    borderRadius: 4
-                }
-            ];
-            
-            // 특이점: 소득과 부채액은 만원 단위, 부채율은 % 단위. Y축 label에 % 단위 추가를 위해 커스터마이징 필요
-            const chart = new Chart(document.getElementById('chartEcon').getContext('2d'), {
-                type: 'bar',
-                data: { labels, datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
-                    plugins: {
-                        legend: { position: 'top' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) { label += ': '; }
-                                    const value = context.raw;
-                                    const unit = context.dataIndex === 2 ? '%' : '만원';
-                                    label += value.toLocaleString() + unit;
-                                    return label;
-                                }
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: (value, context) => value.toLocaleString() + (context.dataIndex === 2 ? '%' : '만원')
-                        }
-                    },
-                    scales: {
-                        x: {
-                            min: 0,
-                            max: 1400, // 부채액 최대값 반영
-                            grid: { color: '#e0e0e0' },
-                            ticks: { font: { size: 11 } }
-                        },
-                        y: {
-                            grid: { display: false },
-                            ticks: { font: { size: 12 } }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-            return chart;
-        }
-
-        // 8. 심리적 위기 차트 (자살 생각 경험)
-        function createSuicideChart() {
-            const labels = ['일반 청년 (19~29세)', '시설 퇴소 청년'];
-            const data = [10.5, 46.5];
-            const colors = ['#60a5fa', '#dc2626']; // 붉은색 강조
-
-            return createBarChart('chartSuicide', labels, [{
-                label: '최근 1년 자살 생각 경험 비율',
-                data: data,
-                backgroundColor: colors,
-                barThickness: 80
-            }], 0, 60, '%', colors);
-        }
-
-
-        // ===========================================================
         // ⭐️ 차트 초기화 함수 (DataLabels 활성화 여부 인자 추가: useLabels)
-        // ===========================================================
         function initChart(canvasId, labels, initialDatasets, yMin, yMax, useLabels = true) {
             const ctx = document.getElementById(canvasId).getContext('2d');
             
@@ -779,7 +834,7 @@
                     offset: 5
                 };
             }
-        
+
             return new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -816,27 +871,47 @@
         
         // 4페이지: 직무 평가 차트 데이터 업데이트 (카테고리 버튼 클릭 시)
         function updatePresView(mode, btnElement) {
-            // ... (기존 로직 유지) ...
             pres_controls.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) {
+            if (btnElement) {
                 btnElement.classList.add('active');
                 btnElement.dataset.mode = mode;
             }
-
+        
+            const newDatasets = [pres_totalData_Partial];
+        
+            if (pres_categories_Partial[mode]) {
+                pres_categories_Partial[mode].forEach(ds => {
+                    newDatasets.push(Object.assign({}, ds, {
+                        tension: 0,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        order: 2
+                    }));
+                });
+            }
+            
+            if (!presChart) {
+                // presChart만 생성 (레이블 off)
+                presChart = initChart('presChart', labelsPartial, newDatasets, 20, 90, false);
+            } else {
+                presChart.data.datasets = newDatasets;
+                presChart.update();
+            }
+        }
 
 
         // -----------------------------------------------------------
-        // ⭐️ 슬라이드 전환 및 표시 업데이트 (전체 11페이지로 변경)
+        // ⭐️ 슬라이드 전환 및 표시 업데이트 (전체 6페이지로 변경)
         // -----------------------------------------------------------
         function updateSlideDisplay(index) {
             document.querySelectorAll('.slide-container').forEach(slide => {
                 slide.classList.add('hidden');
             });
-
+            
             const slideId = slideOrder[index];
             document.getElementById(slideId).classList.remove('hidden');
 
-            // 페이지 인디케이터 업데이트
+            // 페이지 인디케이터 업데이트 (슬라이드가 6개)
             pageIndicator.textContent = `${index + 1} / ${slideOrder.length}`;
 
             navPrev.disabled = (index === 0);
@@ -844,63 +919,46 @@
 
             // 차트 렌더링
             switch(slideId) {
-                // [1~6페이지: 정치 데이터]
-                case 'weekly-trend-slide':
+                case 'weekly-trend-slide': // 1페이지: 직무 주간
                     if (!weeklyTrendData.labels) loadWeeklyTrendChart();
                     else updateWeeklyTrendView(document.querySelector('#weekly-trend-controls .btn.active').dataset.mode, document.querySelector('#weekly-trend-controls .btn.active'));
                     break;
-                case 'party-trend-slide':
+                case 'party-trend-slide': // ⭐️ 2페이지: 정당 주간 (새로 추가)
                     if (!weeklyPartyTrendData.gallup) loadWeeklyPartyTrendChart();
                     else updateWeeklyPartyTrendView(document.querySelector('#party-trend-controls .btn.active').dataset.mode, document.querySelector('#party-trend-controls .btn.active'));
                     break;
-                case 'pres-slide-full':
+                case 'pres-slide-full': // 3페이지 (기존 2페이지): 직무 월간
                     if (!presChartFull) presChartFull = initChart('presChartFull', labelsFull, pres_data_Full, 0, 90);
                     else presChartFull.update();
                     break;
-                case 'party-slide-full':
+                case 'party-slide-full': // 4페이지 (기존 3페이지): 정당 월간
                     if (!partyChartFull) partyChartFull = initChart('partyChartFull', labelsFull, partyData_Full, 0, 50);
                     else partyChartFull.update();
                     break;
-                case 'pres-slide':
+                case 'pres-slide': // 5페이지 (기존 4페이지): 직무 세부
                     const currentActiveBtn = pres_controls.querySelector('.btn.active');
                     updatePresView(currentActiveBtn ? currentActiveBtn.dataset.mode || 'total' : 'total', currentActiveBtn);
                     break;
-                case 'party-slide':
+                case 'party-slide': // 6페이지 (기존 5페이지): 정당 세부
                     if (!partyChart) partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50, false);
                     else partyChart.update();
-                    break;
-
-                // [7~11페이지: 자립준비청년 데이터]
-                case 'policy-econ-slide': // 8페이지: 경제
-                    if (!chartEcon) chartEcon = createEconChart();
-                    else chartEcon.update();
-                    break;
-                case 'policy-risk-slide': // 9페이지: 위험
-                    if (!chartSuicide) chartSuicide = createSuicideChart();
-                    else chartSuicide.update();
-                    break;
-                case 'policy-welfare-slide': // 10페이지: 복지 사각지대
-                    if (!chartWelfare) chartWelfare = createWelfareChart();
-                    else chartWelfare.update();
-                    break;
-                default:
-                    // 타이틀 슬라이드와 솔루션 슬라이드는 차트가 없음
                     break;
             }
         }
 
-        // ⭐️ 화살표를 통한 슬라이드 네비게이션
+        // ⭐️ 화살표를 통한 슬라이드 이동 함수
         function navigateSlides(direction) {
-            currentSlideIndex = (currentSlideIndex + direction + slideOrder.length) % slideOrder.length;
-            updateSlideDisplay(currentSlideIndex);
-        }
+            let newIndex = currentSlideIndex + direction;
 
-        // ⭐️ 초기 로드 시 1페이지 표시
+            if (newIndex >= 0 && newIndex < slideOrder.length) {
+                currentSlideIndex = newIndex;
+                updateSlideDisplay(currentSlideIndex);
+            }
+        }
+        
+        // 초기 로드 시 첫 번째 슬라이드 활성화
         document.addEventListener('DOMContentLoaded', () => {
             updateSlideDisplay(currentSlideIndex);
-            // 초기 로드 시 필요한 데이터 로딩 함수 호출
-            loadWeeklyTrendChart();
-            loadWeeklyPartyTrendChart();
         });
     </script>
 
