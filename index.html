@@ -411,7 +411,7 @@
           </div>
         
           <div class="data-source"> 출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발<br>
-          이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구</div>    
+          이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구</div> </div>   
 
         <div id="policy-welfare-slide" class="slide-container policy-slide hidden">
             <div class="header">
@@ -774,44 +774,48 @@
         // ⭐️ 7-11 페이지 (자립준비청년 데이터) 관련 함수 (새로 추가)
         // -----------------------------------------------------------
 
-        function createBarChart(canvasId, labels, datasets, yMin, yMax, unit, colorSet) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            return new Chart(ctx, {
-                type: 'bar',
-                data: { labels, datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: canvasId === 'chartEcon' ? 'y' : 'x', // 경제지표는 가로 막대
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
-                    plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10, padding: 15 } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) { label += ': '; }
-                                    label += context.parsed.y.toLocaleString() + unit;
-                                    return label;
-                                }
-                            }
-                        },
-                    datalabels: {
-                        display: true,
-                        color: '#333',
-                        anchor: 'end',
-                        align: 'end',
-                        formatter: (value) => value.toLocaleString() + unit
-                    }            },
-                  scales: isHorizontal ? {
+        function createBarChart(canvasId, labels, datasets, yMin, yMax, unit) {
+          const ctx = document.getElementById(canvasId).getContext('2d');
+          const isHorizontal = (canvasId === 'chartEcon');
+        
+          return new Chart(ctx, {
+            type: 'bar',
+            data: { labels, datasets },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: isHorizontal ? 'y' : 'x',
+              layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
+              plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10, padding: 15 } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const v = isHorizontal ? context.parsed.x : context.parsed.y;
+                      return `${context.dataset.label}: ${v}${unit}`;
+                    }
+                  }
+                },
+                datalabels: {
+                  display: true,
+                  color: '#333',
+                  anchor: 'end',
+                  align: 'end',
+                  formatter: (value) => `${value}${unit}`
+                }
+              },
+              scales: isHorizontal
+                ? {
                     x: { min: 0, max: yMax, grid: { color: '#e0e0e0' }, ticks: { font: { size: 11 } } },
-                    y: { grid: { color: '#e0e0e0', drawBorder: false }, ticks: { font: { size: 11 } } }
-                  } : {
+                    y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                  }
+                : {
                     x: { grid: { color: '#e0e0e0' }, ticks: { font: { size: 11 } } },
                     y: { min: yMin, max: yMax, grid: { color: '#e0e0e0', drawBorder: false }, ticks: { font: { size: 11 } } }
-                  }               },
-                plugins: [ChartDataLabels]
-                        });
+                  }
+            },
+            plugins: [ChartDataLabels]
+          });
         }
 
         function createWelfareChart() {
@@ -824,7 +828,7 @@
                 data: data,
                 backgroundColor: colors,
                 barThickness: 60
-            }], 0, 60, '%', colors);
+            }], 0, 60, '%');
         }
 
         // 7. 경제적 상황 차트
@@ -905,7 +909,7 @@
                 data: data,
                 backgroundColor: colors,
                 barThickness: 80
-            }], 0, 60, '%', colors);
+            }], 0, 60, '%');
         }
         function createDepressionChart() {
           const labels = ['일반 청년 (19~29세)', '시설 퇴소 청년'];
@@ -917,7 +921,7 @@
             data: data,
             backgroundColor: colors,
             barThickness: 80
-          }], 0, 30, '%', colors);
+          }], 0, 30, '%');
         }
 
         // ⭐️ 차트 초기화 함수 (DataLabels 활성화 여부 인자 추가: useLabels)
