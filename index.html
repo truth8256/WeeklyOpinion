@@ -193,6 +193,72 @@
             width: 100%;
             padding-top: 10px;
         }
+        /* 9쪽 전용 3열 레이아웃 */
+        .risk-grid{
+          display: grid;
+          grid-template-columns: 2fr 1fr; /* 좌 2/3, 우 1/3 */
+          gap: 16px;
+          height: 100%;
+        }
+        
+        /* 좌측: 차트 2개를 위아래로 */
+        .risk-charts{
+          display: grid;
+          grid-template-rows: 1fr 1fr;
+          gap: 12px;
+          min-height: 0; /* flex/grid에서 canvas 높이 계산 안정화 */
+        }
+        
+        .risk-chart-box{
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-height: 0;
+        }
+        
+        /* 우측 카드 */
+        .risk-side{
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          justify-content: center;
+        }
+        
+        .risk-card{
+          text-align: center;
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid;
+        }
+        
+        .risk-card-red{
+          background: #ffe0e0;
+          border-color: #ff9999;
+          color: #cc0000;
+        }
+        
+        .risk-card-blue{
+          background: #e0f8ff;
+          border-color: #99d8ff;
+          color: #004466;
+        }
+        
+        .risk-card h3{
+          font-size: 18px;
+          margin: 0;
+        }
+        
+        .risk-big{
+          font-size: 28px;
+          font-weight: 700;
+          margin: 6px 0 0 0;
+        }
+        
+        .risk-sub{
+          font-size: 13px;
+          margin: 0;
+        }
+
 
     </style>
 </head>
@@ -315,28 +381,36 @@
             </div>
             <div class="data-source">출처: 2023 시설퇴소 자립준비청년 실태조사</div>
         </div>
-
         <div id="policy-risk-slide" class="slide-container policy-slide hidden">
-            <div class="header">
-                <div class="title">Section 2. 삶의 질 저하와 극단적인 위기</div>
-                <div class="subtitle">우울 증상 비율 4.1배, 자살 생각 경험 비율 4.4배</div>
+          <div class="header">
+            <div class="title">Section 2. 삶의 질 저하와 극단적인 위기</div>
+            <div class="subtitle">우울 증상 비율 4.1배, 자살 생각 경험 비율 4.4배</div> </div>
+        
+          <!-- ✅ 3열 레이아웃: (차트 2/3) + (요약박스 1/3) -->
+          <div class="risk-grid">
+            <!-- 좌측 2열(2/3): 바차트 2개 -->
+            <div class="risk-charts">
+              <div class="risk-chart-box">
+                <canvas id="chartSuicide"></canvas></div>
+              <div class="risk-chart-box">
+                <canvas id="chartDepression"></canvas> </div> </div>
+        
+            <!-- 우측 1열(1/3): 기존 박스는 여기로 이동 -->
+            <div class="risk-side">
+              <div class="risk-card risk-card-red">
+                <h3>우울 증상 유무</h3>
+                <p class="risk-big">24.5%</p>
+                <p class="risk-sub">(일반 청년 5.9%)</p>  </div>
+        
+              <div class="risk-card risk-card-blue">
+                <h3>삶의 만족도</h3>
+                <p class="risk-big">4.93점</p>
+                <p class="risk-sub">(10점 만점 / 보통 미만)</p>
+              </div>
             </div>
-            <div class="chart-wrapper" style="height: 55%;">
-                <canvas id="chartSuicide"></canvas>
-            </div>
-            <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 20px;">
-                <div style="text-align: center; background: #ffe0e0; padding: 15px; border-radius: 8px; border: 1px solid #ff9999;">
-                    <h3 style="color: #cc0000; font-size: 20px; margin: 0;">우울 증상 유무</h3>
-                    <p style="font-size: 28px; font-weight: 700; color: #cc0000; margin: 5px 0 0 0;">24.5%</p>
-                    <p style="font-size: 14px; margin: 0; color: #cc0000;">(일반 청년 5.9%)</p>
-                </div>
-                <div style="text-align: center; background: #e0f8ff; padding: 15px; border-radius: 8px; border: 1px solid #99d8ff;">
-                    <h3 style="color: #004466; font-size: 20px; margin: 0;">삶의 만족도</h3>
-                    <p style="font-size: 28px; font-weight: 700; color: #004466; margin: 5px 0 0 0;">4.93점</p>
-                    <p style="font-size: 14px; margin: 0; color: #004466;">(10점 만점 / 보통 미만)</p>
-                </div>
-            </div>
-            <div class="data-source">출처: 2023 시설퇴소 자립준비청년 실태조사</div>
+          </div>
+        
+          <div class="data-source">출처: 2023 시설퇴소 자립준비청년 실태조사</div>
         </div>
 
         <div id="policy-welfare-slide" class="slide-container policy-slide hidden">
@@ -414,7 +488,7 @@
         let chartEcon = null;
         let chartSuicide = null;
         let chartWelfare = null;
-
+        let chartDepression = null;
 
         // ⭐️ 슬라이드 순서 및 상태 관리 (총 11개로 증가)
         const slideOrder = [
@@ -842,7 +916,19 @@
                 barThickness: 80
             }], 0, 60, '%', colors);
         }
+        function createDepressionChart() {
+          const labels = ['일반 청년 (19~29세)', '시설 퇴소 청년'];
+          const data = [5.9, 24.5];
+          const colors = ['#60a5fa', '#dc2626']; // 동일 색상 체계 유지
         
+          return createBarChart('chartDepression', labels, [{
+            label: '우울 증상 경험 비율',
+            data: data,
+            backgroundColor: colors,
+            barThickness: 80
+          }], 0, 30, '%', colors);
+        }
+
         // ⭐️ 차트 초기화 함수 (DataLabels 활성화 여부 인자 추가: useLabels)
         function initChart(canvasId, labels, initialDatasets, yMin, yMax, useLabels = true) {
             const ctx = document.getElementById(canvasId).getContext('2d');
