@@ -366,8 +366,8 @@
 
         <div id="policy-title-slide" class="slide-container policy-slide hidden" style="justify-content: center; align-items: center;">
             <div style="text-align: center;">
-                <h1 class="title-main" style="color: #3b82f6;">격차의 민낯: 자립준비청년의 위기 분석</h1>
-                <h2 class="title-sub" style="margin-top: 20px;">공적 보호 종료 후 홀로 남겨진 청년들의 현실을 숫자로 진단합니다.</h2>
+                <h1 class="title-main" style="color: #3b82f6;">숫자로 보는 '보호 종료'의 무게: 자립준비청년의 위기 분석</h1>
+                <h2 class="title-sub" style="margin-top: 20px;">일반 청년과의 재정·사회적 격차 집중 분석</h2>
             </div>
         </div>
 
@@ -410,8 +410,9 @@
             </div>
           </div>
         
-          <div class="data-source">출처: 2023 시설퇴소 자립준비청년 실태조사</div>
-        </div>
+          <div class="data-source"> {line-height: 1.4;}  출처:<br>
+          백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발<br>
+          이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구</div>    
 
         <div id="policy-welfare-slide" class="slide-container policy-slide hidden">
             <div class="header">
@@ -421,7 +422,7 @@
             <div class="chart-wrapper">
                 <canvas id="chartWelfare"></canvas>
             </div>
-            <div class="data-source">출처: 2023 시설퇴소 자립준비청년 실태조사 (사회보장정보 통합 분석)</div>
+            <div class="data-source">출처: 백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발</div>
         </div>
 
         <div id="policy-solution-slide" class="slide-container policy-slide hidden">
@@ -796,31 +797,22 @@
                                 }
                             }
                         },
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: (value) => value.toLocaleString() + unit
-                        }
-                    },
-                    scales: {
-                        x: {
-                            min: 0,
-                            max: canvasId === 'chartEcon' ? 1400 : yMax,
-                            grid: { color: '#e0e0e0' },
-                            ticks: { font: { size: 11 }, display: canvasId === 'chartEcon' ? true : true }
-                        },
-                        y: {
-                            min: yMin,
-                            max: canvasId === 'chartEcon' ? undefined : yMax,
-                            grid: { color: '#e0e0e0', drawBorder: false },
-                            ticks: { font: { size: 11 } }
-                        }
-                    }
-                },
+                    datalabels: {
+                        display: true,
+                        color: '#333',
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: (value) => value.toLocaleString() + unit
+                    }            },
+                  scales: isHorizontal ? {
+                    x: { min: 0, max: yMax, grid: { color: '#e0e0e0' }, ticks: { font: { size: 11 } } },
+                    y: { grid: { color: '#e0e0e0', drawBorder: false }, ticks: { font: { size: 11 } } }
+                  } : {
+                    x: { grid: { color: '#e0e0e0' }, ticks: { font: { size: 11 } } },
+                    y: { min: yMin, max: yMax, grid: { color: '#e0e0e0', drawBorder: false }, ticks: { font: { size: 11 } } }
+                  }               },
                 plugins: [ChartDataLabels]
-            });
+                        });
         }
 
         function createWelfareChart() {
@@ -1184,8 +1176,10 @@
                     } else {chartEcon.update();}
                     break;
                 case 'policy-risk-slide':   // 9페이지
-                    if (!chartSuicide) { chartSuicide = createSuicideChart();
-                    } else { chartSuicide.update(); }
+                    if (!chartSuicide) chartSuicide = createSuicideChart();
+                    else chartSuicide.update();
+                    if (!chartDepression) chartDepression = createDepressionChart();
+                    else chartDepression.update();
                     break;
                 case 'policy-welfare-slide': // 10페이지
                     if (!chartWelfare) { chartWelfare = createWelfareChart();
