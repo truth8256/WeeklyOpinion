@@ -943,6 +943,24 @@
                     if (!partyChart) partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50, false);
                     else partyChart.update();
                     break;
+                case 'policy-title-slide':                // [7~11페이지: 자립준비청년 슬라이드]
+                    // 타이틀 슬라이드: 렌더링 없음
+                    break;
+                case 'policy-econ-slide':   // 8페이지
+                    if (!chartEcon) {chartEcon = createEconChart();
+                    } else {chartEcon.update();}
+                    break;
+                case 'policy-risk-slide':   // 9페이지
+                    if (!chartSuicide) { chartSuicide = createSuicideChart();
+                    } else { chartSuicide.update(); }
+                    break;
+                case 'policy-welfare-slide': // 10페이지
+                    if (!chartWelfare) { chartWelfare = createWelfareChart();
+                    } else { chartWelfare.update();}
+                    break;
+                case 'policy-solution-slide':                    // 정책 제언: 차트 없음
+                    break;
+
             }
         }
 
