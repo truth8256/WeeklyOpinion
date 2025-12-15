@@ -9,58 +9,72 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
+        /* =========================================================
+            0) Base
+        ========================================================= */
         body {
             font-family: 'Pretendard', sans-serif;
+            font-size: 15px;
             background-color: #f0f2f5;
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             height: 100vh;
             margin: 0;
             overflow: hidden;
         }
 
-        /* ⭐️ 프레젠테이션 뷰를 감싸는 래퍼 (고정 크기 유지) */
+        /* =========================================================
+            1) Layout: Wrapper / Slide Container
+        ========================================================= */
         .presentation-wrapper {
             width: 1280px;
             height: 720px;
             position: relative;
         }
 
-        /* 슬라이드 컨테이너 */
         .slide-container {
             width: 100%;
             height: 100%;
-            background-color: white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-color: #fff;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 30px;
             box-sizing: border-box;
+
             display: flex;
             flex-direction: column;
+
             position: absolute;
             top: 0;
             left: 0;
+
             opacity: 1;
             visibility: visible;
             transition: opacity 0.3s, visibility 0.3s;
         }
 
-        /* 숨겨진 슬라이드 */
         .slide-container.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
 
-        /* 최소화된 슬라이드 내비게이터 (슬라이드 바깥 우측 하단) */
+        /* =========================================================
+            2) Navigator (outside bottom-right)
+        ========================================================= */
         .slide-navigator {
             position: absolute;
             bottom: -40px;
             right: 0;
+
             display: flex;
             align-items: center;
             gap: 10px;
+
             z-index: 20;
         }
 
@@ -68,13 +82,16 @@
             background: none;
             border: 1px solid #ddd;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
+
+            width: 34px;     /* 이전 30px -> 조금 확대 */
+            height: 34px;    /* 이전 30px -> 조금 확대 */
+            font-size: 18px; /* 이전 16px -> 조금 확대 */
             font-weight: 700;
             color: #495057;
+
             cursor: pointer;
             transition: all 0.2s;
+
             display: flex;
             justify-content: center;
             align-items: center;
@@ -97,24 +114,28 @@
             color: #666;
         }
 
-        /* 공통 스타일 */
+        /* =========================================================
+            3) Common Header / Titles / Controls
+        ========================================================= */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+
             margin-bottom: 15px;
-            border-bottom: 2px solid #3b82f6; /* 정치 데이터 색상: #333 -> #3b82f6 */
+            border-bottom: 2px solid #3b82f6;
             padding-bottom: 10px;
         }
 
         .title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
             color: #1a1a1a;
+            letter-spacing: -0.01em;
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 16px;
             color: #666;
         }
 
@@ -129,6 +150,7 @@
             border: 1px solid #ddd;
             background-color: #f8f9fa;
             border-radius: 20px;
+
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
@@ -141,166 +163,193 @@
 
         .btn.active {
             background-color: #0056b3;
-            color: white;
+            color: #fff;
             border-color: #0056b3;
         }
 
+        /* =========================================================
+            4) Chart Area (flex-safe for canvas)
+        ========================================================= */
         .chart-wrapper {
             flex-grow: 1;
             position: relative;
             width: 100%;
             height: 100%;
 
-            display: flex;           /* 추가 */
-            flex-direction: column;  /* 추가 */
-            min-height: 0;           /* 추가: flex에서 canvas 높이 계산 안정화 */
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+
+            padding-top: 6px;     /* 약간의 숨통 */
+            padding-bottom: 6px;  /* 약간의 숨통 */
         }
-        .chart-canvas-box{
-            flex: 1 1 auto;          /* 추가 */
-            min-height: 0;           /* 추가 */
+
+        .chart-canvas-box {
+            flex: 1 1 auto;
+            min-height: 0;
             position: relative;
         }
-        /* 자립청년 슬라이드 전용 스타일 */
-        .policy-slide .header {
-            border-bottom: 2px solid #333; /* 자립청년 데이터: #333 */
-        }
-        .policy-slide .title-main {
-            font-size: 32px;
-            font-weight: 900;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-        }
-        .policy-slide .title-sub {
-            font-size: 18px;
-            color: #555;
-            font-weight: 600;
-        }
-        .policy-item {
-            background: #e0f2fe;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 5px solid #3b82f6;
-            margin-bottom: 15px;
-        }
-        .policy-item h3 {
-            margin: 0 0 5px 0;
-            color: #1e3a8a;
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .policy-item p {
-            font-size: 14px;
-            margin: 0;
-            color: #333;
-        }
+
         .data-source {
-            flex: 0 0 auto;          /* 추가 */
-            margin-top: 6px;         /* 필요시 */
-            font-size: 12px;
+            flex: 0 0 auto;
+            margin-top: 6px;
+            font-size: 11px; /* 12 -> 11: 존재감은 낮추고, 정보는 유지 */
             color: #888;
             text-align: right;
             width: 100%;
             padding-top: 10px;
+            opacity: 0.9;
         }
-        /* 9쪽 전용 3열 레이아웃 */
-        .risk-grid{
-          display: grid;
-          grid-template-columns: 2fr 1fr; /* 좌 2/3, 우 1/3 */
-          gap: 16px;
-          height: 100%;
+
+        /* =========================================================
+            5) Policy Slides (자립청년 슬라이드)
+        ========================================================= */
+        .policy-slide .header {
+            border-bottom: 2px solid #333;
         }
-        
-        /* 좌측: 차트 2개를 위아래로 */
-        .risk-charts{
-          display: grid;
-          grid-template-rows: 1fr;
-          gap: 12px;
-          min-height: 0; 
+
+        .policy-slide .title-main {
+            font-size: 36px;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
-        
-        .risk-chart-box{
-          position: relative;
-          width: 100%;
-          height: 100%;
-          min-height: 0;
+
+        .policy-slide .title-sub {
+            font-size: 20px;
+            color: #555;
+            font-weight: 600;
         }
-        
-        /* 우측 카드 */
-        .risk-side{
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          justify-content: center;
+
+        .policy-item {
+            background: #e0f2fe;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #3b82f6;
+            margin-bottom: 18px;
         }
-        
-        .risk-card{
-          text-align: center;
-          padding: 15px;
-          border-radius: 8px;
-          border: 1px solid;
+
+        .policy-item h3 {
+            margin: 0 0 6px 0;
+            color: #1e3a8a;
+            font-size: 16px;
+            font-weight: 700;
         }
-        
-        .risk-card-red{
-          background: #ffe0e0;
-          border-color: #ff9999;
-          color: #cc0000;
+
+        /* 본문 가독성: 중복 선언 제거 후 하나로 통일 */
+        .policy-item p {
+            font-size: 15px;
+            margin: 6px 0 0 0;
+            color: #333;
+
+            line-height: 1.55;
+            max-width: 820px;
+            white-space: normal;
+            word-break: keep-all;
         }
-        
-        .risk-card-blue{
-          background: #e0f8ff;
-          border-color: #99d8ff;
-          color: #004466;
+
+        .policy-item strong {
+            font-weight: 700;
+            color: #1d4ed8;
         }
-        
-        .risk-card h3{
-          font-size: 18px;
-          margin: 0;
+
+        .policy-item ul {
+            margin: 6px 0 0 18px;
+            padding: 0;
+
+            line-height: 1.55;
+            max-width: 820px;
         }
-        
-        .risk-big{
-          font-size: 28px;
-          font-weight: 700;
-          margin: 6px 0 0 0;
+
+        .policy-item li {
+            margin: 4px 0;
+            font-size: 15px; /* p와 동일 스케일 */
+            color: #333;
+            word-break: keep-all;
         }
-        
-        .risk-sub{
-          font-size: 13px;
-          margin: 0;
-        }
-        
+
         /* policy-solution 슬라이드: 출처를 항상 맨 아래로 */
-        .policy-solution-body { 
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        min-height: 0;
+        .policy-solution-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-height: 0;
         }
 
-        .policy-solution-source{
-        margin-top: auto;   /* ✅ 아래로 밀어붙임 */
+        .policy-solution-source {
+            margin-top: auto;
         }
 
-        /* 본문 가독성 개선 */
-        .policy-item p{
-        margin: 6px 0 0 0;
-        line-height: 1.45;
-        max-width: 820px;   /* ✅ 한 줄 너무 길어지는 것 방지 */
-        white-space: normal;
-        word-break: keep-all;
+        /* =========================================================
+            6) Risk Slide (9쪽 전용 레이아웃)
+        ========================================================= */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: 3fr 1.1fr;
+            gap: 16px;
+            height: 100%;
         }
 
-        /* 문장을 불릿으로 쪼개서 보여주고 싶을 때 */
-        .policy-item ul{
-        margin: 6px 0 0 18px;
-        padding: 0;
-        line-height: 1.45;
-        max-width: 820px;
-        }
-        .policy-item li{
-        margin: 4px 0;
+        /* 좌측: 차트 영역 */
+        .risk-charts {
+            display: grid;
+            grid-template-rows: 1fr; /* 필요시 1fr 1fr 로 바꾸면 2개 위/아래 */
+            gap: 12px;
+            min-height: 0;
         }
 
-    </style>
+        .risk-chart-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+        }
+
+        /* 우측 카드 */
+        .risk-side {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .risk-card {
+            text-align: center;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid;
+        }
+
+        .risk-card-red {
+            background: #ffe0e0;
+            border-color: #ff9999;
+            color: #cc0000;
+        }
+
+        .risk-card-blue {
+            background: #e0f8ff;
+            border-color: #99d8ff;
+            color: #004466;
+        }
+
+        .risk-card h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .risk-big {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 6px 0 0 0;
+        }
+
+        .risk-sub {
+            font-size: 13px;
+            margin: 0;
+        }
+        </style>
+
 </head>
 <body>
 
