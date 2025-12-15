@@ -285,8 +285,8 @@
 
             <div class="chart-wrapper">
                 <canvas id="weeklyTrendChart"></canvas>
-            </div><div class="data-source">조사의뢰 : 한국갤럽 자체조사 / 조사기관 : 한국갤럽 / 조사기간 : 25년 12월 9일~11일 / 조사방법 : 무선100% 전화면접(CATI) 
-한국갤럽 데일리 오피니언 제645호 인용. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조 </div>
+                <div id="weekly-trend-source" class="data-source"></div>
+            </div>
         </div>
 
         <div id="party-trend-slide" class="slide-container hidden">
@@ -302,6 +302,7 @@
 
             <div class="chart-wrapper">
                 <canvas id="weeklyPartyTrendChart"></canvas>
+                <div id="weekly-trend-source" class="data-source"></div>
             </div>
         </div>
         <div id="pres-slide-full" class="slide-container hidden">
@@ -473,6 +474,12 @@
         // 정치 데이터 라벨
         const labelsFull = ['7월', '8월', '9월', '10월', '11월'];
         const labelsPartial = ['9월', '10월', '11월'];
+        
+        // 함께 공표·보도하여야 할 사항
+        const SOURCE_WEEKLY_GALLUP = `
+        한국갤럽 자체조사로 25년 12월 9일~11일, 무선100% 전화면접(CATI)로 진행함. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조`;
+        const SOURCE_WEEKLY_REALMETER = `
+        에너지경제신문의뢰로 리얼미터가 25년 12월 8일~12일, 무선100% ARS로 진행함. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조`;
 
         // --- 차트 데이터 및 객체 ---
         // 정치 데이터 차트 객체 (기존 유지)
@@ -550,6 +557,9 @@
             const isGallup = mode === 'gallup';
             currentWeeklyTrendMode = mode;   // ⭐️ 현재 1페이지 모드 저장
             const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
+            const sourceEl = document.getElementById('weekly-trend-source');
+            if (sourceEl) {sourceEl.innerHTML = isGallup ? SOURCE_WEEKLY_GALLUP : SOURCE_WEEKLY_REALMETER;}
+
             document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
 
             const newDatasets = [
@@ -628,7 +638,10 @@
                     if (v === '' || v == null) return null;  // 결측은 null
                     return isGallup ? parseInt(v) : parseFloat(v);
                 };
-        
+                
+                const sourceEl = document.getElementById('weekly-trend-source');
+                if (sourceEl) {sourceEl.innerHTML = isGallup ? SOURCE_WEEKLY_GALLUP : SOURCE_WEEKLY_REALMETER;}
+
                 if (idxDem    >= 0) data['더불어민주당'].push(parseVal(values[idxDem]));
                 if (idxCon    >= 0) data['국민의힘'].push(parseVal(values[idxCon]));
                 if (idxCho    >= 0) data['조국혁신당'].push(parseVal(values[idxCho]));
