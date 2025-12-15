@@ -391,11 +391,28 @@
                 <div class="title">1. 경제적 기반의 취약성</div>
                 <div class="subtitle">월평균 소득은 절반, 평균 부채액은 2.6배</div>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="chartEcon"></canvas>
+
+            <div class="risk-grid">
+                <!-- 좌측: 세로막대 차트 -->
+                <div class="risk-charts">
+                <div class="risk-chart-box">
+                    <canvas id="chartEcon"></canvas>
+                </div>
+                </div>
+
+                <!-- 우측: 요약 카드(부채 보유율) -->
+                <div class="risk-side">
+                <div class="risk-card risk-card-red">
+                    <h3>부채 보유율</h3>
+                    <p class="risk-big">36.4%</p>
+                    <p class="risk-sub">(일반 청년 16.3%)</p>
+                </div>
+                </div>
             </div>
+
             <div class="data-source">출처: 2023 시설퇴소 자립준비청년 실태조사</div>
         </div>
+
 
         <div id="policy-risk-slide" class="slide-container policy-slide hidden">
             <div class="header">
@@ -414,11 +431,11 @@
 
                 <!-- 우측 요약 카드 -->
                 <div class="risk-side">
-                <div class="risk-card risk-card-red">
-                    <h3>우울 증상 유무</h3>
-                    <p class="risk-big">24.5%</p>
-                    <p class="risk-sub">(일반 청년 5.9%)</p>
-                </div>
+                    <div class="risk-card risk-card-blue">
+                        <h3>삶의 만족도</h3>
+                        <p class="risk-big">4.93점</p>
+                        <p class="risk-sub">(10점 만점 / 보통 미만)</p>
+                    </div>
                 </div>
             </div>
 
@@ -865,70 +882,66 @@
 
         // 7. 경제적 상황 차트
         function createEconChart() {
-            const labels = ['월평균 소득 (만원)', '평균 부채액 (만원)', '부채 보유율 (%)'];
-            const datasets = [
-                {
-                    label: '일반 청년 (29세 이하)',
-                    data: [365, 514, 16.3],
-                    backgroundColor: POSITIVE_COLOR,
-                    borderRadius: 4
-                },
-                {
-                    label: '시설 퇴소 청년',
-                    data: [170, 1366, 36.4],
-                    backgroundColor: NEGATIVE_COLOR,
-                    borderRadius: 4
+        // ✅ 차트에는 2개만 남김
+        const labels = ['월평균 소득(만원)', '평균 부채액(만원)'];
+
+        const datasets = [
+            {
+            label: '일반 청년(29세 이하)',
+            data: [365, 514],
+            backgroundColor: '#60a5fa',   // ✅ 9쪽과 동일한 파랑 톤
+            borderRadius: 4
+            },
+            {
+            label: '시설 퇴소 청년',
+            data: [170, 1366],
+            backgroundColor: '#dc2626',   // ✅ 9쪽과 동일한 빨강 톤
+            borderRadius: 4
+            }
+        ];
+
+        const ctx = document.getElementById('chartEcon').getContext('2d');
+
+        return new Chart(ctx, {
+            type: 'bar',
+            data: { labels, datasets },
+            options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            // ✅ 세로막대: indexAxis 제거(또는 'x')
+            layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                callbacks: {
+                    label: (context) => `${context.dataset.label}: ${context.raw.toLocaleString()}만원`
                 }
-            ];
-            
-            // 특이점: 소득과 부채액은 만원 단위, 부채율은 % 단위. Y축 label에 % 단위 추가를 위해 커스터마이징 필요
-            const chart = new Chart(document.getElementById('chartEcon').getContext('2d'), {
-                type: 'bar',
-                data: { labels, datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
-                    plugins: {
-                        legend: { position: 'top' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) { label += ': '; }
-                                    const value = context.raw;
-                                    const unit = context.dataIndex === 2 ? '%' : '만원';
-                                    label += value.toLocaleString() + unit;
-                                    return label;
-                                }
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: (value, context) => value.toLocaleString() + (context.dataIndex === 2 ? '%' : '만원')
-                        }
-                    },
-                    scales: {
-                        x: {
-                            min: 0,
-                            max: 1400, // 부채액 최대값 반영
-                            grid: { color: '#e0e0e0' },
-                            ticks: { font: { size: 11 } }
-                        },
-                        y: {
-                            grid: { display: false },
-                            ticks: { font: { size: 12 } }
-                        }
-                    }
                 },
-                plugins: [ChartDataLabels]
-            });
-            return chart;
+                datalabels: {
+                display: true,
+                color: '#333',
+                anchor: 'end',
+                align: 'end',
+                formatter: (value) => `${value.toLocaleString()}만원`
+                }
+            },
+            scales: {
+                y: {
+                beginAtZero: true,
+                suggestedMax: 1500,  // 부채액 최대값 반영
+                grid: { color: '#e0e0e0', drawBorder: false },
+                ticks: { font: { size: 11 } }
+                },
+                x: {
+                grid: { display: false },
+                ticks: { font: { size: 12 } }
+                }
+            }
+            },
+            plugins: [ChartDataLabels]
+        });
         }
+
 
         // 8. 심리적 위기 차트 (자살 생각 경험)
         function createRiskCombinedChart() {
@@ -1233,8 +1246,8 @@
                     // 타이틀 슬라이드: 렌더링 없음
                     break;
                 case 'policy-econ-slide':   // 8페이지
-                    if (!chartEcon) {chartEcon = createEconChart();
-                    } else {chartEcon.update();}
+                    if (!chartEcon) chartEcon = createEconChart();
+                    else chartEcon.update();
                     break;
                 case 'policy-risk-slide':   // 9페이지
                     if (!chartRisk) chartRisk = createRiskCombinedChart();
