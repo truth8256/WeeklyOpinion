@@ -150,8 +150,16 @@
             position: relative;
             width: 100%;
             height: 100%;
-        }
 
+            display: flex;           /* 추가 */
+            flex-direction: column;  /* 추가 */
+            min-height: 0;           /* 추가: flex에서 canvas 높이 계산 안정화 */
+        }
+        .chart-canvas-box{
+            flex: 1 1 auto;          /* 추가 */
+            min-height: 0;           /* 추가 */
+            position: relative;
+        }
         /* 자립청년 슬라이드 전용 스타일 */
         .policy-slide .header {
             border-bottom: 2px solid #333; /* 자립청년 데이터: #333 */
@@ -186,7 +194,8 @@
             color: #333;
         }
         .data-source {
-            margin-top: auto;
+            flex: 0 0 auto;          /* 추가 */
+            margin-top: 6px;         /* 필요시 */
             font-size: 12px;
             color: #888;
             text-align: right;
@@ -546,6 +555,16 @@
                 .catch(error => console.error("주간 직무 데이터 로드 오류:", error));
         }
 
+        function updateWeeklySource(mode){
+            const isGallup = (mode === 'gallup');
+            const html = isGallup ? SOURCE_WEEKLY_GALLUP : SOURCE_WEEKLY_REALMETER;
+
+            // 현재 문서에 있는 동일 출처 영역을 모두 갱신 (1쪽/2쪽 동시에 해결)
+            document.querySelectorAll('.weekly-trend-source').forEach(el => {
+                el.innerHTML = html;
+            });
+        }
+
         function updateWeeklyTrendView(mode, btnElement) {
             if (!weeklyTrendData.labels) return; 
 
@@ -556,8 +575,8 @@
 
             const isGallup = mode === 'gallup';
             currentWeeklyTrendMode = mode;   // ⭐️ 현재 1페이지 모드 저장
+            updateWeeklySource(mode); 
             const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
-            const sourceEl = document.getElementById('weekly-trend-source');
             if (sourceEl) {sourceEl.innerHTML = isGallup ? SOURCE_WEEKLY_GALLUP : SOURCE_WEEKLY_REALMETER;}
 
             document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
@@ -575,7 +594,6 @@
                 weeklyTrendChart.update();
             }
         }
-
 
         // ===========================================================
         // ⭐️ 2페이지: 정당 지지율 주간 로직 (새로 추가됨)
@@ -639,9 +657,6 @@
                     return isGallup ? parseInt(v) : parseFloat(v);
                 };
                 
-                const sourceEl = document.getElementById('weekly-trend-source');
-                if (sourceEl) {sourceEl.innerHTML = isGallup ? SOURCE_WEEKLY_GALLUP : SOURCE_WEEKLY_REALMETER;}
-
                 if (idxDem    >= 0) data['더불어민주당'].push(parseVal(values[idxDem]));
                 if (idxCon    >= 0) data['국민의힘'].push(parseVal(values[idxCon]));
                 if (idxCho    >= 0) data['조국혁신당'].push(parseVal(values[idxCho]));
@@ -697,6 +712,7 @@
 
             const isGallup = mode === 'gallup';
             currentWeeklyPartyMode = mode;   // ⭐️ 현재 모드를 전역에 저장
+            updateWeeklySource(mode);  
             const source = isGallup ? weeklyPartyTrendData.gallup : weeklyPartyTrendData.realmeter;
             
             document.getElementById('party-trend-title').textContent = `주요 정당 지지율 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
