@@ -293,9 +293,11 @@
             </div>
 
             <div class="chart-wrapper">
-                <canvas id="weeklyTrendChart"></canvas>
-                <div id="weekly-trend-source" class="data-source"></div>
-            </div>
+                <div class="chart-canvas-box">
+                    <canvas id="weeklyTrendChart"></canvas></div>
+                <div class="data-source weekly-trend-source"></div>
+                </div>
+
         </div>
 
         <div id="party-trend-slide" class="slide-container hidden">
@@ -310,9 +312,11 @@
             </div>
 
             <div class="chart-wrapper">
-                <canvas id="weeklyPartyTrendChart"></canvas>
-                <div id="weekly-trend-source" class="data-source"></div>
+            <div class="chart-canvas-box">
+                <canvas id="weeklyPartyTrendChart"></canvas>   </div>
+            <div class="data-source weekly-trend-source"></div>
             </div>
+
         </div>
         <div id="pres-slide-full" class="slide-container hidden">
             <div class="header">
@@ -395,7 +399,7 @@
         <div id="policy-risk-slide" class="slide-container policy-slide hidden">
           <div class="header">
             <div class="title">Section 2. 삶의 질 저하와 극단적인 위기</div>
-            <div class="subtitle">우울 증상 비율 4.1배, 자살 생각 경험 비율 4.4배</div> </div>
+            <div class="subtitle">우울 증상 비율 4.1배, 자살 생각 경험 비율 4.4배</div> 
         
           <!-- ✅ 3열 레이아웃: (차트 2/3) + (요약박스 1/3) -->
           <div class="risk-grid">
@@ -577,7 +581,6 @@
             currentWeeklyTrendMode = mode;   // ⭐️ 현재 1페이지 모드 저장
             updateWeeklySource(mode); 
             const source = isGallup ? weeklyTrendData.gallupData : weeklyTrendData.realmeterData;
-            if (sourceEl) {sourceEl.innerHTML = isGallup ? SOURCE_WEEKLY_GALLUP : SOURCE_WEEKLY_REALMETER;}
 
             document.getElementById('weekly-trend-title').textContent = `대통령 직무 수행 평가 추이 (${isGallup ? '갤럽' : '리얼미터'})`;
 
