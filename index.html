@@ -307,6 +307,12 @@
             min-height: 0;
         }
 
+        /* 정책 사각지대 슬라이드: 차트 높이 줄이기 */
+        #policy-welfare-slide .chart-wrapper{
+        max-height: 360px;   /* 기존보다 작게 */
+        margin-top: 10px;
+        }
+
         /* 우측 카드 */
         .risk-side {
             display: flex;
@@ -349,6 +355,147 @@
             font-size: 13px;
             margin: 0;
         }
+
+        .yk-wrap{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        }
+
+        .yk-titlebar{
+        display:flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 18px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        }
+
+        .yk-title{
+        font-size: 28px;
+        font-weight: 800;
+        color:#111;
+        }
+
+        /* slide-yk-1 (center title layout) */
+        .yk-center{
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;      /* 세로 중앙 */
+        justify-content: center;  /* 가로 중앙 */
+        min-height: 0;
+        }
+        .yk-mainword{
+        font-size: 64px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color:#111;
+        }
+        .yk-subcopy{
+        font-size: 18px;
+        line-height: 1.55;
+        color:#333;
+        max-width: 980px;
+        word-break: keep-all;
+        }
+        /* slide-yk-1에서만: 메인카피 아래로 서브카피 내려오기 */
+        #slide-yk-1 .yk-center{
+        display: flex;
+        flex-direction: column;     /* ✅ 세로 배치 */
+        align-items: center;        /* ✅ 가로 중앙 */
+        justify-content: center;    /* ✅ 세로 중앙(슬라이드 가운데 유지) */
+        gap: 14px;                  /* ✅ 메인-서브 간격 */
+        text-align: center;         /* ✅ 서브카피 중앙 정렬 */
+        }
+
+        /* (선택) 서브카피 가독성/폭 제한 */
+        #slide-yk-1 .yk-subcopy{
+        max-width: 860px;
+        line-height: 1.5;
+        }
+
+        /* slide-yk-2 & 3 boxes */
+        .yk-grid{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+        width: 100%;
+        max-width: 1100px;    
+        }
+        /* slide-yk-3에서만: row 높이 강제 늘어남 방지 */
+        #slide-yk-3 .yk-grid{
+        align-items: start;
+        }
+
+        .yk-box{
+        background: #e0f2fe;
+        border-radius: 10px;
+        padding: 18px;
+        text-align: center;
+        }
+
+        .yk-box strong{
+        display: block;
+        font-size: 16px;
+        font-weight: 800;
+        margin-bottom: 6px;
+        }
+
+        .yk-box span{
+        font-size: 14px;
+        color: #444;
+        line-height: 1.4;
+        }
+
+        /* 기타 취약 청년 */
+        .yk-box-muted{
+        background: #f3f4f6;
+        border: 1px dashed #bbb;
+        }
+        /* slide-yk-3: 오른쪽(기타 취약 청년) 박스만 세로 가운데로 */
+        #slide-yk-3 .yk-box-muted{
+        align-self: center;
+        }
+
+        .yk-box-title{
+        font-size: 24px;
+        font-weight: 900;
+        color:#111;
+        margin: 0 0 10px 0;
+        }
+        .yk-box-desc{
+        font-size: 16px;
+        line-height: 1.55;
+        color:#333;
+        margin: 0;
+        word-break: keep-all;
+        }
+
+        /* slide-yk-3 grouping (first 3 boxes) */
+        .yk-group{
+        grid-column: 1 / span 3;
+        border: 3px solid #3b82f6;
+        border-radius: 12px;
+        padding: 18px;
+        position: relative;
+        background: #f8fbff;
+        }
+        .yk-group-label{
+        position: absolute;
+        top: -14px;
+        left: 16px;
+        background: white;
+        padding: 2px 10px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e3a8a;
+        }
+        .yk-group-grid{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        }
         </style>
 
 </head>
@@ -358,14 +505,14 @@
 
         <div class="slide-navigator">
             <button id="nav-prev" class="nav-arrow" onclick="navigateSlides(-1)" disabled>&lt;</button>
-            <span id="page-indicator">1 / 11</span>
+            <span id="page-indicator"></span>
             <button id="nav-next" class="nav-arrow" onclick="navigateSlides(1)">&gt;</button>
         </div>
 
         <div id="weekly-trend-slide" class="slide-container">
             <div class="header">
                 <div id="weekly-trend-title" class="title">대통령 직무 수행 평가 추이 (갤럽)</div>
-                <div class="subtitle">기간: 주간 단위 | 자료: 갤럽/리얼미터</div>
+                <div class="subtitle">기간: 6월 2주 ~ 12월 2주 | 자료: 갤럽/리얼미터</div>
             </div>
 
             <div id="weekly-trend-controls" class="controls">
@@ -384,7 +531,7 @@
         <div id="party-trend-slide" class="slide-container hidden">
             <div class="header">
                 <div id="party-trend-title" class="title">주요 정당 지지율 추이 (갤럽)</div>
-                <div class="subtitle">기간: 주간 단위 | 자료: 갤럽/리얼미터</div>
+                <div class="subtitle">기간: 8월 2주 ~ 12월 2주 | 자료: 갤럽/리얼미터</div>
             </div>
 
             <div id="party-trend-controls" class="controls">
@@ -467,6 +614,97 @@
             </div>
         </div>
 
+        <div id="slide-yk-1" class="slide-container policy-slide hidden">
+        <div class="yk-wrap">
+            <div class="yk-titlebar">
+            <div class="yk-title">시설퇴소 자립준비청년</div>
+            <div></div>
+            </div>
+
+            <div class="yk-center">
+            <div class="yk-mainword">자립준비청년</div>
+            <div class="yk-subcopy">
+                「아동복지법」상 아동양육시설·공동생활가정·가정위탁 등에서 보호를 받다가<br/>
+                보호조치 종료 후 5년 이내인 청년
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <div id="slide-yk-2" class="slide-container policy-slide hidden">
+        <!-- ✅ 제목 영역(상단 고정) -->
+        <div class="header">
+            <div class="title">시설퇴소 자립준비청년</div>
+        </div>
+
+        <!-- ✅ 박스 영역(슬라이드 정중앙) -->
+        <div class="yk-center">
+            <div class="yk-grid">
+            <div class="yk-box">
+                <div class="yk-box-title">자립준비청년</div>
+                <p class="yk-box-desc">아동복지법 기반 보호종료<br>(아동양육시설 등)</p>
+            </div>
+
+            <div class="yk-box">
+                <div class="yk-box-title">자립준비청소년</div>
+                <p class="yk-box-desc">청소년복지시설 퇴소 <br>(쉼터·자립지원관 등)</p>
+            </div>
+
+            <div class="yk-box">
+                <div class="yk-box-title">소년보호시설 출원생</div>
+                <p class="yk-box-desc">소년법 체계 보호처분 종료<br>(소년원, 소년분류심사원)</p>
+            </div>
+
+            <div class="yk-box yk-box-muted">
+                <div class="yk-box-title">기타 취약 청년</div>
+                <p class="yk-box-desc">시설보호 경험 청년, 노숙 청년, 기타 취약 청년 등</p>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+        <div id="slide-yk-3" class="slide-container policy-slide hidden">
+        <!-- ✅ 제목 영역(상단 고정) -->
+        <div class="header">
+            <div class="title">시설퇴소 자립준비청년</div>
+        </div>
+
+        <!-- ✅ 박스 영역(슬라이드 정중앙) -->
+        <div class="yk-center">
+            <div class="yk-grid">
+            <!-- 🔹 앞의 3개를 묶는 그룹(1~3열 차지) -->
+            <div class="yk-group">
+                <div class="yk-group-label">&lt;시설퇴소 자립준비청년&gt;</div>
+
+                <div class="yk-group-grid">
+                <div class="yk-box">
+                    <div class="yk-box-title">자립준비청년</div>
+                    <p class="yk-box-desc">아동복지법 기반 보호종료<br>(아동양육시설 등)</p>
+                </div>
+
+                <div class="yk-box">
+                <div class="yk-box-title">자립준비청소년</div>
+                <p class="yk-box-desc">청소년복지시설 퇴소<br>(쉼터·자립지원관 등)</p>
+                </div>
+
+                <div class="yk-box">
+                <div class="yk-box-title">소년보호시설 출원생</div>
+                <p class="yk-box-desc">소년법 체계 보호처분 종료<br>(소년원, 소년분류심사원)</p>
+                </div>
+                </div>
+            </div>
+
+            <!-- 🔹 같은 줄의 4번째 박스 -->
+            <div class="yk-box yk-box-muted">
+                <div class="yk-box-title">기타 취약 청년</div>
+                <p class="yk-box-desc">시설보호 경험 청년, 노숙 청년, 기타 취약 청년 등</p>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
         <div id="policy-econ-slide" class="slide-container policy-slide hidden">
             <div class="header">
                 <div class="title">1. 경제적 기반의 취약성</div>
@@ -491,7 +729,7 @@
                 </div>
             </div>
 
-            <div class="data-source">출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발</div>
+            <div class="data-source">출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발</div>
         </div>
 
 
@@ -521,20 +759,20 @@
             </div>
 
             <div class="data-source">
-                출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발<br>
+                출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발<br>
                 이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구
             </div>
         </div>
 
         <div id="policy-welfare-slide" class="slide-container policy-slide hidden">
             <div class="header">
-                <div class="title">3. 정책의 사각지대</div>
-                <div class="subtitle">퇴소 시설 유형에 따른 기초생활수급 비율 격차 (%)</div>
+                <div class="title">3. 정책의 사각지대 : 자립지원수당</div>
+                <div class="subtitle">시설 유형별 자립수당 수령 여부 (%)</div>
             </div>
             <div class="chart-wrapper">
                 <canvas id="chartWelfare"></canvas>
             </div>
-            <div class="data-source">출처: 백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발</div>
+            <div class="data-source">출처: 김승경 외. (2024). 2024년 시설퇴소청년의 생활 실태 및 정책개발</div>
         </div>
 
         <div id="policy-solution-slide" class="slide-container policy-slide hidden">
@@ -573,7 +811,7 @@
                 </div>
 
                 <div class="data-source policy-solution-source">
-                출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활실태 및 정책개발<br>
+                출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발<br>
                 이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구
                 </div>
 
@@ -609,9 +847,9 @@
         
         // 함께 공표·보도하여야 할 사항
         const SOURCE_WEEKLY_GALLUP = `
-        한국갤럽 자체조사로 25년 12월 9일~11일, 무선100% 전화면접(CATI)로 진행함. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조`;
+        * 12월 2주 조사 : 한국갤럽 자체조사로 25년 12월 9일~11일, 무선100% 전화면접(CATI)로 진행함. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조`;
         const SOURCE_WEEKLY_REALMETER = `
-        에너지경제신문의뢰로 리얼미터가 25년 12월 8일~12일, 무선100% ARS로 진행함. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조`;
+        * 12월 2주 조사 : 에너지경제신문의뢰로 리얼미터가 25년 12월 8일~12일, 무선100% ARS로 진행함. 그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조`;
 
         // --- 차트 데이터 및 객체 ---
         // 정치 데이터 차트 객체 (기존 유지)
@@ -629,10 +867,11 @@
         let chartWelfare = null;
         let chartRisk = null;
 
-        // ⭐️ 슬라이드 순서 및 상태 관리 (총 11개로 증가)
+        // ⭐️ 슬라이드 순서 및 상태 관리
         const slideOrder = [
             'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide', // [1~6] 정치 데이터
-            'policy-title-slide', 'policy-econ-slide', 'policy-risk-slide', 'policy-welfare-slide', 'policy-solution-slide' // [7~11] 자립청년 데이터
+            'policy-title-slide', 'slide-yk-1','slide-yk-2','slide-yk-3',    // ✅ [8~10] 새로 추가한 개념 슬라이드
+            'policy-econ-slide', 'policy-risk-slide', 'policy-welfare-slide', 'policy-solution-slide' // [7~11] 자립청년 데이터
         ];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
@@ -970,17 +1209,69 @@
         }
 
         function createWelfareChart() {
-            const labels = ['아동양육시설', '청소년쉼터', '소년보호시설'];
-            const data = [51.5, 34.7, 24.8];
-            const colors = ['#3b82f6', '#f97316', '#dc2626']; // 소년보호시설(가장 낮은 수급률) 강조
+            const labels = ['전체', '아동시설', '청소년시설', '소년보호시설'];
 
-            return createBarChart('chartWelfare', labels, [{
-                label: '기초생활수급 비율',
-                data: data,
-                backgroundColor: colors,
-                barThickness: 60
-            }], 0, 60, '%');
+            const data_current = [56.3, 68.0, 23.3, 17.1];  // 현재 받고 있다
+            const data_past    = [22.1, 25.1, 13.5, 11.4];  // 과거에는 받았으나 현재는 받지 않는다
+            const data_never   = [21.6,  6.9, 63.2, 71.5];  // 한 번도 받은 적 없다
+
+            const ctx = document.getElementById('chartWelfare').getContext('2d');
+
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                labels,
+                datasets: [
+                    { label: '현재 받고 있다', data: data_current, stack: 'stack1',backgroundColor: '#5b7bbf',categoryPercentage: 0.6,
+    barPercentage: 0.7 },
+                    { label: '과거엔 받았으나 현재는 받지 않는다', data: data_past, stack: 'stack1',backgroundColor: '#d6a55f',categoryPercentage: 0.6,
+    barPercentage: 0.7  },
+                    { label: '한 번도 받은 적 없다', data: data_never, stack: 'stack1',backgroundColor: '#c97a7a',categoryPercentage: 0.6,
+    barPercentage: 0.7  }
+                ]
+                },
+                options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',                 // ✅ 가로 누적막대(가독성 좋음)
+                scales: {
+                    x: {
+                    stacked: true,
+                    min: 0,
+                    max: 100,
+                    ticks: { callback: (v) => v + '%' }
+                    },
+                    y: { stacked: true }
+                },
+                plugins: {
+                    legend: { position: 'right',
+                              align: 'center',
+                              labels: {boxWidth: 14,boxHeight: 14,padding: 12,
+                                    font: {size: 13,weight: '600'},
+                                    color: '#333'}},
+                    tooltip: {
+                    callbacks: {
+                        label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x}%`
+                    }
+                    },
+                    datalabels: {color: '#ffffff',font: {weight: '700', size: 12},    
+                    formatter: (v) => (v >= 8 ? v + '%' : ''),  // ✅ 너무 작은 조각은 숨김(원하면 숫자 조정)
+                    anchor: 'center',
+                    align: 'center',clamp: true 
+                    }
+                },
+                layout: {
+                padding: {
+                    left: 20,
+                    right: 20,
+                    top: 20,
+                    bottom: 20
+                }
+                }
+                }
+            });
         }
+
 
         // 7. 경제적 상황 차트
         function createEconChart() {
@@ -1036,7 +1327,7 @@
                 },
                 x: {
                 grid: { display: false },
-                ticks: { font: { size: 12 } }
+                ticks: { font: { size: 16 } }
                 }
             }
             },
@@ -1090,7 +1381,7 @@
                 },
                 scales: {
                     y: { min: 0, max: 60, ticks: { stepSize: 10 }, grid: { color: '#e0e0e0' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 12 } } }
+                    x: { grid: { display: false }, ticks: { font: { size: 16 } } }
                 }
                 },
                 plugins: [ChartDataLabels]
@@ -1305,65 +1596,110 @@
         // ⭐️ 슬라이드 전환 및 표시 업데이트 (전체 6페이지로 변경)
         // -----------------------------------------------------------
         function updateSlideDisplay(index) {
+            // 1) 인덱스 가드
+            if (index < 0 || index >= slideOrder.length) return;
+
+            // 2) 전체 숨김
             document.querySelectorAll('.slide-container').forEach(slide => {
                 slide.classList.add('hidden');
             });
-            
+
+            // 3) 현재 슬라이드 표시 (ID 존재 여부 체크)
             const slideId = slideOrder[index];
-            document.getElementById(slideId).classList.remove('hidden');
+            const slideEl = document.getElementById(slideId);
 
-            // 페이지 인디케이터 업데이트 (슬라이드가 6개)
+            if (!slideEl) {
+                console.error(`[updateSlideDisplay] 슬라이드 ID를 찾을 수 없습니다: ${slideId}`);
+                // 최소한 네비 UI는 업데이트하고 종료
+                pageIndicator.textContent = `${index + 1} / ${slideOrder.length}`;
+                navPrev.disabled = (index === 0);
+                navNext.disabled = (index === slideOrder.length - 1);
+                return;
+            }
+
+            slideEl.classList.remove('hidden');
+
+            // 4) 네비 UI 업데이트 (하드코딩 제거)
             pageIndicator.textContent = `${index + 1} / ${slideOrder.length}`;
-
             navPrev.disabled = (index === 0);
             navNext.disabled = (index === slideOrder.length - 1);
 
-            // 차트 렌더링
-            switch(slideId) {
+            // 5) 차트/렌더링: 필요한 슬라이드에서만 실행
+            switch (slideId) {
                 case 'weekly-trend-slide': // 1페이지: 직무 주간
-                    if (!weeklyTrendData.labels) loadWeeklyTrendChart();
-                    else updateWeeklyTrendView(document.querySelector('#weekly-trend-controls .btn.active').dataset.mode, document.querySelector('#weekly-trend-controls .btn.active'));
-                    break;
-                case 'party-trend-slide': // ⭐️ 2페이지: 정당 주간 (새로 추가)
-                    if (!weeklyPartyTrendData.gallup) loadWeeklyPartyTrendChart();
-                    else updateWeeklyPartyTrendView(document.querySelector('#party-trend-controls .btn.active').dataset.mode, document.querySelector('#party-trend-controls .btn.active'));
-                    break;
-                case 'pres-slide-full': // 3페이지 (기존 2페이지): 직무 월간
-                    if (!presChartFull) presChartFull = initChart('presChartFull', labelsFull, pres_data_Full, 0, 90);
-                    else presChartFull.update();
-                    break;
-                case 'party-slide-full': // 4페이지 (기존 3페이지): 정당 월간
-                    if (!partyChartFull) partyChartFull = initChart('partyChartFull', labelsFull, partyData_Full, 0, 50);
-                    else partyChartFull.update();
-                    break;
-                case 'pres-slide': // 5페이지 (기존 4페이지): 직무 세부
-                    const currentActiveBtn = pres_controls.querySelector('.btn.active');
-                    updatePresView(currentActiveBtn ? currentActiveBtn.dataset.mode || 'total' : 'total', currentActiveBtn);
-                    break;
-                case 'party-slide': // 6페이지 (기존 5페이지): 정당 세부
-                    if (!partyChart) partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50, false);
-                    else partyChart.update();
-                    break;
-                case 'policy-title-slide':                // [7~11페이지: 자립준비청년 슬라이드]
-                    // 타이틀 슬라이드: 렌더링 없음
-                    break;
-                case 'policy-econ-slide':   // 8페이지
-                    if (!chartEcon) chartEcon = createEconChart();
-                    else chartEcon.update();
-                    break;
-                case 'policy-risk-slide':   // 9페이지
-                    if (!chartRisk) chartRisk = createRiskCombinedChart();
-                    else chartRisk.update();
-                    break;
-                case 'policy-welfare-slide': // 10페이지
-                    if (!chartWelfare) { chartWelfare = createWelfareChart();
-                    } else { chartWelfare.update();}
-                    break;
-                case 'policy-solution-slide':                    // 정책 제언: 차트 없음
-                    break;
+                if (!weeklyTrendData.labels) loadWeeklyTrendChart();
+                else updateWeeklyTrendView(
+                    document.querySelector('#weekly-trend-controls .btn.active')?.dataset.mode,
+                    document.querySelector('#weekly-trend-controls .btn.active')
+                );
+                break;
 
+                case 'party-trend-slide': // 2페이지: 정당 주간
+                if (!weeklyPartyTrendData.gallup) loadWeeklyPartyTrendChart();
+                else updateWeeklyPartyTrendView(
+                    document.querySelector('#party-trend-controls .btn.active')?.dataset.mode,
+                    document.querySelector('#party-trend-controls .btn.active')
+                );
+                break;
+
+                case 'pres-slide-full': // 3페이지: 직무 월간
+                if (!presChartFull) presChartFull = initChart('presChartFull', labelsFull, pres_data_Full, 0, 90);
+                else presChartFull.update();
+                break;
+
+                case 'party-slide-full': // 4페이지: 정당 월간
+                if (!partyChartFull) partyChartFull = initChart('partyChartFull', labelsFull, partyData_Full, 0, 50);
+                else partyChartFull.update();
+                break;
+
+                case 'pres-slide': { // 5페이지: 직무 세부
+                const currentActiveBtn = pres_controls?.querySelector('.btn.active');
+                updatePresView(currentActiveBtn ? (currentActiveBtn.dataset.mode || 'total') : 'total', currentActiveBtn);
+                break;
+                }
+
+                case 'party-slide': // 6페이지: 정당 세부
+                if (!partyChart) partyChart = initChart('partyChart', labelsPartial, partyData_Partial, 0, 50, false);
+                else partyChart.update();
+                break;
+
+                case 'policy-title-slide': // 7페이지: 섹션 타이틀
+                // 렌더링 없음
+                break;
+
+                // ✅ 추가된 개념 슬라이드 3장
+                case 'slide-yk-1':
+                case 'slide-yk-2':
+                case 'slide-yk-3':
+                // 차트 없음 (렌더링 없음)
+                break;
+
+                case 'policy-econ-slide': // 이후 페이지
+                if (!chartEcon) chartEcon = createEconChart();
+                else chartEcon.update();
+                break;
+
+                case 'policy-risk-slide':
+                if (!chartRisk) chartRisk = createRiskCombinedChart();
+                else chartRisk.update();
+                break;
+
+                case 'policy-welfare-slide':
+                if (!chartWelfare) chartWelfare = createWelfareChart();
+                else chartWelfare.update();
+                break;
+
+                case 'policy-solution-slide':
+                // 차트 없음
+                break;
+
+                default:
+                // 혹시 slideOrder에 새 ID를 추가했는데 case를 빼먹어도, 화면은 나오게 두기
+                console.warn(`[updateSlideDisplay] switch 처리되지 않은 슬라이드: ${slideId}`);
+                break;
             }
         }
+
 
         // ⭐️ 화살표를 통한 슬라이드 이동 함수
         function navigateSlides(direction) {
