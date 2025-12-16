@@ -233,13 +233,13 @@
         .policy-item h3 {
             margin: 0 0 6px 0;
             color: #1e3a8a;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 700;
         }
 
         /* 본문 가독성: 중복 선언 제거 후 하나로 통일 */
         .policy-item p {
-            font-size: 15px;
+            font-size: 17px;
             margin: 6px 0 0 0;
             color: #333;
 
@@ -309,7 +309,7 @@
 
         /* 정책 사각지대 슬라이드: 차트 높이 줄이기 */
         #policy-welfare-slide .chart-wrapper{
-        max-height: 360px;   /* 기존보다 작게 */
+        max-height: 460px;   /* 기존보다 작게 */
         margin-top: 10px;
         }
 
@@ -732,10 +732,24 @@
             <div class="data-source">출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발</div>
         </div>
 
+        <div id="policy-negative-exp-slide" class="slide-container policy-slide hidden">
+            <div class="header">
+                <div class="title">2. 부정적인 생활사 경험</div>
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="chartNegativeExp"></canvas>
+            </div>
+
+            <div class="data-source">
+                출처: 김지연 외. (2022). 2022년 시설퇴소청년의 생활 실태 및 정책개발
+            </div>
+        </div>
+
 
         <div id="policy-risk-slide" class="slide-container policy-slide hidden">
             <div class="header">
-                <div class="title">2. 삶의 질 저하와 극단적인 위기</div>
+                <div class="title">3. 삶의 질 저하와 극단적인 위기</div>
                 <div class="subtitle">우울 증상 비율 4.1배, 자살 생각 경험 비율 4.4배</div>
             </div>
 
@@ -766,10 +780,10 @@
 
         <div id="policy-welfare-slide" class="slide-container policy-slide hidden">
             <div class="header">
-                <div class="title">3. 정책의 사각지대 : 자립지원수당</div>
+                <div class="title">4. 정책의 사각지대 : 자립지원수당</div>
                 <div class="subtitle">시설 유형별 자립수당 수령 여부 (%)</div>
             </div>
-            <div class="chart-wrapper">
+            <div class="chart-wrapper" style="height: 720px;">
                 <canvas id="chartWelfare"></canvas>
             </div>
             <div class="data-source">출처: 김승경 외. (2024). 2024년 시설퇴소청년의 생활 실태 및 정책개발</div>
@@ -777,7 +791,7 @@
 
         <div id="policy-solution-slide" class="slide-container policy-slide hidden">
             <div class="header">
-                <div class="title">4. 격차 해소를 위한 정책 과제</div>
+                <div class="title">5. 격차 해소를 위한 정책 과제</div>
                 <div class="subtitle">자립 성공을 위한 시스템 강화 방안 (전문가 제언)</div>
             </div>
 
@@ -864,6 +878,7 @@
 
         // 자립청년 데이터 차트 객체 (새로 추가)
         let chartEcon = null;
+        let chartNegativeExp = null;
         let chartWelfare = null;
         let chartRisk = null;
 
@@ -871,7 +886,7 @@
         const slideOrder = [
             'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide', // [1~6] 정치 데이터
             'policy-title-slide', 'slide-yk-1','slide-yk-2','slide-yk-3',    // ✅ [8~10] 새로 추가한 개념 슬라이드
-            'policy-econ-slide', 'policy-risk-slide', 'policy-welfare-slide', 'policy-solution-slide' // [7~11] 자립청년 데이터
+            'policy-econ-slide','policy-negative-exp-slide', 'policy-risk-slide', 'policy-welfare-slide', 'policy-solution-slide' // 자립청년 데이터
         ];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
@@ -1209,7 +1224,7 @@
         }
 
         function createWelfareChart() {
-            const labels = ['전체', '아동시설', '청소년시설', '소년보호시설'];
+            const labels = ['시설 퇴소 청년\n전체', '아동시설', '청소년시설', '소년보호시설'];
 
             const data_current = [56.3, 68.0, 23.3, 17.1];  // 현재 받고 있다
             const data_past    = [22.1, 25.1, 13.5, 11.4];  // 과거에는 받았으나 현재는 받지 않는다
@@ -1222,12 +1237,12 @@
                 data: {
                 labels,
                 datasets: [
-                    { label: '현재 받고 있다', data: data_current, stack: 'stack1',backgroundColor: '#5b7bbf',categoryPercentage: 0.6,
-    barPercentage: 0.7 },
-                    { label: '과거엔 받았으나 현재는 받지 않는다', data: data_past, stack: 'stack1',backgroundColor: '#d6a55f',categoryPercentage: 0.6,
-    barPercentage: 0.7  },
-                    { label: '한 번도 받은 적 없다', data: data_never, stack: 'stack1',backgroundColor: '#c97a7a',categoryPercentage: 0.6,
-    barPercentage: 0.7  }
+                    { label: '현재 받고 있다', data: data_current, stack: 'stack1',backgroundColor: '#5b7bbf',categoryPercentage: 0.7,
+    barPercentage: 0.8 },
+                    { label: '과거엔 받았으나 현재는 받지 않는다', data: data_past, stack: 'stack1',backgroundColor: '#d6a55f',categoryPercentage: 0.7,
+    barPercentage: 0.8 },
+                    { label: '한 번도 받은 적 없다', data: data_never, stack: 'stack1',backgroundColor: '#c97a7a',categoryPercentage: 0.7,
+    barPercentage: 0.8 }
                 ]
                 },
                 options: {
@@ -1241,7 +1256,11 @@
                     max: 100,
                     ticks: { callback: (v) => v + '%' }
                     },
-                    y: { stacked: true }
+                    y: { stacked: true,
+                        ticks: {
+                        padding: 12,
+                        font: { size: 14, weight: '600' }
+                        } }
                 },
                 plugins: {
                     legend: { position: 'right',
@@ -1280,7 +1299,7 @@
 
         const datasets = [
             {
-            label: '일반 청년(29세 이하)',
+            label: '일반 청년(19~29세)',
             data: [365, 514],
             backgroundColor: '#60a5fa',   // ✅ 9쪽과 동일한 파랑 톤
             borderRadius: 4
@@ -1304,7 +1323,10 @@
             // ✅ 세로막대: indexAxis 제거(또는 'x')
             layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
             plugins: {
-                legend: { position: 'bottom' },
+                legend: {
+                    position: 'bottom',
+                    labels: { usePointStyle: true, boxWidth: 10, padding: 15 }
+                    },
                 tooltip: {
                 callbacks: {
                     label: (context) => `${context.dataset.label}: ${context.raw.toLocaleString()}만원`
@@ -1335,6 +1357,93 @@
         });
         }
 
+        
+        function createNegativeExpChart() {
+            const labels = [
+                '가정형편이 급격히\n어려워진 경험',
+                '경제적 문제로\n학업 중단·휴학 경험',
+                '아는 사람에게\n배신·사기 피해',
+                '모르는 사람에게\n사기·폭력 피해'
+            ];
+
+            const datasets = [
+                {
+                label: '일반 청년 (19~29세)',
+                data: [17.8, 4.7, 7.2, null],      // ❗ 문항 미조사 → null
+                backgroundColor: '#60a5fa',
+                borderRadius: 4
+                },
+                {
+                label: '시설 퇴소 청년',
+                data: [51.1, 14.2, 26.7, 14.9],
+                backgroundColor: '#dc2626',
+                borderRadius: 4
+                }
+            ];
+
+            const ctx = document.getElementById('chartNegativeExp').getEncodes
+                ? null
+                : document.getElementById('chartNegativeExp').getContext('2d');
+
+            return new Chart(ctx, {
+                type: 'bar',
+                data: { labels, datasets },
+                options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                // ✅ Risk 차트와 동일
+                layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
+
+                plugins: {
+                    // ✅ Risk 차트와 동일
+                    legend: {
+                    position: 'bottom',
+                    labels: { usePointStyle: true, boxWidth: 10, padding: 15 }
+                    },
+                    tooltip: {
+                    callbacks: {
+                        // null이면 “해당 문항 없음”으로 표시 (일관성 해치지 않게 tooltip만 처리)
+                        label: (context) => {
+                        if (context.raw === null) return `${context.dataset.label}: 해당 문항 없음`;
+                        return `${context.dataset.label}: ${context.parsed.y}%`;
+                        }
+                    }
+                    },
+                    datalabels: {
+                    display: true,
+                    color: '#333',
+                    anchor: 'end',
+                    align: 'end',
+                    formatter: (v) => (v === null ? '' : `${v}%`)
+                    }
+                },
+
+                scales: {
+                    // ✅ y축은 데이터 범위 고려(최대 30대)하되 Risk 차트 톤 유지
+                    y: {
+                    min: 0,
+                    max: 55,              
+                    ticks: { stepSize: 10 },
+                    grid: { color: '#e0e0e0' }
+                    },
+                    x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 16 } }
+                    }
+                },
+
+                // ✅ 막대 “두께/간격”을 Risk 차트와 비슷한 체감으로 고정
+                datasets: {
+                    bar: {
+                    categoryPercentage: 0.5, // 카테고리 내 막대가 차지하는 폭
+                    barPercentage: 0.9       // 실제 막대 폭
+                    }
+                }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
 
         // 8. 심리적 위기 차트 (자살 생각 경험)
         function createRiskCombinedChart() {
@@ -1678,7 +1787,10 @@
                 if (!chartEcon) chartEcon = createEconChart();
                 else chartEcon.update();
                 break;
-
+                case 'policy-negative-exp-slide': 
+                if (!chartNegativeExp) {chartNegativeExp = createNegativeExpChart();
+                } else {chartNegativeExp.update(); }
+                break;
                 case 'policy-risk-slide':
                 if (!chartRisk) chartRisk = createRiskCombinedChart();
                 else chartRisk.update();
