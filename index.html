@@ -245,7 +245,7 @@
         <div id="weekly-trend-slide" class="slide-container">
             <div class="header">
                 <div id="weekly-trend-title" class="title">대통령 직무 수행 평가 추이 (갤럽)</div>
-                <div class="subtitle">기간: 6월 2주 ~ 1월 3주 | 자료: 갤럽/리얼미터</div>
+                <div class="subtitle">기간: 25년 6월 2주 ~ 26년 1월 3주 | 자료: 갤럽/리얼미터</div>
             </div>
 
             <div id="weekly-trend-controls" class="controls">
@@ -267,7 +267,7 @@
         <div id="party-trend-slide" class="slide-container hidden">
             <div class="header">
                 <div id="party-trend-title" class="title">주요 정당 지지율 추이 (갤럽)</div>
-                <div class="subtitle">기간: 8월 2주 ~ 1월 3주 | 자료: 갤럽/리얼미터</div>
+                <div class="subtitle">기간: 25년 8월 2주 ~ 26년 1월 3주 | 자료: 갤럽/리얼미터</div>
             </div>
 
             <div id="party-trend-controls" class="controls">
@@ -288,7 +288,7 @@
         <div id="pres-slide-full" class="slide-container hidden">
             <div class="header">
                 <div class="title">대통령 직무 수행 평가 추이 (월별 통합)</div>
-                <div class="subtitle">기간: 2025년 7월 ~ 11월 | 자료: 한국갤럽</div>
+                <div class="subtitle">기간: 2025년 7월 ~ 12월 | 자료: 한국갤럽</div>
             </div>
 
             <div class="controls" style="height: 35px;"></div>
@@ -301,7 +301,7 @@
         <div id="party-slide-full" class="slide-container hidden">
             <div class="header">
                 <div class="title">주요 정당 지지율 추이 (월별 통합)</div>
-                <div class="subtitle">기간: 2025년 7월 ~ 11월 | 자료: 한국갤럽</div>
+                <div class="subtitle">기간: 2025년 7월 ~ 12월 | 자료: 한국갤럽</div>
             </div>
 
             <div class="controls" style="height: 35px;"></div>
@@ -314,7 +314,7 @@
         <div id="pres-slide" class="slide-container hidden">
             <div class="header">
                 <div class="title">대통령 직무 수행 평가 추이 (월별통합, 긍정) - 세부 비교</div>
-                <div class="subtitle">기간: 2025년 9월 ~ 11월 | 자료: 한국갤럽</div>
+                <div class="subtitle">기간: 2025년 9월 ~ 12월 | 자료: 한국갤럽</div>
             </div>
 
             <div id="pres-controls" class="controls">
@@ -333,20 +333,7 @@
 
         </div>
 
-        <div id="party-slide" class="slide-container hidden">
-            <div class="header">
-                <div class="title">주요 정당 지지율 추이 (민주당, 국민의힘, 무당층) - 세부</div>
-                <div class="subtitle">기간: 2025년 9월 ~ 11월 | 자료: 한국갤럽</div>
-            </div>
 
-            <div id="party-controls" class="controls">
-                <button class="btn active" disabled>전체 보기</button>
-            </div>
-
-            <div class="chart-wrapper">
-                <canvas id="partyChart"></canvas>
-            </div>
-        </div>
 
         <div id="policy-title-slide" class="slide-container policy-slide hidden"
             style="justify-content: center; align-items: center;">
@@ -639,7 +626,7 @@
 
         // ⭐️ 슬라이드 순서 및 상태 관리
         const slideOrder = [
-            'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', 'party-slide', // [1~6] 정치 데이터
+            'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', // [1~5] 정치 데이터 (party-slide 제거됨)
             'policy-title-slide', 'slide-yk-1', 'slide-yk-2', 'slide-yk-3',    // ✅ [8~10] 새로 추가한 개념 슬라이드
             'policy-econ-slide', 'policy-negative-exp-slide', 'policy-risk-slide', 'policy-welfare-slide', 'policy-solution-slide' // 자립청년 데이터
         ];
@@ -1302,7 +1289,8 @@
                 canvasId === 'weeklyTrendChart' ||
                 canvasId === 'presChartFull' ||
                 canvasId === 'partyChartFull' ||
-                canvasId === 'weeklyPartyTrendChart'
+                canvasId === 'weeklyPartyTrendChart' ||
+                canvasId === 'presChart'    // ✅ 세부 비교 차트도 라벨 표시
             );
 
             const plugins = {
@@ -1375,8 +1363,12 @@
                             return ['더불어민주당', '국민의힘', '무당층'].includes(label);
                         }
 
-                        // presChart, partyChart(5·6페이지)는
-                        // initChart 호출 시 useLabels=false 로 오므로 여기까지 아예 안 들어옴
+                        // presChart(세부 비교): 'auto'로 겹침 자동 숨김 -> 겹쳐도 보이게 true
+                        if (canvasId === 'presChart') {
+                            return true;
+                        }
+
+                        // 그 외 (partyChart 등)
                         return false;
                     },
                     color: '#333',
@@ -1426,8 +1418,15 @@
                             }
                         }
 
+                        // presChart: 라인 끝(end) 또는 위(start) 등 -> 'auto' display와 함께 'end' 추천
+                        if (canvasId === 'presChart') {
+                            return 'end';
+                        }
+
                         return 'end';
                     },
+
+
                     offset: 5
                 };
             }
@@ -1477,12 +1476,11 @@
             // 1) CSV 로드가 안됐으면 리턴
             if (!monthlyDetailedData) return;
 
-            // 2) 최근 3개월 데이터만 사용 (slice(-3))
-            //    단, 12월 데이터가 비어있을 수 있으므로 "값이 있는 마지막 3개"를 찾거나,
-            //    단순히 마지막 3개를 가져오되 null은 표시 안됨.
-            //    여기서는 "CSV의 마지막 3행"을 가져오는 것으로 가정.
+            // 2) 최근 4개월 데이터만 사용 (slice(-4)) - 9월부터 나오게 하기 위함
+            //    단, 12월 데이터가 비어있을 수 있으므로 "값이 있는 마지막 4개"를 찾거나,
+            //    단순히 마지막 4개를 가져오되 null은 표시 안됨.
             const totalLen = monthlyDetailedData.labels.length;
-            const startIndex = Math.max(0, totalLen - 3);
+            const startIndex = Math.max(0, totalLen - 4);
 
             // 3) Partial 차트용 데이터셋 구성 함수
             const sliceData = (arrKey) => {
@@ -1528,8 +1526,8 @@
             const partialLabels = monthlyDetailedData.labels.slice(startIndex);
 
             if (!presChart) {
-                // presChart만 생성 (레이블 off)
-                presChart = initChart('presChart', partialLabels, newDatasets, 20, 90, false);
+                // presChart만 생성 (레이블 on) - 겹침 방지 설정 추가됨
+                presChart = initChart('presChart', partialLabels, newDatasets, 20, 90, true);
             } else {
                 presChart.data.labels = partialLabels;
                 presChart.data.datasets = newDatasets;
