@@ -226,6 +226,39 @@
         }
 
         /* =========================================================
+   9) PODCAST VISUALIZATION STYLES
+========================================================= */
+        .insight-box {
+            background-color: #eceff1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 22px;
+            /* Adjusted for large screen */
+            color: #37474f;
+            border-left: 6px solid #1a237e;
+            line-height: 1.5;
+        }
+
+        .section-badge {
+            font-size: 18px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: white;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .badge-part2 {
+            background-color: #1a237e;
+        }
+
+        .badge-part3 {
+            background-color: #c62828;
+        }
+
+        /* =========================================================
    END CSS
 ========================================================= */
     </style>
@@ -335,229 +368,131 @@
 
 
 
-        <div id="policy-title-slide" class="slide-container policy-slide hidden"
-            style="justify-content: center; align-items: center;">
+
+        <!-- Part 2 Title Slide -->
+        <div id="title-part2" class="slide-container hidden"
+            style="justify-content: center; align-items: center; display: flex;">
             <div style="text-align: center;">
-                <h1 class="title-main" style="color: #3b82f6;">숫자로 보는 '보호 종료'의 무게: 자립준비청년의 위기 분석</h1>
-                <h2 class="title-sub" style="margin-top: 20px;">일반 청년과의 재정·사회적 격차 집중 분석</h2>
+                <h1 class="title-main" style="color: #1a237e; font-size: 3rem; margin-bottom: 20px;">대통령 국정운영 지지율 60%
+                </h1>
+                <h2 class="title-sub" style="color: #546e7a; font-size: 2rem;">2026년에는 어떻게 될까</h2>
             </div>
         </div>
 
-        <div id="slide-yk-1" class="slide-container policy-slide hidden">
-            <div class="yk-wrap">
-                <div class="yk-titlebar">
-                    <div class="yk-title">시설퇴소 자립준비청년</div>
-                    <div></div>
-                </div>
-
-                <div class="yk-center">
-                    <div class="yk-mainword">자립준비청년</div>
-                    <div class="yk-subcopy">
-                        「아동복지법」상 아동양육시설·공동생활가정·가정위탁 등에서 보호를 받다가<br />
-                        보호조치 종료 후 5년 이내인 청년
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="slide-yk-2" class="slide-container policy-slide hidden">
-            <!-- ✅ 제목 영역(상단 고정) -->
+        <!-- Slide 1: Approval Trend -->
+        <div id="slide-new-1" class="slide-container hidden">
             <div class="header">
-                <div class="title">시설퇴소 자립준비청년</div>
+                <div class="title">이재명 정부 지지율 궤적: 60%의 안정감</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
             </div>
-
-            <!-- ✅ 박스 영역(슬라이드 정중앙) -->
-            <div class="yk-center">
-                <div class="yk-grid">
-                    <div class="yk-box">
-                        <div class="yk-box-title">자립준비청년</div>
-                        <p class="yk-box-desc">아동복지법 기반 보호종료<br>(아동양육시설 등)</p>
-                    </div>
-
-                    <div class="yk-box">
-                        <div class="yk-box-title">자립준비청소년</div>
-                        <p class="yk-box-desc">청소년복지시설 퇴소 <br>(쉼터·자립지원관 등)</p>
-                    </div>
-
-                    <div class="yk-box">
-                        <div class="yk-box-title">소년보호시설 출원생</div>
-                        <p class="yk-box-desc">소년법 체계 보호처분 종료<br>(소년원, 소년분류심사원)</p>
-                    </div>
-
-                    <div class="yk-box yk-box-muted">
-                        <div class="yk-box-title">기타 취약 청년</div>
-                        <p class="yk-box-desc">시설보호 경험 청년, 노숙 청년, 기타 취약 청년 등</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div id="slide-yk-3" class="slide-container policy-slide hidden">
-            <!-- ✅ 제목 영역(상단 고정) -->
-            <div class="header">
-                <div class="title">시설퇴소 자립준비청년</div>
-            </div>
-
-            <!-- ✅ 박스 영역(슬라이드 정중앙) -->
-            <div class="yk-center">
-                <div class="yk-grid">
-                    <!-- 🔹 앞의 3개를 묶는 그룹(1~3열 차지) -->
-                    <div class="yk-group">
-                        <div class="yk-group-label">&lt;시설퇴소 자립준비청년&gt;</div>
-
-                        <div class="yk-group-grid">
-                            <div class="yk-box">
-                                <div class="yk-box-title">자립준비청년</div>
-                                <p class="yk-box-desc">아동복지법 기반 보호종료<br>(아동양육시설 등)</p>
-                            </div>
-
-                            <div class="yk-box">
-                                <div class="yk-box-title">자립준비청소년</div>
-                                <p class="yk-box-desc">청소년복지시설 퇴소<br>(쉼터·자립지원관 등)</p>
-                            </div>
-
-                            <div class="yk-box">
-                                <div class="yk-box-title">소년보호시설 출원생</div>
-                                <p class="yk-box-desc">소년법 체계 보호처분 종료<br>(소년원, 소년분류심사원)</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 🔹 같은 줄의 4번째 박스 -->
-                    <div class="yk-box yk-box-muted">
-                        <div class="yk-box-title">기타 취약 청년</div>
-                        <p class="yk-box-desc">시설보호 경험 청년, 노숙 청년, 기타 취약 청년 등</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div id="policy-econ-slide" class="slide-container policy-slide hidden">
-            <div class="header">
-                <div class="title">1. 경제적 기반의 취약성</div>
-                <div class="subtitle">월평균 소득은 절반, 평균 부채액은 2.6배</div>
-            </div>
-
-            <div class="risk-grid">
-                <!-- 좌측: 세로막대 차트 -->
-                <div class="risk-charts">
-                    <div class="risk-chart-box">
-                        <canvas id="chartEcon"></canvas>
-                    </div>
-                </div>
-
-                <!-- 우측: 요약 카드(부채 보유율) -->
-                <div class="risk-side">
-                    <div class="risk-card risk-card-red">
-                        <h3>부채 보유율</h3>
-                        <p class="risk-big">36.4%</p>
-                        <p class="risk-sub">(일반 청년 16.3%)</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="data-source">출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발</div>
-        </div>
-
-        <div id="policy-negative-exp-slide" class="slide-container policy-slide hidden">
-            <div class="header">
-                <div class="title">2. 부정적인 생활사 경험</div>
-            </div>
-
             <div class="chart-wrapper">
-                <canvas id="chartNegativeExp"></canvas>
+                <canvas id="chartNew1"></canvas>
             </div>
+        </div>
 
-            <div class="data-source">
-                출처: 김지연 외. (2022). 2022년 시설퇴소청년의 생활 실태 및 정책개발
+        <!-- Slide 2-1: Positive Evaluation Reasons -->
+        <div id="slide-new-2-1" class="slide-container hidden">
+            <div class="header">
+                <div class="title">국정수행 긍정평가) 제일 잘 했다고 생각하는 분야</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew2_1"></canvas>
+            </div>
+            <div
+                style="margin-top: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; margin-left: 80px;">
+                * 국정운영 잘했다고 응답한 1,257명의 1,2순위 응답을 합산한 결과<br>
+                * 외교/안보(한미 관세협상 타결, 주변국 관계 정상화 등), 경제/조세(배당소득 분리과세, 상법 개정 추진 등), 복지/노동(노동 개혁, 사회안전망 강화), 내란 극복(12·3 비상계엄
+                관련자 처벌 및 진상규명), 정치/소통(야당과의 협치, 국민 소통)
+            </div>
+        </div>
+
+        <!-- Slide 2-2: Negative Evaluation Reasons -->
+        <div id="slide-new-2-2" class="slide-container hidden">
+            <div class="header">
+                <div class="title">국정수행 부정평가) 제일 잘 못했다고 생각하는 분야</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew2_2"></canvas>
+            </div>
+            <div
+                style="margin-top: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; margin-left: 80px;">
+                * 국정운영 잘못했다고 응답한 672명의 1,2순위 응답을 합산한 결과<br>
+                * 경제/민생(물가 관리 미흡, 경기 회복 지연), 부동산 정책(보유세 논란, 집값 불안정), 인사(장관 등 고위직 인사 검증 논란), 협치 부족/독주(입법 강행 처리 등),
+                외교/안보(대북 정책, 외교 노선 논란)
+            </div>
+        </div>
+
+        <!-- Slide 2-3: Negative Evaluation Reasons (Age) -->
+        <div id="slide-new-2-3" class="slide-container hidden">
+            <div class="header">
+                <div class="title">국정수행 부정평가) 제일 잘 못했다고 생각하는 분야 (연령별)</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew2_3"></canvas>
+            </div>
+            <div
+                style="margin-top: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; margin-left: 80px;">
+                * 국정운영 잘못했다고 응답한 672명의 1,2순위 응답을 합산한 결과<br>
+                * 경제/민생(물가 관리 미흡, 경기 회복 지연), 부동산 정책(보유세 논란, 집값 불안정), 인사(장관 등 고위직 인사 검증 논란), 협치 부족/독주(입법 강행 처리 등),
+                외교/안보(대북 정책, 외교 노선 논란)
+            </div>
+        </div>
+
+        <!-- Slide 3: New Support base -->
+        <div id="slide-new-3" class="slide-container hidden">
+            <div class="header">
+                <div class="title">지지층 해부: 누가 60%를 만드는가?</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew3"></canvas>
             </div>
         </div>
 
 
-        <div id="policy-risk-slide" class="slide-container policy-slide hidden">
-            <div class="header">
-                <div class="title">3. 삶의 질 저하와 극단적인 위기</div>
-                <div class="subtitle">우울 증상 비율 4.1배, 자살 생각 경험 비율 4.4배</div>
-            </div>
-
-            <!-- ✅ 2열 레이아웃: (차트) + (요약박스) -->
-            <div class="risk-grid">
-                <!-- 좌측: 통합 바차트 1개 -->
-                <div class="risk-charts">
-                    <div class="risk-chart-box">
-                        <canvas id="chartRisk"></canvas>
-                    </div>
-                </div>
-
-                <!-- 우측 요약 카드 -->
-                <div class="risk-side">
-                    <div class="risk-card risk-card-blue">
-                        <h3>삶의 만족도(10점 만점)</h3>
-                        <p class="risk-big">4.93점</p>
-                        <p class="risk-sub">(일반 청년 6.71점)</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="data-source">
-                출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발<br>
-                이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구
+        <!-- Part 3 Title Slide -->
+        <div id="title-part3" class="slide-container hidden"
+            style="justify-content: center; align-items: center; display: flex;">
+            <div style="text-align: center;">
+                <h1 class="title-main" style="color: #c62828; font-size: 3rem; margin-bottom: 20px;">내란사건 1년 여론을 살펴본다
+                </h1>
+                <h2 class="title-sub" style="color: #546e7a; font-size: 2rem;">사형 구형, 2월 19일 선고</h2>
             </div>
         </div>
 
-        <div id="policy-welfare-slide" class="slide-container policy-slide hidden">
+        <!-- Slide 4: 12.3 Event Perception -->
+        <div id="slide-new-4" class="slide-container hidden">
             <div class="header">
-                <div class="title">4. 정책의 사각지대 : 자립지원수당</div>
-                <div class="subtitle">시설 유형별 자립수당 수령 여부 (%)</div>
+                <div class="title">12·3 사태 인식: 국민 63% '명백한 내란'</div>
+                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
             </div>
-            <div class="chart-wrapper" style="height: 720px;">
-                <canvas id="chartWelfare"></canvas>
+            <div class="chart-wrapper">
+                <canvas id="chartNew4"></canvas>
             </div>
-            <div class="data-source">출처: 김승경 외. (2024). 2024년 시설퇴소청년의 생활 실태 및 정책개발</div>
         </div>
 
-        <div id="policy-solution-slide" class="slide-container policy-slide hidden">
+        <!-- Slide 5: Inst Trust -->
+        <div id="slide-new-5" class="slide-container hidden">
             <div class="header">
-                <div class="title">5. 격차 해소를 위한 정책 과제</div>
-                <div class="subtitle">자립 성공을 위한 시스템 강화 방안 (전문가 제언)</div>
+                <div class="title">기관 신뢰도 변화: 행정부 상승 vs 검찰 정체</div>
+                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
             </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew5"></canvas>
+            </div>
+        </div>
 
-            <!-- ✅ 본문/출처를 분리해서, 출처를 아래로 고정 -->
-            <div class="policy-solution-body">
-
-                <div style="width:100%; margin-top:10px; display:flex; flex-direction:column; gap:10px;">
-                    <div class="policy-item" style="border-left-color:#3b82f6;">
-                        <h3>1. 지원 시스템 통합 및 전문 인력 확충</h3>
-                        <ul>
-                            <li><b>부처 간 칸막이 해소</b>로 지원 경로를 단일화</li>
-                            <li>복합 문제(주거·취업·건강) 대응을 위한 <b>전담 인력</b> 확충</li>
-                        </ul>
-                    </div>
-
-                    <div class="policy-item" style="border-left-color:#f97316; background:#fff7ed;">
-                        <h3>2. 현실적인 금융 방패 마련 및 기간 현실화</h3>
-                        <ul>
-                            <li><b>자립 지원 기간</b>을 현실에 맞게 조정</li>
-                            <li>금융사기 예방을 위한 <b>금융 교육 의무화</b> 및 상시 상담</li>
-                        </ul>
-                    </div>
-
-                    <div class="policy-item" style="border-left-color:#10b981; background:#f0fdf4;">
-                        <h3>3. 심리 치료와 건강 관리의 연계 강화</h3>
-                        <ul>
-                            <li><b>정신건강 지원</b> 확대(우울·트라우마 등)</li>
-                            <li><b>치료 이력 단절</b>을 막는 연계·추적 관리 체계 구축</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="data-source policy-solution-source">
-                    출처 : 백혜정 외. (2023). 2023년 시설퇴소청년의 생활 실태 및 정책개발<br>
-                    이상정 외. (2024). 자립준비청년 자살원인 분석을 통한 효과적 예방체계 구축 연구
-                </div>
-
+        <!-- Slide 6: Conspiracy Theory -->
+        <div id="slide-new-6" class="slide-container hidden">
+            <div class="header">
+                <div class="title">믿음의 양극화: 부정선거 음모론</div>
+                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew6"></canvas>
             </div>
         </div>
 
@@ -614,11 +549,15 @@
         let weeklyPartyTrendChart = null;
         let weeklyPartyTrendData = {};
 
-        // 자립청년 데이터 차트 객체 (새로 추가)
-        let chartEcon = null;
-        let chartNegativeExp = null;
-        let chartWelfare = null;
-        let chartRisk = null;
+        // 자립청년 데이터 차트 객체 (새로 추가) -> 팟캐스트 시각화 차트 객체
+        let chartNew1 = null;
+        let chartNew2_1 = null;
+        let chartNew2_2 = null;
+        let chartNew2_3 = null;
+        let chartNew3 = null;
+        let chartNew4 = null;
+        let chartNew5 = null;
+        let chartNew6 = null;
 
         // ⭐️ CSV 데이터 저장소 (새로 추가)
         let monthlyMainData = null;      // monthly_main_trends.csv
@@ -626,9 +565,9 @@
 
         // ⭐️ 슬라이드 순서 및 상태 관리
         const slideOrder = [
-            'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', // [1~5] 정치 데이터 (party-slide 제거됨)
-            'policy-title-slide', 'slide-yk-1', 'slide-yk-2', 'slide-yk-3',    // ✅ [8~10] 새로 추가한 개념 슬라이드
-            'policy-econ-slide', 'policy-negative-exp-slide', 'policy-risk-slide', 'policy-welfare-slide', 'policy-solution-slide' // 자립청년 데이터
+            'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', // [1~5] 정치 데이터
+            'title-part2', 'slide-new-1', 'slide-new-2-1', 'slide-new-2-2', 'slide-new-2-3', 'slide-new-3',  // [6~11] 2부
+            'title-part3', 'slide-new-4', 'slide-new-5', 'slide-new-6'   // [12~15] 3부
         ];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
@@ -946,337 +885,426 @@
         }
 
         // -----------------------------------------------------------
-        // ⭐️ 7-11 페이지 (자립준비청년 데이터) 관련 함수 (새로 추가)
+        // ⭐️ 팟캐스트 시각화 관련 함수 (새로 추가)
         // -----------------------------------------------------------
 
-        function createBarChart(canvasId, labels, datasets, yMin, yMax, unit) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            const isHorizontal = (canvasId === 'chartEcon');
+        // 공통 옵션
+        const podCommonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { family: "'Pretendard', sans-serif", size: 16, weight: '600' } } },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 10,
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 16 }
+                },
+                datalabels: {
+                    display: true,
+                    color: '#333',
+                    font: { size: 16, weight: 'bold' },
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 4,
+                    formatter: (v) => v.toFixed(1)
+                }
+            }
+        };
 
+        function createChartNew1() {
+            const ctx = document.getElementById('chartNew1').getContext('2d');
+            const data = {
+                labels: [['1차 조사 (25.5)', '대선후보 지지도'], ['2차 조사 (25.9)', '국정운영 긍정평가'], ['3차 조사 (25.12)', '국정운영 긍정평가']],
+                datasets: [{
+                    label: '지지율(%)',
+                    data: [49.3, 62.7, 62.2],
+                    borderColor: '#1a237e',
+                    backgroundColor: '#1a237e',
+                    pointRadius: 6,
+                    borderWidth: 3,
+                    tension: 0
+                }]
+            };
             return new Chart(ctx, {
-                type: 'bar',
-                data: { labels, datasets },
+                type: 'line',
+                data: data,
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: isHorizontal ? 'y' : 'x',
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
+                    ...podCommonOptions,
+                    scales: {
+                        x: { offset: true, ticks: { font: { size: 16 } }, grid: { display: false } },
+                        y: { beginAtZero: false, min: 40, max: 70, ticks: { font: { size: 16 } } }
+                    },
+                    layout: { padding: { left: 10, right: 20, top: 25 } },
                     plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10, padding: 15 } },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    const v = isHorizontal ? context.parsed.x : context.parsed.y;
-                                    return `${context.dataset.label}: ${v}${unit}`;
-                                }
-                            }
-                        },
+                        ...podCommonOptions.plugins,
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            color: '#333',
+                            font: { size: 16, weight: 'bold' },
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 4,
+                            formatter: (v) => v.toFixed(1)
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChartNew2_1() {
+            const ctx = document.getElementById('chartNew2_1').getContext('2d');
+            const data = {
+                labels: ['외교/안보', '경제/조세 정책', '내란 극복', '복지/노동', '정치/소통', '기타', '잘 모르겠다'],
+                datasets: [
+                    {
+                        label: '긍정 평가 이유 (%)',
+                        data: [81.6, 34.6, 31.3, 30.4, 14.2, 1.1, 3.4],
+                        backgroundColor: '#1a237e',
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            };
+            return new Chart(ctx, {
+                type: 'bar', // Horizontal bar will be set by indexAxis: 'y'
+                data: data,
+                options: {
+                    ...podCommonOptions,
+                    indexAxis: 'y',
+                    layout: { padding: { left: 50, right: 100, top: 20, bottom: 20 } }, // 여백 추가하여 차트 너비 줄임
+                    scales: {
+                        x: { beginAtZero: true, max: 100, ticks: { font: { size: 14 } }, grid: { display: false } }, // x축 그리드 제거
+                        y: { ticks: { font: { size: 16, weight: 'bold' } } }
+                    },
+                    plugins: {
+                        ...podCommonOptions.plugins,
+                        legend: { display: false },
                         datalabels: {
                             display: true,
                             color: '#333',
                             anchor: 'end',
-                            align: 'end',
-                            formatter: (value) => `${value}${unit}`
+                            align: 'end', // 바 오른쪽 바깥
+                            font: { size: 16, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
                         }
-                    },
-                    scales: isHorizontal
-                        ? {
-                            x: { min: 0, max: yMax, grid: { color: '#e0e0e0' }, ticks: { font: { size: 16 } } },
-                            y: { grid: { display: false }, ticks: { font: { size: 16 } } }
-                        }
-                        : {
-                            x: { grid: { color: '#e0e0e0' }, ticks: { font: { size: 16 } } },
-                            y: { min: yMin, max: yMax, grid: { color: '#e0e0e0', drawBorder: false }, ticks: { font: { size: 16 } } }
-                        }
-                },
-                plugins: [ChartDataLabels]
+                    }
+                }
             });
         }
 
-        function createWelfareChart() {
-            const labels = ['시설 퇴소 청년\n전체', '아동시설', '청소년시설', '소년보호시설'];
-
-            const data_current = [56.3, 68.0, 23.3, 17.1];  // 현재 받고 있다
-            const data_past = [22.1, 25.1, 13.5, 11.4];  // 과거에는 받았으나 현재는 받지 않는다
-            const data_never = [21.6, 6.9, 63.2, 71.5];  // 한 번도 받은 적 없다
-
-            const ctx = document.getElementById('chartWelfare').getContext('2d');
-
+        function createChartNew2_2() {
+            const ctx = document.getElementById('chartNew2_2').getContext('2d');
+            const data = {
+                labels: ['경제/민생', '협치 부족/독주', '부동산 정책', '인사', '외교/안보', '기타', '잘 모르겠다'],
+                datasets: [
+                    {
+                        label: '부정 평가 이유 (%)',
+                        data: [53.7, 47.8, 34.8, 28.1, 27.7, 4.3, 1.9],
+                        backgroundColor: '#c62828',
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            };
             return new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: '현재 받고 있다', data: data_current, stack: 'stack1', backgroundColor: '#5b7bbf', categoryPercentage: 0.7,
-                            barPercentage: 0.8
-                        },
-                        {
-                            label: '과거엔 받았으나 현재는 받지 않는다', data: data_past, stack: 'stack1', backgroundColor: '#d6a55f', categoryPercentage: 0.7,
-                            barPercentage: 0.8
-                        },
-                        {
-                            label: '한 번도 받은 적 없다', data: data_never, stack: 'stack1', backgroundColor: '#c97a7a', categoryPercentage: 0.7,
-                            barPercentage: 0.8
-                        }
-                    ]
-                },
+                type: 'bar', // Horizontal bar will be set by indexAxis: 'y'
+                data: data,
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',                 // ✅ 가로 누적막대(가독성 좋음)
+                    ...podCommonOptions,
+                    indexAxis: 'y',
+                    layout: { padding: { left: 50, right: 100, top: 20, bottom: 20 } }, // 여백 추가하여 차트 너비 줄임
                     scales: {
-                        x: {
-                            stacked: true,
-                            min: 0,
-                            max: 100,
-                            ticks: { callback: (v) => v + '%' }
-                        },
-                        y: {
-                            stacked: true,
-                            ticks: {
-                                padding: 12,
-                                font: { size: 18, weight: '600' }
-                            }
-                        }
+                        x: { beginAtZero: true, max: 100, ticks: { font: { size: 14 } }, grid: { display: false } },
+                        y: { ticks: { font: { size: 16, weight: 'bold' } } }
                     },
                     plugins: {
+                        ...podCommonOptions.plugins,
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            color: '#333',
+                            anchor: 'end',
+                            align: 'end', // 바 오른쪽 바깥
+                            font: { size: 16, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChartNew2_3() {
+            const ctx = document.getElementById('chartNew2_3').getContext('2d');
+            const data = {
+                labels: ['18~29세', '30~39세', '40~49세', '50~59세', '60~69세', '70세 이상'],
+                datasets: [
+                    {
+                        label: '경제/민생',
+                        data: [76.6, 66.3, 56.7, 53.6, 40.3, 34.5],
+                        borderColor: '#c62828', // Red
+                        backgroundColor: '#c62828',
+                        pointRadius: 5,
+                        borderWidth: 3,
+                        tension: 0
+                    },
+                    {
+                        label: '협치 부족/독주',
+                        data: [23.3, 33.1, 38.8, 50.3, 58.1, 74.1],
+                        borderColor: '#1a237e', // Cold (Navy)
+                        backgroundColor: '#1a237e',
+                        pointRadius: 5,
+                        borderWidth: 3,
+                        tension: 0
+                    },
+                    {
+                        label: '부동산 정책',
+                        data: [41.0, 43.9, 34.6, 33.7, 32.1, 25.4],
+                        borderColor: '#4db6ac', // Desaturated Teal
+                        backgroundColor: '#4db6ac',
+                        pointRadius: 5,
+                        borderWidth: 3,
+                        tension: 0
+                    },
+                    {
+                        label: '인사',
+                        data: [14.4, 25.5, 29.4, 27.2, 31.4, 39.7],
+                        borderColor: '#78909c', // Grey
+                        backgroundColor: '#78909c',
+                        pointRadius: 5,
+                        borderWidth: 3,
+                        tension: 0
+                    },
+                    {
+                        label: '외교/안보',
+                        data: [39.0, 23.8, 29.4, 19.7, 28.2, 23.4],
+                        borderColor: '#9575cd', // Desaturated Purple
+                        backgroundColor: '#9575cd',
+                        pointRadius: 5,
+                        borderWidth: 3,
+                        tension: 0
+                    }
+                ]
+            };
+            return new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    ...podCommonOptions,
+                    layout: { padding: { left: 10, right: 20, top: 25 } },
+                    scales: {
+                        x: { offset: true, ticks: { font: { size: 16 } }, grid: { display: false } },
+                        y: { beginAtZero: true, max: 100, ticks: { font: { size: 16 } } }
+                    },
+                    plugins: {
+                        ...podCommonOptions.plugins,
+                        datalabels: {
+                            display: 'auto',
+                            align: 'top',
+                            anchor: 'end',
+                            font: { size: 14, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
+                        },
                         legend: {
                             position: 'right',
-                            align: 'center',
+                            align: 'start',
                             labels: {
-                                boxWidth: 14, boxHeight: 14, padding: 12,
-                                font: { size: 16, weight: '600' },
-                                color: '#333'
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                padding: 15,
+                                font: { size: 14, weight: '600' }
                             }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x}%`
-                            }
-                        },
-                        datalabels: {
-                            color: '#ffffff', font: { weight: '700', size: 16 },
-                            formatter: (v) => (v >= 8 ? v + '%' : ''),  // ✅ 너무 작은 조각은 숨김(원하면 숫자 조정)
-                            anchor: 'center',
-                            align: 'center', clamp: true
-                        }
-                    },
-                    layout: {
-                        padding: {
-                            left: 20,
-                            right: 20,
-                            top: 20,
-                            bottom: 20
                         }
                     }
                 }
             });
         }
 
-
-        // 7. 경제적 상황 차트
-        function createEconChart() {
-            // ✅ 차트에는 2개만 남김
-            const labels = ['월평균 소득(만원)', '평균 부채액(만원)'];
-
-            const datasets = [
-                {
-                    label: '일반 청년(19~29세)',
-                    data: [365, 514],
-                    backgroundColor: '#60a5fa',   // ✅ 9쪽과 동일한 파랑 톤
-                    borderRadius: 4
-                },
-                {
-                    label: '시설 퇴소 청년',
-                    data: [170, 1366],
-                    backgroundColor: '#dc2626',   // ✅ 9쪽과 동일한 빨강 톤
-                    borderRadius: 4
-                }
-            ];
-
-            const ctx = document.getElementById('chartEcon').getContext('2d');
-
+        function createChartNew3() {
+            const ctx = document.getElementById('chartNew3').getContext('2d');
+            const data = {
+                labels: ['Old 이재명 (기존 지지층)', 'New 이재명 (신규 유입층)'],
+                datasets: [{
+                    data: [78.1, 21.9],
+                    backgroundColor: ['#1a237e', '#fbc02d'],
+                    hoverOffset: 4
+                }]
+            };
             return new Chart(ctx, {
-                type: 'bar',
-                data: { labels, datasets },
+                type: 'doughnut',
+                data: data,
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    // ✅ 세로막대: indexAxis 제거(또는 'x')
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
+                    ...podCommonOptions,
                     plugins: {
+                        ...podCommonOptions.plugins,
+                        title: { display: true, text: '국정 지지층(긍정 평가자) 구성', font: { size: 18 } },
+                        datalabels: {
+                            display: true,
+                            color: '#fff',
+                            font: { size: 16, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChartNew4() {
+            const ctx = document.getElementById('chartNew4').getContext('2d');
+            const data = {
+                labels: ['명백한 내란 행위', '절차 문제 있는 정치적 사건', '불가피한 구국의 결단', '모름'],
+                datasets: [{
+                    data: [63.1, 18.9, 14.9, 3.2],
+                    backgroundColor: ['#c62828', '#78909c', '#1a237e', '#eceff1'],
+                }]
+            };
+            return new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    ...podCommonOptions,
+                    plugins: {
+                        ...podCommonOptions.plugins,
+                        datalabels: {
+                            display: true,
+                            color: (ctx) => ctx.dataIndex === 3 ? '#333' : '#fff',
+                            formatter: (v) => v.toFixed(1)
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChartNew5() {
+            const ctx = document.getElementById('chartNew5').getContext('2d');
+            const data = {
+                labels: ['1차 조사(25.2)', '2차 조사(25.9)', '3차 조사(25.12)'],
+                datasets: [
+                    {
+                        label: '헌재',
+                        data: [5.2, 5.2, 5.2],
+                        borderColor: '#8e24aa', // 보라색
+                        backgroundColor: '#8e24aa',
+                        borderWidth: 3,
+                        pointRadius: 6,
+                        tension: 0
+                    },
+                    {
+                        label: '중앙선관위',
+                        data: [4.7, 5.0, 5.1],
+                        borderColor: '#0288d1', // 하늘색
+                        backgroundColor: '#0288d1',
+                        borderWidth: 3,
+                        pointRadius: 6,
+                        tension: 0
+                    },
+                    {
+                        label: '행정부',
+                        data: [4.2, 4.8, 5.0],
+                        borderColor: '#1a237e', // 짙은 파랑
+                        backgroundColor: '#1a237e',
+                        borderWidth: 3,
+                        pointRadius: 6,
+                        tension: 0
+                    },
+                    {
+                        label: '국회',
+                        data: [3.8, 4.1, 4.1],
+                        borderColor: '#43a047', // 초록
+                        backgroundColor: '#43a047',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        pointRadius: 6,
+                        tension: 0
+                    },
+                    {
+                        label: '법원',
+                        data: [3.8, 4.0, 3.9],
+                        borderColor: '#ffa726', // 주황
+                        backgroundColor: '#ffa726',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        pointRadius: 6,
+                        tension: 0
+                    },
+                    {
+                        label: '검찰',
+                        data: [3.2, 3.2, 3.3],
+                        borderColor: '#78909c', // 회색
+                        backgroundColor: '#78909c',
+                        borderWidth: 3,
+                        borderDash: [2, 2],
+                        pointRadius: 6,
+                        tension: 0
+                    }
+                ]
+            };
+            return new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    ...podCommonOptions,
+                    layout: { padding: { left: 10, right: 20, top: 25 } },
+                    scales: {
+                        x: { offset: true, ticks: { font: { size: 16 } }, grid: { display: false } },
+                        y: { min: 2, max: 6, title: { display: true, text: '신뢰도 (10점 만점)' }, ticks: { font: { size: 16 } } }
+                    },
+                    plugins: {
+                        ...podCommonOptions.plugins,
                         legend: {
-                            position: 'bottom',
-                            labels: { usePointStyle: true, boxWidth: 10, padding: 15 }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => `${context.dataset.label}: ${context.raw.toLocaleString()}만원`
+                            position: 'right',
+                            align: 'start',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                padding: 15,
+                                font: { size: 16, weight: '600' }
                             }
                         },
                         datalabels: {
                             display: true,
-                            color: '#333',
+                            align: 'top',
                             anchor: 'end',
-                            align: 'end',
-                            formatter: (value) => `${value.toLocaleString()}만원`
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            suggestedMax: 1500,  // 부채액 최대값 반영
-                            grid: { color: '#e0e0e0', drawBorder: false },
-                            ticks: { font: { size: 16 } }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 16 } }
+                            font: { size: 14, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1),
+                            // 데이터 많으므로 겹침 방지 위해 일부 조정이 필요할 수 있으나 일단 기본값
+                            display: 'auto'
                         }
                     }
-                },
-                plugins: [ChartDataLabels]
+                }
             });
         }
 
-
-        function createNegativeExpChart() {
-            const labels = [
-                '가정형편이 급격히\n어려워진 경험',
-                '경제적 문제로\n학업 중단·휴학 경험',
-                '아는 사람에게\n배신·사기 피해',
-                '모르는 사람에게\n사기·폭력 피해'
-            ];
-
-            const datasets = [
-                {
-                    label: '일반 청년 (19~29세)',
-                    data: [17.8, 4.7, 7.2, null],      // ❗ 문항 미조사 → null
-                    backgroundColor: '#60a5fa',
-                    borderRadius: 4
-                },
-                {
-                    label: '시설 퇴소 청년',
-                    data: [51.1, 14.2, 26.7, 14.9],
-                    backgroundColor: '#dc2626',
-                    borderRadius: 4
-                }
-            ];
-
-            const ctx = document.getElementById('chartNegativeExp').getEncodes
-                ? null
-                : document.getElementById('chartNegativeExp').getContext('2d');
-
+        function createChartNew6() {
+            const ctx = document.getElementById('chartNew6').getContext('2d');
+            const data = {
+                labels: ['전체 국민', '국민의힘 지지층'],
+                datasets: [{
+                    label: '부정선거/조작설 동의 비율 (%)',
+                    data: [39.0, 81.0],
+                    backgroundColor: ['#78909c', '#c62828']
+                }]
+            };
             return new Chart(ctx, {
                 type: 'bar',
-                data: { labels, datasets },
+                data: data,
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-
-                    // ✅ Risk 차트와 동일
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
-
+                    ...podCommonOptions,
+                    scales: { y: { beginAtZero: true, max: 100 } },
                     plugins: {
-                        // ✅ Risk 차트와 동일
-                        legend: {
-                            position: 'bottom',
-                            labels: { usePointStyle: true, boxWidth: 10, padding: 15 }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                // null이면 “해당 문항 없음”으로 표시 (일관성 해치지 않게 tooltip만 처리)
-                                label: (context) => {
-                                    if (context.raw === null) return `${context.dataset.label}: 해당 문항 없음`;
-                                    return `${context.dataset.label}: ${context.parsed.y}%`;
-                                }
-                            }
-                        },
+                        ...podCommonOptions.plugins,
+                        legend: { display: false },
+                        title: { display: true, text: '부정선거(사전투표 조작 등) 동의율 비교', font: { size: 18 } },
                         datalabels: {
                             display: true,
-                            color: '#333',
+                            align: 'top',
                             anchor: 'end',
-                            align: 'end',
-                            formatter: (v) => (v === null ? '' : `${v}%`)
-                        }
-                    },
-
-                    scales: {
-                        // ✅ y축은 데이터 범위 고려(최대 30대)하되 Risk 차트 톤 유지
-                        y: {
-                            min: 0,
-                            max: 55,
-                            ticks: { stepSize: 10 },
-                            grid: { color: '#e0e0e0' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 16 } }
-                        }
-                    },
-
-                    // ✅ 막대 “두께/간격”을 Risk 차트와 비슷한 체감으로 고정
-                    datasets: {
-                        bar: {
-                            categoryPercentage: 0.5, // 카테고리 내 막대가 차지하는 폭
-                            barPercentage: 0.9       // 실제 막대 폭
+                            font: { size: 14, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
                         }
                     }
-                },
-                plugins: [ChartDataLabels]
-            });
-        }
-
-        // 8. 심리적 위기 차트 (자살 생각 경험)
-        function createRiskCombinedChart() {
-            const labels = ['자살 생각 경험 비율', '우울 증상 경험 비율'];
-
-            const datasets = [
-                {
-                    label: '일반 청년 (19~29세)',
-                    data: [10.5, 5.9],
-                    backgroundColor: '#60a5fa',
-                    borderRadius: 4
-                },
-                {
-                    label: '시설 퇴소 청년',
-                    data: [46.5, 24.5],
-                    backgroundColor: '#dc2626',
-                    borderRadius: 4
                 }
-            ];
-
-            const ctx = document.getElementById('chartRisk').getEncodes ? null : document.getElementById('chartRisk').getContext('2d');
-
-            return new Chart(ctx, {
-                type: 'bar',
-                data: { labels, datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } },
-                    plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10, padding: 15 } },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: (v) => `${v}%`
-                        }
-                    },
-                    scales: {
-                        y: { min: 0, max: 60, ticks: { stepSize: 10 }, grid: { color: '#e0e0e0' } },
-                        x: { grid: { display: false }, ticks: { font: { size: 16 } } }
-                    }
-                },
-                plugins: [ChartDataLabels]
             });
         }
 
@@ -1707,38 +1735,57 @@
                     }
                     break;
 
-                case 'policy-title-slide': // 7페이지: 섹션 타이틀
-                    // 렌더링 없음
+                case 'policy-title-slide': // (삭제됨)
+                    break;
+                case 'slide-yk-1': // (삭제됨)
+                case 'slide-yk-2': // (삭제됨)
+                case 'slide-yk-3': // (삭제됨)
                     break;
 
-                // ✅ 추가된 개념 슬라이드 3장
-                case 'slide-yk-1':
-                case 'slide-yk-2':
-                case 'slide-yk-3':
-                    // 차트 없음 (렌더링 없음)
+                case 'slide-new-1':
+                    if (!chartNew1) chartNew1 = createChartNew1();
+                    else chartNew1.update();
+                    break;
+                case 'slide-new-2-1':
+                    if (!chartNew2_1) chartNew2_1 = createChartNew2_1();
+                    else chartNew2_1.update();
+                    break;
+                case 'slide-new-2-2':
+                    if (!chartNew2_2) chartNew2_2 = createChartNew2_2();
+                    else chartNew2_2.update();
+                    break;
+                case 'slide-new-2-3':
+                    if (!chartNew2_3) chartNew2_3 = createChartNew2_3();
+                    else chartNew2_3.update();
+                    break;
+                case 'slide-new-3':
+                    if (!chartNew3) chartNew3 = createChartNew3();
+                    else chartNew3.update();
+                    break;
+                case 'slide-new-4':
+                    if (!chartNew4) chartNew4 = createChartNew4();
+                    else chartNew4.update();
+                    break;
+                case 'slide-new-5':
+                    if (!chartNew5) chartNew5 = createChartNew5();
+                    else chartNew5.update();
+                    break;
+                case 'slide-new-6':
+                    if (!chartNew6) chartNew6 = createChartNew6();
+                    else chartNew6.update();
                     break;
 
-                case 'policy-econ-slide': // 이후 페이지
-                    if (!chartEcon) chartEcon = createEconChart();
-                    else chartEcon.update();
+                // Title Slides (No charts)
+                case 'title-part2':
+                case 'title-part3':
                     break;
+
+                // Old cases for cleanup safety (can be removed or left as dead code)
+                case 'policy-econ-slide':
                 case 'policy-negative-exp-slide':
-                    if (!chartNegativeExp) {
-                        chartNegativeExp = createNegativeExpChart();
-                    } else { chartNegativeExp.update(); }
-                    break;
                 case 'policy-risk-slide':
-                    if (!chartRisk) chartRisk = createRiskCombinedChart();
-                    else chartRisk.update();
-                    break;
-
                 case 'policy-welfare-slide':
-                    if (!chartWelfare) chartWelfare = createWelfareChart();
-                    else chartWelfare.update();
-                    break;
-
                 case 'policy-solution-slide':
-                    // 차트 없음
                     break;
 
                 default:
