@@ -7,8 +7,8 @@
     <title>데이터 프레젠테이션 (VIDEO FULLSCREEN)</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey"></script>
 
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -46,7 +46,7 @@
             height: 100%;
             background: #ffffff;
 
-            padding: 80px 120px;
+            padding: 80px 120px 120px 120px;
             box-sizing: border-box;
 
             display: flex;
@@ -142,7 +142,7 @@
             font-size: 14px;
             color: #666;
             text-align: right;
-            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         /* =========================================================
@@ -288,11 +288,12 @@
                     onclick="updateWeeklyTrendView('realmeter', this)">리얼미터</button>
             </div>
 
+            <div class="data-source weekly-trend-source"></div>
+
             <div class="chart-wrapper">
                 <div class="chart-canvas-box">
                     <canvas id="weeklyTrendChart"></canvas>
                 </div>
-                <div class="data-source weekly-trend-source"></div>
             </div>
 
         </div>
@@ -310,11 +311,12 @@
                     onclick="updateWeeklyPartyTrendView('realmeter', this)">리얼미터</button>
             </div>
 
+            <div class="data-source weekly-trend-source"></div>
+
             <div class="chart-wrapper">
                 <div class="chart-canvas-box">
                     <canvas id="weeklyPartyTrendChart"></canvas>
                 </div>
-                <div class="data-source weekly-trend-source"></div>
             </div>
 
         </div>
@@ -396,14 +398,11 @@
                 <div class="title">국정수행 긍정평가) 제일 잘 했다고 생각하는 분야</div>
                 <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
             </div>
+            <div style="margin-bottom: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: right;">
+                * 국정운영 잘했다고 응답한 1,257명의 1,2순위 응답을 합산한 결과
+            </div>
             <div class="chart-wrapper">
                 <canvas id="chartNew2_1"></canvas>
-            </div>
-            <div
-                style="margin-top: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; margin-left: 80px;">
-                * 국정운영 잘했다고 응답한 1,257명의 1,2순위 응답을 합산한 결과<br>
-                * 외교/안보(한미 관세협상 타결, 주변국 관계 정상화 등), 경제/조세(배당소득 분리과세, 상법 개정 추진 등), 복지/노동(노동 개혁, 사회안전망 강화), 내란 극복(12·3 비상계엄
-                관련자 처벌 및 진상규명), 정치/소통(야당과의 협치, 국민 소통)
             </div>
         </div>
 
@@ -413,14 +412,11 @@
                 <div class="title">국정수행 부정평가) 제일 잘 못했다고 생각하는 분야</div>
                 <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
             </div>
+            <div style="margin-bottom: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: right;">
+                * 국정운영 잘못했다고 응답한 672명의 1,2순위 응답을 합산한 결과
+            </div>
             <div class="chart-wrapper">
                 <canvas id="chartNew2_2"></canvas>
-            </div>
-            <div
-                style="margin-top: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; margin-left: 80px;">
-                * 국정운영 잘못했다고 응답한 672명의 1,2순위 응답을 합산한 결과<br>
-                * 경제/민생(물가 관리 미흡, 경기 회복 지연), 부동산 정책(보유세 논란, 집값 불안정), 인사(장관 등 고위직 인사 검증 논란), 협치 부족/독주(입법 강행 처리 등),
-                외교/안보(대북 정책, 외교 노선 논란)
             </div>
         </div>
 
@@ -430,14 +426,82 @@
                 <div class="title">국정수행 부정평가) 제일 잘 못했다고 생각하는 분야 (연령별)</div>
                 <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
             </div>
+            <div style="margin-bottom: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: right;">
+                * 국정운영 잘못했다고 응답한 672명의 1,2순위 응답을 합산한 결과
+            </div>
             <div class="chart-wrapper">
                 <canvas id="chartNew2_3"></canvas>
             </div>
-            <div
-                style="margin-top: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; margin-left: 80px;">
-                * 국정운영 잘못했다고 응답한 672명의 1,2순위 응답을 합산한 결과<br>
-                * 경제/민생(물가 관리 미흡, 경기 회복 지연), 부동산 정책(보유세 논란, 집값 불안정), 인사(장관 등 고위직 인사 검증 논란), 협치 부족/독주(입법 강행 처리 등),
-                외교/안보(대북 정책, 외교 노선 논란)
+        </div>
+
+        <!-- Slide 2-4: Reform Areas -->
+        <div id="slide-new-2-4" class="slide-container hidden">
+            <div class="header">
+                <div class="title">가장 우선적으로 개혁이 필요한 분야</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+            <div style="margin-bottom: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: right;">
+                * 2020명 대상 조사 (복수응답 포함 가능성 확인 필요 - 합계 184%?)
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartNew2_4"></canvas>
+            </div>
+        </div>
+
+        <!-- Slide 2-5: Party-Gov Relationship -->
+        <div id="slide-new-2-5" class="slide-container hidden">
+            <div class="header">
+                <div class="title">지난 1년 당정관계 평가</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+            <div style="margin-bottom: 10px; font-size: 16px; color: #555; line-height: 1.5; text-align: right;">
+                * 지난 1년 동안 여당인 더불어민주당과 대통령실 간의 국정 파트너십 평가
+            </div>
+            <div class="chart-wrapper">
+                <div class="chart-canvas-box" style="width: 70%; margin: 0 auto;">
+                    <canvas id="chartNew2_5"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2-6: Responsibility -->
+        <div id="slide-new-2-6" class="slide-container hidden">
+            <div class="header">
+                <div class="title">당정 협력 원활하지 않았던 책임</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정 지지율</div>
+            </div>
+
+            <div id="res-controls" class="controls">
+                <button class="btn active" onclick="updateResponsibilityChart('total', this)">전체 결과</button>
+                <button class="btn" onclick="updateResponsibilityChart('region', this)">지역별</button>
+                <button class="btn" onclick="updateResponsibilityChart('party', this)">지지정당/성향별</button>
+            </div>
+
+            <!-- Footnote removed -->
+            <div class="chart-wrapper">
+                <canvas id="chartNew2_6"></canvas>
+            </div>
+        </div>
+
+        <!-- Slide 2-7: Sankey Chart -->
+        <div id="slide-sankey" class="slide-container hidden">
+            <div class="header">
+                <div class="title">지지 후보 변화: 1차(대선) → 3차(국정 평가) 흐름</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 패널 조사</div>
+            </div>
+            <div class="chart-wrapper" style="min-height: 600px;">
+                <canvas id="chartSankey"></canvas>
+            </div>
+        </div>
+
+        <!-- ⭐️ 2-8. Sankey Chart (Simplified) -->
+        <div class="slide-container hidden" id="slide-sankey-simple">
+            <div class="header">
+                <div class="title">지지 후보 변화 (단순화): 이재명 vs 비재명 → 국정 평가</div>
+                <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 패널 조사</div>
+            </div>
+            <div class="chart-wrapper" style="min-height: 600px;">
+                <canvas id="chartSankeySimple"></canvas>
             </div>
         </div>
 
@@ -566,14 +630,543 @@
         // ⭐️ 슬라이드 순서 및 상태 관리
         const slideOrder = [
             'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', // [1~5] 정치 데이터
-            'title-part2', 'slide-new-1', 'slide-new-2-1', 'slide-new-2-2', 'slide-new-2-3', 'slide-new-3',  // [6~11] 2부
-            'title-part3', 'slide-new-4', 'slide-new-5', 'slide-new-6'   // [12~15] 3부
+            'title-part2', 'slide-new-1', 'slide-new-2-1', 'slide-new-2-2', 'slide-new-2-3',
+            'slide-new-2-4', 'slide-new-2-5', 'slide-new-2-6', 'slide-sankey', 'slide-sankey-simple', 'slide-new-3',  // [6~16] 2부 (Simple Sankey 추가됨)
+            'title-part3', 'slide-new-4', 'slide-new-5', 'slide-new-6'   // [17~20] 3부
         ];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
         const navPrev = document.getElementById('nav-prev');
         const navNext = document.getElementById('nav-next');
         const pres_controls = document.getElementById('pres-controls');
+
+        // 책임 소재 데이터 (전역)
+        const responsibilityData = {
+            labels: ['전체', '서울', '경기/인천', '대전/충청', '광주/전라', '대구/경북', '부울경', '민주당 지지', '국힘 지지', '조국혁신당', '진보', '중도', '보수'],
+            data: {
+                // 당의 의견을 충분히 수용하지 않은 대통령실(정부)
+                gov: [10.8, 8.1, 12.0, 9.4, 12.0, 16.5, 7.2, 4.9, 16.7, 14.1, 3.1, 8.6, 16.3],
+                // 정부를 적극적으로 뒷받침하지 못한 민주당 지도부
+                party: [38.2, 42.6, 41.5, 36.1, 42.5, 22.5, 39.7, 67.4, 20.9, 66.2, 71.5, 39.0, 24.0],
+                // 양측 모두 비슷
+                both: [47.1, 47.8, 42.3, 50.9, 34.3, 53.5, 50.2, 23.2, 59.5, 12.5, 21.3, 47.9, 56.4]
+            }
+        };
+
+
+        // ... (기존 load/update 함수들)
+
+        // ===========================================================
+        // ⭐️ 추가된 차트 함수들 (2-4 ~ 2-6)
+        // ===========================================================
+
+        function createChartNew2_4() {
+            const ctx = document.getElementById('chartNew2_4').getContext('2d');
+            const data = {
+                labels: ['공공 분야', '규제 분야', '금융 분야', '노동 분야', '연금 분야', '교육 분야', '없다', '모름'],
+                datasets: [{
+                    label: '개혁 필요성 (%)',
+                    data: [37.6, 34.2, 33.5, 33.0, 24.3, 16.3, 3.4, 5.1],
+                    backgroundColor: '#1a237e',
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.8
+                }]
+            };
+            return new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    ...podCommonOptions,
+                    indexAxis: 'y',
+                    layout: { padding: { left: 50, right: 100, top: 20, bottom: 20 } },
+                    scales: {
+                        x: { beginAtZero: true, max: 50, ticks: { font: { size: 14 } }, grid: { display: false } },
+                        y: { ticks: { font: { size: 16, weight: 'bold' } } }
+                    },
+                    plugins: {
+                        ...podCommonOptions.plugins,
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            color: '#333',
+                            anchor: 'end',
+                            align: 'end',
+                            font: { size: 16, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChartNew2_5() {
+            const ctx = document.getElementById('chartNew2_5').getContext('2d');
+
+            // 데이터 구성
+            // Inner: 긍정(49.6), 부정(38.3), 모름(12.1)
+            // Outer: 매우원활(7.0), 대체로원활(42.6), 별로원활X(26.1), 전혀원활X(12.2), 모름(12.1)
+
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        '매우 원활', '대체로 원활',  // 긍정 그룹
+                        '별로 원활X', '전혀 원활X',  // 부정 그룹
+                        '모름'
+                    ],
+                    datasets: [
+                        // Outer Ring: 통합 (Aggregated) - Index 0
+                        {
+                            label: '통합 평가',
+                            data: [49.6, 38.3, 12.1], // 긍정, 부정, 모름
+                            backgroundColor: [
+                                '#1a237e', // 긍정 (파랑)
+                                '#c62828', // 부정 (빨강)
+                                '#90a4ae'  // 모름 (진한 회색)
+                            ],
+                            weight: 1.0
+                        },
+                        // Inner Ring: 상세 (Detailed) - Index 1
+                        {
+                            label: '상세 평가',
+                            data: [7.0, 42.6, 26.1, 12.2, 12.1],
+                            backgroundColor: [
+                                '#0d47a1', // 매우 원활 (짙은 파랑)
+                                '#42a5f5', // 대체로 원활 (밝은 파랑)
+                                '#ef5350', // 별로 원활X (밝은 빨강)
+                                '#b71c1c', // 전혀 원활X (짙은 빨강)
+                                '#cfd8dc'  // 모름 (회색)
+                            ],
+                            weight: 1.0
+                        }
+                    ]
+                },
+                options: {
+                    ...podCommonOptions,
+                    plugins: {
+                        ...podCommonOptions.plugins,
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                generateLabels: function (chart) {
+                                    const legends = [
+                                        { text: '매우 원활 (7.0%)', fillStyle: '#0d47a1' },
+                                        { text: '대체로 원활 (42.6%)', fillStyle: '#42a5f5' },
+                                        { text: '별로 원활하지 못함 (26.1%)', fillStyle: '#ef5350' },
+                                        { text: '전혀 원활하지 못함 (12.2%)', fillStyle: '#b71c1c' },
+                                        { text: '잘 모름 (12.1%)', fillStyle: '#cfd8dc' }
+                                    ];
+                                    return legends.map(l => ({
+                                        text: l.text,
+                                        fillStyle: l.fillStyle,
+                                        strokeStyle: l.fillStyle,
+                                        hidden: false,
+                                        lineCap: 'butt',
+                                        lineDash: [],
+                                        lineDashOffset: 0,
+                                        lineJoin: 'miter',
+                                        lineWidth: 0,
+                                        datasetIndex: 1 // Inner set refer (Detailed)
+                                    }));
+                                },
+                                font: { size: 16, weight: '600' },
+                                padding: 20
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            textAlign: 'right',
+                            color: '#fff',
+                            font: function (context) {
+                                // Outer(0)는 크게, Inner(1)는 작게
+                                const dsIndex = context.datasetIndex;
+                                return dsIndex === 0 ? { size: 20, weight: 'bold' } : { size: 14, weight: '600' };
+                            },
+                            formatter: (v, ctx) => {
+                                const dsIndex = ctx.datasetIndex;
+                                const dataIndex = ctx.dataIndex;
+
+                                if (dsIndex === 0) {
+                                    // Outer Ring: 통합 수치 + 라벨
+                                    const label = ['원활함 ', '원활하지\n못함  ', '모름 '][dataIndex];
+                                    return label + '\n' + v.toFixed(1) + '%';
+                                } else {
+                                    // Inner Ring: 상세 수치만
+                                    return v > 5 ? v.toFixed(1) + '%' : '';
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const dsIndex = context.datasetIndex;
+                                    const dataIndex = context.dataIndex;
+                                    const value = context.parsed;
+
+                                    if (dsIndex === 1) {
+                                        // Inner
+                                        const labels = ['매우 원활', '대체로 원활', '별로 원활X', '전혀 원활X', '모름'];
+                                        return `${labels[dataIndex]}: ${value}%`;
+                                    } else {
+                                        // Outer
+                                        const labels = ['긍정 합계', '부정 합계', '모름'];
+                                        return `${labels[dataIndex]}: ${value}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        let chartNew2_6 = null; // 전역 변수로 관리
+
+        function updateResponsibilityChart(mode, btn) {
+            if (btn) {
+                document.querySelectorAll('#res-controls .btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
+            const ctx = document.getElementById('chartNew2_6').getContext('2d');
+            let labels, dataGov, dataParty, dataBoth;
+
+            if (mode === 'total') {
+                labels = ['전체'];
+                dataGov = [responsibilityData.data.gov[0]];
+                dataParty = [responsibilityData.data.party[0]];
+                dataBoth = [responsibilityData.data.both[0]];
+            } else if (mode === 'region') {
+                labels = responsibilityData.labels.slice(1, 7); // 서울 ~ 부울경
+                dataGov = responsibilityData.data.gov.slice(1, 7);
+                dataParty = responsibilityData.data.party.slice(1, 7);
+                dataBoth = responsibilityData.data.both.slice(1, 7);
+            } else if (mode === 'party') {
+                labels = responsibilityData.labels.slice(7); // 민주 ~ 보수 (지지정당/성향 등)
+                dataGov = responsibilityData.data.gov.slice(7);
+                dataParty = responsibilityData.data.party.slice(7);
+                dataBoth = responsibilityData.data.both.slice(7);
+            }
+
+            const newData = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '민주당 지도부 책임',
+                        data: dataParty,
+                        backgroundColor: '#1a237e', // 파랑 (민주당 색)
+                        barPercentage: 0.6
+                    },
+                    {
+                        label: '대통령실(정부) 책임',
+                        data: dataGov,
+                        backgroundColor: '#c62828', // 빨강 (반대 느낌?)
+                        barPercentage: 0.6
+                    },
+                    {
+                        label: '양측 비슷',
+                        data: dataBoth,
+                        backgroundColor: '#78909c', // 회색
+                        barPercentage: 0.6
+                    }
+                ]
+            };
+
+            if (chartNew2_6) {
+                chartNew2_6.data = newData;
+                chartNew2_6.update();
+            } else {
+                chartNew2_6 = new Chart(ctx, {
+                    type: 'bar',
+                    data: newData,
+                    options: {
+                        ...podCommonOptions,
+                        indexAxis: 'y', // 세로형 리스트 느낌
+                        scales: {
+                            x: { stacked: true, max: 100, grid: { display: false } }, // 100% 기준
+                            y: { stacked: true, ticks: { font: { size: 16, weight: 'bold' } } }
+                        },
+                        plugins: {
+                            ...podCommonOptions.plugins,
+                            legend: {
+                                position: 'right',
+                                align: 'start',
+                                labels: {
+                                    usePointStyle: true,
+                                    boxWidth: 8,
+                                    padding: 15,
+                                    font: { size: 16, weight: '600' }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                color: '#fff',
+                                font: { size: 14 },
+                                formatter: (v) => v > 5 ? v.toFixed(1) : '' // 5% 미만은 숨김
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ... (existing updateResponsibilityChart)
+
+        // ===========================================================
+        // ⭐️ Sankey Chart Logic (Slide 2-7)
+        // ===========================================================
+        let sankeyData = null;
+        let chartSankey = null;
+
+        function loadSankeyData() {
+            // CSV: id, 1st, 2nd, 3rd, wt
+            const DATA_URL = './data/sankey.csv';
+
+            fetch(DATA_URL)
+                .then(res => res.ok ? res.text() : Promise.reject('Sankey Load Failed'))
+                .then(text => {
+                    const lines = text.trim().split('\n').slice(1); // skip header
+                    const flows = {};
+                    // Key: "SourceNode_TargetNode" -> Value: Sum of weights
+
+                    lines.forEach(line => {
+                        const cols = line.split(',');
+                        if (cols.length < 5) return;
+
+                        let source = parseInt(cols[1].trim()); // 1st
+                        let target = parseInt(cols[3].trim()); // 3rd
+                        let weight = parseFloat(cols[4].trim());
+
+                        // 1) Merge Wave 1 categories (4, 5, 6 -> 4)
+                        if (source === 4 || source === 5 || source === 6) {
+                            source = 4;
+                        }
+
+                        // 2) Map to keys
+                        // Source: Q1_1 (Lee), Q1_2 (Kim), Q1_3 (LeeJS), Q1_4 (Others)
+                        // Target: Q3_1 (VeryBad), Q3_2 (Bad), Q3_3 (Good), Q3_4 (VeryGood), Q3_9 (Unknown)
+                        const sourceKey = `Q1_${source}`;
+                        const targetKey = `Q3_${target}`;
+
+                        const flowKey = `${sourceKey}|${targetKey}`;
+                        if (!flows[flowKey]) flows[flowKey] = 0;
+                        flows[flowKey] += weight;
+                    });
+
+                    // Prepare Chart.js data
+                    const flowData = [];
+                    for (const [key, value] of Object.entries(flows)) {
+                        const [from, to] = key.split('|');
+                        flowData.push({ from, to, flow: value });
+                    }
+
+                    sankeyData = flowData;
+                    if (document.getElementById('slide-sankey').classList.contains('hidden') === false) {
+                        createSankeyChart();
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+
+        function createSankeyChart() {
+            if (!sankeyData) {
+                loadSankeyData();
+                return;
+            }
+
+            const ctx = document.getElementById('chartSankey').getContext('2d');
+
+            const existingChart = Chart.getChart('chartSankey');
+            if (existingChart) existingChart.destroy();
+
+            // Define colors
+            const colors = {
+                'Q1_1': '#1a237e', // Lee (Blue)
+                'Q1_2': '#c62828', // Kim (Red)
+                'Q1_3': '#ff9800', // LeeJS (Orange)
+                'Q1_4': '#9e9e9e', // Others (Grey)
+
+                'Q3_1': '#b71c1c', // Very Bad (Deep Red) - Left side of right
+                'Q3_2': '#ef5350', // Bad (Light Red)
+                'Q3_9': '#cfd8dc', // Unknown (Grey) - Middle
+                'Q3_3': '#42a5f5', // Good (Light Blue)
+                'Q3_4': '#0d47a1'  // Very Good (Deep Blue)
+            };
+
+            const labels = {
+                'Q1_1': '이재명', 'Q1_2': '김문수', 'Q1_3': '이준석', 'Q1_4': '기타/무응답',
+                'Q3_1': '매우 잘못함', 'Q3_2': '잘못하는 편', 'Q3_3': '잘하는 편', 'Q3_4': '매우 잘함', 'Q3_9': '잘 모름'
+            };
+
+            // Custom ordering for layout:
+            // Left: Lee(1), Kim(2), LeeJS(3), Others(4)
+            // Right Priority: VeryBad(1) -> Bad(2) -> Unknown(9) -> Good(3) -> VeryGood(4)
+            const priority = {
+                'Q1_1': 1, 'Q1_2': 2, 'Q1_3': 3, 'Q1_4': 4,
+                'Q3_1': 1, 'Q3_2': 2, 'Q3_9': 3, 'Q3_3': 4, 'Q3_4': 5
+            };
+
+            chartSankey = new Chart(ctx, {
+                type: 'sankey',
+                data: {
+                    datasets: [{
+                        data: sankeyData,
+                        colorFrom: (c) => colors[c.raw.from] || '#cccccc',
+                        colorTo: (c) => colors[c.raw.to] || '#cccccc',
+                        colorMode: 'gradient', // or 'from', 'to'
+                        labels: labels,
+                        priority: priority,
+                        // column processing is automatic usually, but we can hints
+                        size: 'max', // adjust node size
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: 20 },
+                    plugins: {
+                        datalabels: { display: false }, // Force disable datalabels
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const item = ctx.raw;
+                                    return `${labels[item.from]} → ${labels[item.to]}: ${item.flow.toFixed(0)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            return chartSankey;
+        }
+
+        // ===========================================================
+        // ⭐️ Sankey Chart Simple Logic (Slide 2-8)
+        // ===========================================================
+        let sankeySimpleData = null;
+        let chartSankeySimple = null;
+
+        function loadSankeySimpleData() {
+            console.log("Starting loadSankeySimpleData...");
+            const DATA_URL = './data/sankey.csv';
+
+            fetch(DATA_URL)
+                .then(res => res.ok ? res.text() : Promise.reject('Sankey Simple Load Failed'))
+                .then(text => {
+                    const lines = text.trim().split('\n').slice(1);
+                    const flows = {};
+
+                    lines.forEach(line => {
+                        const cols = line.split(',');
+                        if (cols.length < 5) return;
+
+                        let source = parseInt(cols[1].trim()); // 1st
+                        let target = parseInt(cols[3].trim()); // 3rd
+                        let weight = parseFloat(cols[4].trim());
+
+                        // 1) Simplify Source (Lee vs Non-Lee)
+                        // 1=Lee, 2~6=Non-Lee
+                        let sourceLabel = (source === 1) ? 'Lee' : 'NonLee';
+
+                        // 2) Simplify Target (Pos vs Neg vs Unknown)
+                        // 1,2 -> Negative
+                        // 3,4 -> Positive
+                        // 9   -> Unknown
+                        let targetLabel;
+                        if (target === 1 || target === 2) targetLabel = 'Negative';
+                        else if (target === 3 || target === 4) targetLabel = 'Positive';
+                        else targetLabel = 'Unknown';
+
+                        const flowKey = `${sourceLabel}|${targetLabel}`;
+                        if (!flows[flowKey]) flows[flowKey] = 0;
+                        flows[flowKey] += weight;
+                    });
+
+                    const flowData = [];
+                    for (const [key, value] of Object.entries(flows)) {
+                        const [from, to] = key.split('|');
+                        flowData.push({ from, to, flow: value });
+                    }
+
+                    sankeySimpleData = flowData;
+
+                    const container = document.getElementById('slide-sankey-simple');
+                    if (container && !container.classList.contains('hidden')) {
+                        createSankeySimpleChart();
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+
+        function createSankeySimpleChart() {
+            if (!sankeySimpleData) {
+                loadSankeySimpleData();
+                return;
+            }
+
+            const ctx = document.getElementById('chartSankeySimple').getContext('2d');
+
+            const existingChart = Chart.getChart('chartSankeySimple');
+            if (existingChart) existingChart.destroy();
+
+            // Colors
+            // Lee: Blue (#1a237e), NonLee: Grey (#9e9e9e)
+            // Positive: Blue (#1a237e), Negative: Red (#c62828), Unknown: Grey (#cfd8dc)
+            const colors = {
+                'Lee': '#1a237e',
+                'NonLee': '#9e9e9e',
+                'Positive': '#1a237e', // Same as Lee for flow continuity visual
+                'Negative': '#c62828',
+                'Unknown': '#cfd8dc'
+            };
+
+            const labels = {
+                'Lee': '이재명 지지',
+                'NonLee': '이재명 지지 안함',
+                'Positive': '국정운영 긍정',
+                'Negative': '국정운영 부정',
+                'Unknown': '잘 모름'
+            };
+
+            const priority = {
+                'Lee': 1, 'NonLee': 2,
+                'Negative': 1, 'Unknown': 2, 'Positive': 3
+            };
+
+            chartSankeySimple = new Chart(ctx, {
+                type: 'sankey',
+                data: {
+                    datasets: [{
+                        data: sankeySimpleData,
+                        colorFrom: (c) => colors[c.raw.from] || '#cccccc',
+                        colorTo: (c) => colors[c.raw.to] || '#cccccc',
+                        colorMode: 'gradient',
+                        labels: labels,
+                        priority: priority,
+                        size: 'max'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: 40 },
+                    plugins: {
+                        datalabels: { display: false },
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const item = ctx.raw;
+                                    return `${labels[item.from]} → ${labels[item.to]}: ${item.flow.toFixed(0)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            return chartSankeySimple;
+        }
 
 
         // ===========================================================
@@ -1598,6 +2191,42 @@
 
             // 5) 차트/렌더링: 필요한 슬라이드에서만 실행
             switch (slideId) {
+                case 'slide-new-2-4':
+                    if (!document.getElementById('chartNew2_4').$chart) {
+                        // Chart property marker
+                        const c = createChartNew2_4();
+                        document.getElementById('chartNew2_4').$chart = c;
+                    }
+                    break;
+                case 'slide-new-2-5':
+                    if (!document.getElementById('chartNew2_5').$chart) {
+                        const c = createChartNew2_5();
+                        document.getElementById('chartNew2_5').$chart = c;
+                    }
+                    break;
+                case 'slide-new-2-6':
+                    // 초기값 total로 생성
+                    if (!chartNew2_6) {
+                        updateResponsibilityChart('total', document.querySelector('#res-controls .btn.active'));
+                    }
+                    break;
+                case 'slide-sankey':
+                    if (!sankeyData) {
+                        loadSankeyData();
+                    }
+                    else if (document.getElementById('slide-sankey').classList.contains('hidden') === false && !chartSankey) {
+                        createSankeyChart();
+                    }
+                    break;
+
+                case 'slide-sankey-simple':
+                    if (!sankeySimpleData) {
+                        loadSankeySimpleData();
+                    }
+                    else if (document.getElementById('slide-sankey-simple').classList.contains('hidden') === false && !chartSankeySimple) {
+                        createSankeySimpleChart();
+                    }
+                    break;
                 case 'weekly-trend-slide': // 1페이지: 직무 주간
                     if (!weeklyTrendData.labels) loadWeeklyTrendChart();
                     else updateWeeklyTrendView(
