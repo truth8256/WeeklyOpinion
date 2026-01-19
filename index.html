@@ -531,7 +531,7 @@
         <div id="slide-new-4" class="slide-container hidden">
             <div class="header">
                 <div class="title">12·3 사태 인식: 국민 63% '명백한 내란'</div>
-                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
+                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
             </div>
 
             <div id="new4-controls" class="controls">
@@ -548,7 +548,7 @@
         <div id="slide-new-5" class="slide-container hidden">
             <div class="header">
                 <div class="title">기관 신뢰도 변화: 행정부 상승 vs 검찰 정체</div>
-                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
+                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
             </div>
             <div class="chart-wrapper">
                 <canvas id="chartNew5"></canvas>
@@ -559,7 +559,7 @@
         <div id="slide-new-6" class="slide-container hidden">
             <div class="header">
                 <div class="title">믿음의 양극화: 부정선거 음모론</div>
-                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
+                <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
             </div>
             <div class="chart-wrapper">
                 <canvas id="chartNew6"></canvas>
@@ -573,13 +573,49 @@
     <div id="slide-new-4-1" class="slide-container hidden">
         <div class="header">
             <div class="title">지난 6개월간의 수사와 처벌 과정에 대한 평가</div>
-            <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란 여론</div>
+            <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
         </div>
         <div style="margin-bottom: 20px; font-size: 16px; color: #555; line-height: 1.5; text-align: right;">
             * 질문: 지난 6개월간 비상계엄 관련자 수사 및 처벌, 내란죄 재판 진행 과정에 대해 어떻게 평가하십니까?
         </div>
         <div class="chart-wrapper">
             <canvas id="chartNew4_1"></canvas>
+        </div>
+    </div>
+
+
+
+    <!-- Slide 4-2: Prosecutorial Reform (New) -->
+    <div id="slide-new-4-2" class="slide-container hidden">
+        <div class="header">
+            <div class="title">검찰 개혁 핵심 쟁점 : '보완수사권' 존폐</div>
+            <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
+        </div>
+        <div
+            style="margin-bottom: 20px; font-size: 16px; color: #555; line-height: 1.5; text-align: left; background: #f5f5f5; padding: 15px; border-radius: 8px;">
+            <strong>* 쟁점 설명:</strong> 경찰 송치 사건에 대한 검찰의 <b>'보완수사권'</b>을 없앨 것인가(완전 폐지), 남길 것인가(일부 존치)<br />
+            ① 완전 폐지 찬성: 검찰권 남용 방지, 기소만 전담 (수사권 박탈)<br />
+            ② 일부 존치 (폐지 반대): 경찰 수사 오류 시정, 중요 범죄 수사 공백 방지
+        </div>
+
+    </div>
+
+    <!-- Slide 6: Election Trust (Revamped) -->
+    <div id="slide-new-6" class="slide-container hidden">
+        <div class="header">
+            <div class="title">믿음의 양극화: 부정선거 음모론</div>
+            <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
+        </div>
+
+        <div id="new6-controls" class="controls" style="flex-wrap: wrap; justify-content: center; gap: 8px;">
+            <!-- Buttons will be injected by JS -->
+        </div>
+
+        <div class="chart-wrapper" style="height: 300px; margin-top: 30px;">
+            <canvas id="chartNew6"></canvas>
+        </div>
+        <div style="text-align: center; margin-top: 10px; color: #666; font-size: 14px;">
+            * 1: 전혀 동의 안 함 ~ 4: 매우 동의함
         </div>
     </div>
 
@@ -652,7 +688,8 @@
             'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', // [1~5] 정치 데이터
             'title-part2', 'slide-new-1', 'slide-new-2-1', 'slide-new-2-2', 'slide-new-2-3',
             'slide-new-2-4', 'slide-new-2-5', 'slide-new-2-6', 'slide-sankey', 'slide-sankey-simple', 'slide-new-3',  // [6~16] 2부
-            'title-part3', 'slide-new-4', 'slide-new-4-1', 'slide-new-5', 'slide-new-6'   // [17~21] 3부 (4-1 추가)
+
+            'title-part3', 'slide-new-4', 'slide-new-4-1', 'slide-new-4-2', 'slide-new-5', 'slide-new-6'   // [17~22] 3부 (4-2 추가)
         ];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
@@ -1958,6 +1995,162 @@
             });
         }
 
+        let chartNew4_2 = null;
+
+        function updateNew4_2View(mode, btn) {
+            if (btn) {
+                document.querySelectorAll('#new4-2-controls .btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
+            const ctx = document.getElementById('chartNew4_2').getContext('2d');
+
+            // Data Definition
+            // Option 1: Abolition (Blue)
+            // Option 2: Retention (Red)
+            // Option 3: Unknown (Grey)
+            const COLOR_ABOLITION = '#1a237e'; // Blue
+            const COLOR_RETENTION = '#c62828'; // Red
+            const COLOR_UNKNOWN = '#eceff1';   // Grey
+
+            let labels = [];
+            let data1 = []; // Abolition
+            let data2 = []; // Retention
+            let data3 = []; // Unknown
+
+            let isStacked = false;
+            let indexAxis = 'y'; // Default Horizontal
+
+            if (mode === 'total') {
+                // Total View: Simple Horizontal Bar comparing the 3 options
+                labels = [['완전 폐지 찬성', '(수사권 박탈)'], ['일부 존치', '(폐지 반대)'], '잘 모르겠다'];
+                // Data: 38.3, 50.9, 10.8
+                // We format this as a single dataset bar chart for simple comparison
+
+                const dataTotal = {
+                    labels: labels,
+                    datasets: [{
+                        label: '응답 비율',
+                        data: [38.3, 50.9, 10.8],
+                        backgroundColor: [COLOR_ABOLITION, COLOR_RETENTION, COLOR_UNKNOWN],
+                        barPercentage: 0.6
+                    }]
+                };
+
+                if (chartNew4_2) chartNew4_2.destroy();
+
+                chartNew4_2 = new Chart(ctx, {
+                    type: 'bar',
+                    data: dataTotal,
+                    options: {
+                        ...podCommonOptions,
+                        indexAxis: 'y',
+                        scales: {
+                            x: { beginAtZero: true, max: 60, grid: { display: false } },
+                            y: { ticks: { font: { size: 16, weight: 'bold' } } }
+                        },
+                        plugins: {
+                            ...podCommonOptions.plugins,
+                            legend: { display: false },
+                            datalabels: {
+                                display: true,
+                                color: (ctx) => ctx.dataIndex === 2 ? '#333' : '#fff', // 3rd is grey bg
+                                anchor: 'end',
+                                align: (ctx) => ctx.dataIndex === 2 ? 'end' : 'start',
+                                formatter: (v) => v.toFixed(1) + '%'
+                            }
+                        }
+                    }
+                });
+                return;
+
+            } else if (mode === 'ideology') {
+                labels = ['진보', '중도', '보수'];
+                // 1: Abolition, 2: Retention, 3: Unknown
+                data1 = [66.9, 35.1, 15.5];
+                data2 = [26.1, 50.1, 76.7];
+                data3 = [7.0, 14.9, 7.8];
+                isStacked = true;
+
+            } else if (mode === 'party') {
+                labels = ['더불어민주당', '조국혁신당', '진보당', '개혁신당', '국민의힘', '그 외 정당', '무당층', '잘모름'];
+                // Order: DP, Cho, Prog, Reform, PPP, Others, None, Unknown (Grouped by similarity roughly)
+                // DP
+                data1.push(62.9); data2.push(27.9); data3.push(9.2);
+                // Cho
+                data1.push(67.1); data2.push(24.8); data3.push(8.1);
+                // Prog
+                data1.push(48.7); data2.push(51.3); data3.push(0.0);
+                // Reform
+                data1.push(11.1); data2.push(86.4); data3.push(2.5);
+                // PPP
+                data1.push(7.4); data2.push(83.1); data3.push(9.4);
+                // Others
+                data1.push(30.5); data2.push(63.9); data3.push(5.6);
+                // None
+                data1.push(11.5); data2.push(63.6); data3.push(24.9);
+                // Unknown
+                data1.push(8.4); data2.push(45.1); data3.push(46.5);
+
+                isStacked = true;
+            }
+
+            // Stacked Chart Construction
+            const dataStacked = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '완전 폐지 찬성',
+                        data: data1,
+                        backgroundColor: COLOR_ABOLITION
+                    },
+                    {
+                        label: '일부 존치 (폐지 반대)',
+                        data: data2,
+                        backgroundColor: COLOR_RETENTION
+                    },
+                    {
+                        label: '잘 모르겠다',
+                        data: data3,
+                        backgroundColor: COLOR_UNKNOWN
+                    }
+                ]
+            };
+
+            if (chartNew4_2) chartNew4_2.destroy();
+
+            chartNew4_2 = new Chart(ctx, {
+                type: 'bar',
+                data: dataStacked,
+                options: {
+                    ...podCommonOptions,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { stacked: true, max: 100, grid: { display: false } }, // 100%
+                        y: { stacked: true, ticks: { font: { size: 15, weight: 'bold' } } }
+                    },
+                    plugins: {
+                        ...podCommonOptions.plugins,
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, padding: 20, font: { size: 14 } }
+                        },
+                        datalabels: {
+                            display: true,
+                            color: (ctx) => ctx.datasetIndex === 2 ? '#333' : '#fff', // Last index (unknown) is dark text
+                            formatter: (v) => v > 5 ? v.toFixed(1) : '' // Hide small values
+                        }
+                    }
+                }
+            });
+        }
+
+        // Init Proxy
+        function createChartNew4_2() {
+            updateNew4_2View('total', null);
+            return chartNew4_2;
+        }
+
         function createChartNew5() {
             const ctx = document.getElementById('chartNew5').getContext('2d');
             const data = {
@@ -2058,37 +2251,176 @@
             });
         }
 
-        function createChartNew6() {
+        // ===========================================================
+        // ⭐️ Slide 6 Logic (New Dot Plot)
+        // ===========================================================
+        let electionTrustData = [];
+        // chartNew6 is global
+
+        function loadElectionTrustData() {
+            console.log("Loading Election Trust Data...");
+            const DATA_URL = './data/election_trust_survey.csv';
+            fetch(DATA_URL)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.text();
+                })
+                .then(text => {
+                    const lines = text.trim().split('\n').slice(1); // Skip header
+                    if (lines.length === 0) throw new Error("CSV appears empty");
+
+                    electionTrustData = lines.map(line => {
+                        const cols = line.split(',');
+                        if (cols.length < 3) return null;
+                        return {
+                            question: cols[0],
+                            total: parseFloat(cols[1]),
+                            ppp: parseFloat(cols[2])
+                        };
+                    }).filter(item => item !== null);
+
+                    console.log("Election Data Loaded:", electionTrustData);
+
+                    // Init controls
+                    const container = document.getElementById('new6-controls');
+                    if (container) {
+                        container.innerHTML = '';
+                        electionTrustData.forEach((item, idx) => {
+                            const btn = document.createElement('button');
+                            btn.className = `btn ${idx === 0 ? 'active' : ''}`;
+                            btn.style.margin = "4px"; // Add explicit margin
+                            // Limit text length but keep it readable
+                            let label = item.question;
+                            if (label.length > 12) label = (idx + 1) + ". " + label.substring(0, 12) + "...";
+                            else label = (idx + 1) + ". " + label;
+
+                            btn.textContent = label;
+                            btn.title = item.question;
+                            btn.onclick = () => updateNew6View(idx, btn);
+                            container.appendChild(btn);
+                        });
+                    } else {
+                        console.error("new6-controls container not found!");
+                    }
+
+                    // If currently viewing slide 6, render the first chart
+                    const slide6 = document.getElementById('slide-new-6');
+                    if (slide6 && !slide6.classList.contains('hidden')) {
+                        updateNew6View(0, container ? container.firstElementChild : null);
+                    }
+                })
+                .catch(err => console.error("Slide 6 Load Error:", err));
+        }
+
+        function updateNew6View(index, btn) {
+            if (btn) {
+                // Remove active from siblings
+                const parent = btn.parentElement;
+                if (parent) {
+                    parent.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                }
+                btn.classList.add('active');
+            }
+
+            const item = electionTrustData[index];
+            if (!item) return;
+
             const ctx = document.getElementById('chartNew6').getContext('2d');
+
+            // Scatter Data: Y is fixed (1)
             const data = {
-                labels: ['전체 국민', '국민의힘 지지층'],
-                datasets: [{
-                    label: '부정선거/조작설 동의 비율 (%)',
-                    data: [39.0, 81.0],
-                    backgroundColor: ['#78909c', '#c62828']
-                }]
+                datasets: [
+                    {
+                        label: '전체 평균',
+                        data: [{ x: item.total, y: 1 }],
+                        backgroundColor: '#78909c', // Grey/Blue
+                        borderColor: '#78909c',
+                        pointRadius: 15,
+                        pointHoverRadius: 17
+                    },
+                    {
+                        label: '국민의힘 지지층',
+                        data: [{ x: item.ppp, y: 1 }],
+                        backgroundColor: '#c62828', // Red
+                        borderColor: '#c62828',
+                        pointRadius: 15,
+                        pointHoverRadius: 17
+                    }
+                ]
             };
-            return new Chart(ctx, {
-                type: 'bar',
+
+            if (chartNew6) chartNew6.destroy();
+
+            chartNew6 = new Chart(ctx, {
+                type: 'scatter',
                 data: data,
                 options: {
                     ...podCommonOptions,
-                    scales: { y: { beginAtZero: true, max: 100 } },
+                    layout: { padding: { top: 20, bottom: 20, left: 30, right: 30 } },
+                    scales: {
+                        x: {
+                            min: 1, max: 4,
+                            ticks: {
+                                font: { size: 16, weight: 'bold' },
+                                stepSize: 1,
+                                callback: function (value) {
+                                    const map = { 1: '전혀 동의 안 함', 2: '별로 동의 안 함', 3: '대체로 동의', 4: '매우 동의' };
+                                    return map[value] || value;
+                                }
+                            },
+                            grid: { drawBorder: false, color: '#eee' }
+                        },
+                        y: {
+                            min: 0, max: 2,
+                            display: false // Hide Y axis
+                        }
+                    },
                     plugins: {
                         ...podCommonOptions.plugins,
-                        legend: { display: false },
-                        title: { display: true, text: '부정선거(사전투표 조작 등) 동의율 비교', font: { size: 18 } },
+                        title: {
+                            display: true,
+                            text: `[${item.question}]`,
+                            font: { size: 24, weight: 'bold' },
+                            padding: { bottom: 30 }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, font: { size: 16 } }
+                        },
                         datalabels: {
                             display: true,
                             align: 'top',
-                            anchor: 'end',
-                            font: { size: 14, weight: 'bold' },
-                            formatter: (v) => v.toFixed(1)
+                            color: '#333',
+                            font: { size: 18, weight: 'bold' },
+                            formatter: (v) => v.x.toFixed(1)
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.dataset.label}: ${context.parsed.x}점`
+                            }
+                        },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    yMin: 1,
+                                    yMax: 1,
+                                    xMin: item.total,
+                                    xMax: item.ppp,
+                                    borderColor: '#999',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    z: -1 // Behind points
+                                }
+                            }
                         }
                     }
-                }
+                },
+                plugins: [ChartDataLabels]
             });
         }
+
+        // createChartNew6 function removed, handled in switch directly to check data loading state
 
         // ⭐️ 차트 초기화 함수 (DataLabels 활성화 여부 인자 추가: useLabels)
         function initChart(canvasId, labels, initialDatasets, yMin, yMax, useLabels = true) {
@@ -2590,13 +2922,31 @@
                     if (!chartNew4_1) chartNew4_1 = createChartNew4_1();
                     else chartNew4_1.update();
                     break;
+                case 'slide-new-4-2':
+                    if (!chartNew4_2) {
+                        chartNew4_2 = createChartNew4_2();
+                    } else {
+                        // Re-trigger view update if needed or just let it be.
+                        // Keeping it simple since updateNew4_2View handles destroy/create
+                        // We can just call update with current mode if we stored it, or default.
+                        const activeBtn = document.querySelector('#new4-2-controls .btn.active');
+                        updateNew4_2View(activeBtn ? activeBtn.dataset.mode || 'total' : 'total', null);
+                    }
+                    break;
                 case 'slide-new-5':
                     if (!chartNew5) chartNew5 = createChartNew5();
                     else chartNew5.update();
                     break;
                 case 'slide-new-6':
-                    if (!chartNew6) chartNew6 = createChartNew6();
-                    else chartNew6.update();
+                    if (electionTrustData.length === 0) {
+                        loadElectionTrustData();
+                    } else if (!chartNew6) {
+                        // Data loaded but chart missing
+                        const container = document.getElementById('new6-controls');
+                        updateNew6View(0, container ? container.firstElementChild : null);
+                    } else {
+                        chartNew6.update();
+                    }
                     break;
 
                 // Title Slides (No charts)
