@@ -486,7 +486,7 @@
         <!-- Slide 2-7: Sankey Chart -->
         <div id="slide-sankey" class="slide-container hidden">
             <div class="header">
-                <div class="title">지지 후보 변화: 1차(대선) → 3차(국정 평가) 흐름</div>
+                <div class="title">대선의 선택은 어떻게 국정평가로 이어졌나</div>
                 <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정운영 지지율</div>
             </div>
             <div class="chart-wrapper" style="min-height: 600px;">
@@ -497,7 +497,7 @@
         <!-- ⭐️ 2-8. Sankey Chart (Simplified) -->
         <div class="slide-container hidden" id="slide-sankey-simple">
             <div class="header">
-                <div class="title">지지 후보 변화 (단순화): 이재명 vs 비재명 → 국정 평가</div>
+                <div class="title">대선의 선택은 어떻게 국정평가로 이어졌나</div>
                 <div class="subtitle"><span class="section-badge badge-part2">PART 2</span> 국정운영 지지율</div>
             </div>
             <div class="chart-wrapper" style="min-height: 600px;">
@@ -695,11 +695,11 @@
 
         // ⭐️ 슬라이드 순서 및 상태 관리
         const slideOrder = [
-            'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide', // [1~5] 정치 데이터
             'title-part2', 'slide-new-1', 'slide-new-2-1', 'slide-new-2-2', 'slide-new-2-3',
             'slide-new-2-4', 'slide-new-2-5', 'slide-new-2-6', 'slide-sankey', 'slide-sankey-simple', 'slide-new-3',  // [6~16] 2부
 
-            'title-part3', 'slide-new-4', 'slide-new-4-1', 'slide-new-4-2', 'slide-new-5', 'slide-new-6'   // [17~22] 3부 (4-2 추가)
+            'title-part3', 'slide-new-4', 'slide-new-4-1', 'slide-new-4-2', 'slide-new-5', 'slide-new-6',   // [17~22] 3부 (4-2 추가)
+            'weekly-trend-slide', 'party-trend-slide', 'pres-slide-full', 'party-slide-full', 'pres-slide' // [1~5] 정치 데이터
         ];
         let currentSlideIndex = 0;
         const pageIndicator = document.getElementById('page-indicator');
