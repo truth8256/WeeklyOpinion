@@ -535,7 +535,7 @@
             </div>
 
             <div id="new4-controls" class="controls">
-                <button class="btn active" onclick="updateNew4View('total', this)">전체 결과</button>
+                <button class="btn active" onclick="updateNew4View('total', this)">전체</button>
                 <button class="btn" onclick="updateNew4View('age', this)">연령별</button>
             </div>
 
@@ -547,7 +547,7 @@
         <!-- Slide 5: Inst Trust -->
         <div id="slide-new-5" class="slide-container hidden">
             <div class="header">
-                <div class="title">기관 신뢰도 변화: 행정부 상승 vs 검찰 정체</div>
+                <div class="title">기관 신뢰도: 행정부는 상승, 검찰 정체</div>
                 <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
             </div>
             <div class="chart-wrapper">
@@ -558,7 +558,7 @@
         <!-- Slide 6: Conspiracy Theory -->
         <div id="slide-new-6" class="slide-container hidden">
             <div class="header">
-                <div class="title">믿음의 양극화: 부정선거 음모론</div>
+                <div class="title">부정선거 음모론</div>
                 <div class="subtitle"><span class="section-badge badge-part3">PART 3</span> 내란사건 1년 여론</div>
             </div>
             <div class="chart-wrapper">
@@ -596,6 +596,16 @@
             <strong>* 쟁점 설명:</strong> 경찰 송치 사건에 대한 검찰의 <b>'보완수사권'</b>을 없앨 것인가(완전 폐지), 남길 것인가(일부 존치)<br />
             ① 완전 폐지 찬성: 검찰권 남용 방지, 기소만 전담 (수사권 박탈)<br />
             ② 일부 존치 (폐지 반대): 경찰 수사 오류 시정, 중요 범죄 수사 공백 방지
+        </div>
+
+        <div id="new4-2-controls" class="controls">
+            <button class="btn active" onclick="updateNew4_2View('total', this)">전체 결과</button>
+            <button class="btn" onclick="updateNew4_2View('ideology', this)">정치 성향별</button>
+            <button class="btn" onclick="updateNew4_2View('party', this)">지지 정당별</button>
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="chartNew4_2"></canvas>
         </div>
 
     </div>
@@ -1091,6 +1101,7 @@
                         colorMode: 'gradient', // or 'from', 'to'
                         labels: labels,
                         priority: priority,
+                        nodeWidth: 50, // 1차/3차 시점 강조를 위해 막대 두께 증가
                         // column processing is automatic usually, but we can hints
                         size: 'max', // adjust node size
                     }]
@@ -1219,6 +1230,7 @@
                         colorMode: 'gradient',
                         labels: labels,
                         priority: priority,
+                        nodeWidth: 50, // 1차/3차 시점 강조를 위해 막대 두께 증가
                         size: 'max'
                     }]
                 },
@@ -2281,138 +2293,99 @@
 
                     console.log("Election Data Loaded:", electionTrustData);
 
-                    // Init controls
+                    // Clear controls if any exists (we don't need buttons anymore)
                     const container = document.getElementById('new6-controls');
-                    if (container) {
-                        container.innerHTML = '';
-                        electionTrustData.forEach((item, idx) => {
-                            const btn = document.createElement('button');
-                            btn.className = `btn ${idx === 0 ? 'active' : ''}`;
-                            btn.style.margin = "4px"; // Add explicit margin
-                            // Limit text length but keep it readable
-                            let label = item.question;
-                            if (label.length > 12) label = (idx + 1) + ". " + label.substring(0, 12) + "...";
-                            else label = (idx + 1) + ". " + label;
+                    if (container) container.innerHTML = '';
 
-                            btn.textContent = label;
-                            btn.title = item.question;
-                            btn.onclick = () => updateNew6View(idx, btn);
-                            container.appendChild(btn);
-                        });
-                    } else {
-                        console.error("new6-controls container not found!");
-                    }
-
-                    // If currently viewing slide 6, render the first chart
+                    // Render the specific bar chart
                     const slide6 = document.getElementById('slide-new-6');
                     if (slide6 && !slide6.classList.contains('hidden')) {
-                        updateNew6View(0, container ? container.firstElementChild : null);
+                        renderConspiracyBarChart();
                     }
                 })
                 .catch(err => console.error("Slide 6 Load Error:", err));
         }
 
-        function updateNew6View(index, btn) {
-            if (btn) {
-                // Remove active from siblings
-                const parent = btn.parentElement;
-                if (parent) {
-                    parent.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-                }
-                btn.classList.add('active');
-            }
+        function renderConspiracyBarChart() {
+            if (!electionTrustData || electionTrustData.length === 0) return;
 
-            const item = electionTrustData[index];
-            if (!item) return;
+            const targets = [
+                '사전투표는 조작 가능성이 높다',
+                '선거관리위원회는 선거를 공정하게 관리한다',
+                '중국이 선거에 개입할 가능성이 높다'
+            ];
+
+            const filteredData = electionTrustData.filter(item => targets.includes(item.question));
+            // Sort by header order
+            filteredData.sort((a, b) => targets.indexOf(a.question) - targets.indexOf(b.question));
 
             const ctx = document.getElementById('chartNew6').getContext('2d');
-
-            // Scatter Data: Y is fixed (1)
-            const data = {
-                datasets: [
-                    {
-                        label: '전체 평균',
-                        data: [{ x: item.total, y: 1 }],
-                        backgroundColor: '#78909c', // Grey/Blue
-                        borderColor: '#78909c',
-                        pointRadius: 15,
-                        pointHoverRadius: 17
-                    },
-                    {
-                        label: '국민의힘 지지층',
-                        data: [{ x: item.ppp, y: 1 }],
-                        backgroundColor: '#c62828', // Red
-                        borderColor: '#c62828',
-                        pointRadius: 15,
-                        pointHoverRadius: 17
-                    }
-                ]
-            };
+            const questions = filteredData.map(d => d.question);
+            const totalScores = filteredData.map(d => d.total);
+            const pppScores = filteredData.map(d => d.ppp);
 
             if (chartNew6) chartNew6.destroy();
 
             chartNew6 = new Chart(ctx, {
-                type: 'scatter',
-                data: data,
+                type: 'bar',
+                data: {
+                    labels: questions,
+                    datasets: [
+                        {
+                            label: '전체',
+                            data: totalScores,
+                            backgroundColor: '#78909c',
+                            borderColor: '#78909c',
+                            borderWidth: 1,
+                            barPercentage: 0.9,
+                            categoryPercentage: 0.6
+                        },
+                        {
+                            label: '국민의힘 지지층',
+                            data: pppScores,
+                            backgroundColor: '#c62828',
+                            borderColor: '#c62828',
+                            borderWidth: 1,
+                            barPercentage: 0.9,
+                            categoryPercentage: 0.6
+                        }
+                    ]
+                },
                 options: {
                     ...podCommonOptions,
-                    layout: { padding: { top: 20, bottom: 20, left: 30, right: 30 } },
+                    indexAxis: 'y',
+                    layout: { padding: { top: 20, bottom: 20, left: 10, right: 30 } },
                     scales: {
                         x: {
                             min: 1, max: 4,
                             ticks: {
                                 font: { size: 16, weight: 'bold' },
+                                color: '#000',
                                 stepSize: 1,
                                 callback: function (value) {
-                                    const map = { 1: '전혀 동의 안 함', 2: '별로 동의 안 함', 3: '대체로 동의', 4: '매우 동의' };
+                                    const map = { 1: '전혀 동의안함', 2: '별로 동의안함', 3: '대체로 동의', 4: '매우 동의' };
                                     return map[value] || value;
                                 }
                             },
                             grid: { drawBorder: false, color: '#eee' }
                         },
                         y: {
-                            min: 0, max: 2,
-                            display: false // Hide Y axis
+                            ticks: { font: { size: 16, weight: 'bold' } }
                         }
                     },
                     plugins: {
                         ...podCommonOptions.plugins,
-                        title: {
-                            display: true,
-                            text: `[${item.question}]`,
-                            font: { size: 24, weight: 'bold' },
-                            padding: { bottom: 30 }
-                        },
                         legend: {
-                            position: 'bottom',
-                            labels: { usePointStyle: true, font: { size: 16 } }
+                            display: true,
+                            position: 'right',
+                            labels: { usePointStyle: true, font: { size: 14 } }
                         },
                         datalabels: {
-                            display: true,
-                            align: 'top',
+                            anchor: 'end',
+                            align: 'end',
                             color: '#333',
-                            font: { size: 18, weight: 'bold' },
-                            formatter: (v) => v.x.toFixed(1)
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => `${context.dataset.label}: ${context.parsed.x}점`
-                            }
-                        },
-                        annotation: {
-                            annotations: {
-                                line1: {
-                                    type: 'line',
-                                    yMin: 1,
-                                    yMax: 1,
-                                    xMin: item.total,
-                                    xMax: item.ppp,
-                                    borderColor: '#999',
-                                    borderWidth: 2,
-                                    borderDash: [5, 5],
-                                    z: -1 // Behind points
-                                }
-                            }
+                            font: { size: 14, weight: 'bold' },
+                            formatter: (v) => v.toFixed(1)
                         }
                     }
                 },
@@ -2941,11 +2914,7 @@
                     if (electionTrustData.length === 0) {
                         loadElectionTrustData();
                     } else if (!chartNew6) {
-                        // Data loaded but chart missing
-                        const container = document.getElementById('new6-controls');
-                        updateNew6View(0, container ? container.firstElementChild : null);
-                    } else {
-                        chartNew6.update();
+                        renderConspiracyBarChart();
                     }
                     break;
 
