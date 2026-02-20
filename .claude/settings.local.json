@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c:*)",
+      "WebFetch(domain:www.businesspost.co.kr)",
+      "WebFetch(domain:news.einfomax.co.kr)",
+      "WebFetch(domain:www.korea.kr)",
+      "WebSearch"
+    ]
+  }
+}
