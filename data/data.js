@@ -35,7 +35,7 @@ const PRESENTATION_CONFIG = {
                     {
                         source: 'MBC',
                         question: '이재명 정부의 부동산 정책이 앞으로 주택 가격 안정이나 주거 부담 완화에 실질적인 효과가 있을 것이라고 보십니까?',
-                        options: ['매우효과', '어느정도효과', '별로효과없음', '전혀효과없음', '모름무응답']
+                        options: ['매우 효과있음', '어느정도 효과있음', '별로 효과없음', '전혀 효과없음', '모름/무응답']
                     }
                 ]
             },
@@ -66,14 +66,14 @@ const PRESENTATION_CONFIG = {
             type: 'cross-tab',
             data: {
                 title: '세부 항목별 평가', // label -> title
-                subtitle: '세부 정책 기대 파급 효과 — 방향 동의, 성과는 아직', // title + subtitle -> subtitle
+                subtitle: '부동산 정책별 의견', // title + subtitle -> subtitle
                 unit: '%',
                 orientation: 'horizontal',
                 source: 'SBS | 2026.02.12~14 | n=1,000',
-                categories: ['보유세 인상 동의', '양도세 중과 효과 기대', '공급대책\n(중장기 포함)', '부동산 정책 전반'],
+                categories: ['부동산 정책 전반', '공급대책 효과 기대', '양도세 중과 효과 기대', '보유세 인상 동의\n(다주택·고가 1주택자)'],
                 series: [
-                    { name: '긍정/동의', data: [76, 57, 57, 52], color: '#2563EB' },
-                    { name: '부정/비동의', data: [19, 38, 38, 39], color: '#DC2626' },
+                    { name: '긍정/동의', data: [52, 57, 57, 76], color: '#2563EB' },
+                    { name: '부정/비동의', data: [39, 38, 38, 19], color: '#DC2626' },
                 ],
             },
         },

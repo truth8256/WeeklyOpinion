@@ -296,18 +296,18 @@ const SlideEngine = (() => {
       const items = d.items || [];
       return `
         ${_buildTitleBar(d)}
-        <div class="slide-body" style="gap:40px; align-items:stretch; padding-top:20px;">
+        <div class="slide-body" style="gap:40px; align-items:center; padding-top:20px;">
           ${items.map((item, i) => `
-            <div class="card-elevated anim-seq" style="flex:1; display:flex; flex-direction:column; gap:24px; animation-delay:${i * 100}ms;">
+            <div class="card-elevated anim-seq" style="flex:1; display:flex; flex-direction:column; gap:20px; padding:32px; animation-delay:${i * 100}ms;">
               <div style="display:flex; align-items:center; gap:16px;">
                 <div class="slide-badge" style="background:var(--text-accent); color:white; border:none; padding:4px 16px; font-size:24px;">${item.source}</div>
               </div>
-              <div style="font-size:38px; font-weight:700; line-height:1.45; word-break:keep-all; color:var(--text-primary); flex-shrink:0;">
+              <div style="font-size:36px; font-weight:700; line-height:1.4; word-break:keep-all; color:var(--text-primary); flex-shrink:0;">
                 ${item.question.replace(/\n/g, '<br>')}
               </div>
-              <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:auto;">
+              <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;">
                 ${item.options.map(opt => `
-                  <div style="padding:10px 20px; background:var(--bg-primary); border:1.5px solid var(--border-default); border-radius:var(--radius-md); font-size:28px; font-weight:600; color:var(--text-secondary);">
+                  <div style="padding:8px 16px; background:var(--bg-primary); border:1.5px solid var(--border-default); border-radius:var(--radius-md); font-size:26px; font-weight:600; color:var(--text-secondary);">
                     ${opt}
                   </div>
                 `).join('')}
