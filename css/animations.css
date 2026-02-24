@@ -1,0 +1,113 @@
+/* ============================================================
+   animations.css — 슬라이드 전환 + UI 애니메이션
+   ============================================================ */
+
+/* ── 1. 슬라이드 등장 애니메이션 ── */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── 2. 콘텐츠 순차 등장 ── */
+@keyframes contentReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: contentReveal 500ms ease both;
+}
+.animate-in-delay-1 { animation-delay: 100ms; }
+.animate-in-delay-2 { animation-delay: 200ms; }
+.animate-in-delay-3 { animation-delay: 300ms; }
+.animate-in-delay-4 { animation-delay: 400ms; }
+.animate-in-delay-5 { animation-delay: 500ms; }
+
+/* ── 3. 빅 넘버 강조 ── */
+@keyframes numberPop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  60%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-number-pop {
+  animation: numberPop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── 4. 키워드 강조 ── */
+@keyframes keywordReveal {
+  from { clip-path: inset(0 100% 0 0); opacity: 0; }
+  to   { clip-path: inset(0 0% 0 0);   opacity: 1; }
+}
+.animate-keyword {
+  animation: keywordReveal 700ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── 5. versus 대결 강조선 ── */
+@keyframes vsLineGrow {
+  from { transform: scaleY(0); opacity: 0; }
+  to   { transform: scaleY(1); opacity: 1; }
+}
+.animate-vs-line {
+  animation: vsLineGrow 400ms ease both;
+  transform-origin: center;
+}
+
+/* ── 6. 펄스 (주목 효과) ── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ── 7. 스핀 (로딩) ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ── 8. 배경 그라데이션 흐름 ── */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* ── 9. 차트 바 성장 (ECharts 보완) ── */
+@keyframes barGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ── 10. 테두리 하이라이트 ── */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0); }
+  50%       { box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.3); }
+}
+.animate-border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* ── 11. 슬라이드 전환 direction 클래스 ── */
+.slide.entering-right { animation: slideInRight 400ms ease both; }
+.slide.entering-left  { animation: slideInLeft  400ms ease both; }

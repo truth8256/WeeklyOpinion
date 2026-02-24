@@ -1,0 +1,33 @@
+/* ============================================================
+   themes/light-gray.css — 기본 라이트 그레이 테마
+   ============================================================ */
+
+[data-theme="light-gray"],
+.theme-light-gray {
+  --bg-primary: #F4F5F7;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-accent: #2563EB;
+  --border-default: #D1D5DB;
+  --accent-blue: #2563EB;
+
+  /* 슬라이드 배경 */
+  --slide-bg: #F4F5F7;
+
+  /* 헤더 강조선 색상 */
+  --header-accent: #2563EB;
+
+  /* 차트 그리드 색상 */
+  --chart-grid: #E5E7EB;
+  --chart-axis-label: #6B7280;
+}
+
+/* 기본 적용 (data-theme 없을 때) */
+:root {
+  --slide-bg: #F4F5F7;
+  --header-accent: #2563EB;
+  --chart-grid: #E5E7EB;
+  --chart-axis-label: #6B7280;
+}
