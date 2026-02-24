@@ -1,9 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:api.github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "Bash(python -c:*)",
+      "WebFetch(domain:www.businesspost.co.kr)",
+      "WebFetch(domain:news.einfomax.co.kr)",
+      "WebFetch(domain:www.korea.kr)",
+      "WebSearch"
     ]
   }
 }
