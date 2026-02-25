@@ -156,7 +156,110 @@ const BarChart = (() => {
     return chart;
   }
 
-  return { renderHorizontal, renderVertical };
+  /**
+   * 세로 막대 그룹(묶음) 차트 (10월 vs 2월 비교용 등)
+   * @param {Object} data 
+   *   categories: ['서울', '18~29세', '30대']
+   *   series: [ { name: '10월', data: [36, 29, 33] }, { name: '2월', data: [46, 37, 42] } ]
+   */
+  function renderVerticalGroup(containerId, data) {
+    const chart = ChartUtils.init(containerId);
+    const unit = data.unit || '%';
+    const categories = data.categories || [];
+    const seriesData = data.series || [];
+
+    const series = seriesData.map((s, i) => {
+      const color = s.color || ColorMap.get(s.name, i);
+      return {
+        name: s.name,
+        type: 'bar',
+        data: s.data,
+        itemStyle: {
+          color: color,
+          borderRadius: [8, 8, 0, 0],
+        },
+        barMaxWidth: 80,
+        barGap: '10%',
+        label: {
+          show: true,
+          position: 'top',
+          ...ChartUtils.LABEL_STYLE,
+          color: '#111827',
+          fontSize: 32,
+          formatter: params => `${params.value.toFixed(1)}${unit}`,
+          distance: 12
+        },
+        emphasis: { disabled: true },
+      };
+    });
+
+    const option = {
+      ...ChartUtils.ANIMATION_DEFAULTS,
+      animationDelay: idx => idx * 100,
+
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        borderColor: '#d1d5db',
+        borderWidth: 1,
+        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', sans-serif" },
+        formatter: params => {
+          let html = `<div style="margin-bottom:8px;color:#6b7280">${params[0].axisValue}</div>`;
+          params.forEach(p => {
+            html += `<div style="display:flex;justify-content:space-between;gap:24px">
+              <span>${p.marker}${p.seriesName}</span>
+              <b style="font-family:'Pretendard Variable', sans-serif">${p.value?.toFixed(1)}${unit}</b>
+            </div>`;
+          });
+          return html;
+        }
+      },
+
+      legend: {
+        top: 0,
+        right: 80,
+        icon: 'circle',
+        itemWidth: 12,
+        itemHeight: 12,
+        itemGap: 28,
+        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', sans-serif" },
+      },
+
+      grid: { top: 120, right: 80, bottom: 100, left: 80 },
+
+      xAxis: {
+        type: 'category',
+        data: categories,
+        axisLine: { lineStyle: { color: '#d1d5db' } },
+        axisTick: { show: false },
+        axisLabel: {
+          ...ChartUtils.TEXT_STYLE,
+          color: '#111827',
+          fontSize: 32,
+          fontFamily: "'Pretendard Variable', sans-serif",
+          interval: 0,
+        },
+      },
+
+      yAxis: {
+        type: 'value',
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { ...ChartUtils.TEXT_STYLE, fontSize: 18 },
+        splitLine: {
+          lineStyle: { color: '#e5e7eb', type: 'dashed' },
+        },
+      },
+
+      series: series
+    };
+
+    chart.setOption(option);
+    return chart;
+  }
+
+  return { renderHorizontal, renderVertical, renderVerticalGroup };
 })();
 
 window.BarChart = BarChart;
