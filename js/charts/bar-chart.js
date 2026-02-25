@@ -156,7 +156,105 @@ const BarChart = (() => {
     return chart;
   }
 
-  return { renderHorizontal, renderVertical };
+  /**
+   * 그룹 세로 막대 차트 (bar-v-group)
+   * @param {string} containerId
+   * @param {Object} data
+   *   categories: ['18~29세', '30대', ...]
+   *   series: [{name, data:[...], color}]
+   *   unit: '%'
+   */
+  function renderVerticalGroup(containerId, data) {
+    const chart = ChartUtils.init(containerId);
+    const unit = data.unit || '%';
+    const categories = data.categories || [];
+    const series = data.series || [];
+
+    const option = {
+      ...ChartUtils.ANIMATION_DEFAULTS,
+      animationDelay: idx => idx * 80,
+
+      legend: {
+        data: series.map(s => s.name),
+        top: 0,
+        right: 40,
+        textStyle: {
+          ...ChartUtils.TEXT_STYLE,
+          fontSize: 24,
+          color: '#374151',
+          fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+        },
+        icon: 'roundRect',
+        itemWidth: 28,
+        itemHeight: 16,
+        itemGap: 32,
+      },
+
+      grid: { top: 60, right: 60, bottom: 80, left: 80 },
+
+      xAxis: {
+        type: 'category',
+        data: categories,
+        axisLine: { lineStyle: { color: '#d1d5db' } },
+        axisTick: { show: false },
+        axisLabel: {
+          ...ChartUtils.TEXT_STYLE,
+          color: '#111827',
+          fontSize: 30,
+          fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+          fontWeight: '600',
+          interval: 0,
+        },
+      },
+
+      yAxis: {
+        type: 'value',
+        min: 0,
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: {
+          ...ChartUtils.TEXT_STYLE,
+          fontSize: 20,
+          formatter: v => `${v}${unit}`,
+        },
+        splitLine: {
+          lineStyle: { color: '#e5e7eb', type: 'dashed' },
+        },
+      },
+
+      series: series.map(s => ({
+        name: s.name,
+        type: 'bar',
+        data: s.data.map(v => ({
+          value: v,
+          itemStyle: {
+            color: s.color || '#2563EB',
+            borderRadius: [8, 8, 0, 0],
+          },
+        })),
+        barMaxWidth: 90,
+        barGap: '15%',
+        label: {
+          show: true,
+          position: 'top',
+          ...ChartUtils.LABEL_STYLE,
+          color: '#111827',
+          fontSize: 28,
+          formatter: params => `${params.value}${unit}`,
+        },
+        emphasis: { disabled: true },
+      })),
+
+      tooltip: ChartUtils.tooltipOption(
+        params => `${params.seriesName}<br/>${params.name}: <b>${params.value}${unit}</b>`
+      ),
+    };
+
+    chart.setOption(option);
+    return chart;
+  }
+
+  return { renderHorizontal, renderVertical, renderVerticalGroup };
 })();
 
 window.BarChart = BarChart;
