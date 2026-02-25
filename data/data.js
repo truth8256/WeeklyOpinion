@@ -140,6 +140,48 @@ const PRESENTATION_CONFIG = {
         },
 
 
+        /* ─── 5. 조사 문항 및 보기 항목 (NBS vs MBC) ──── */
+        {
+            id: 'slide-05',
+            type: 'survey-detail',
+            data: {
+                title: '시계열 비교 — 조사 문항 및 보기 항목',
+                items: [
+                    {
+                        source: 'NBS 10월 (전국지표조사)',
+                        question: '정부가 발표한 10.15 부동산 대책이 향후 집값 안정에 효과가 있을 것이라고 생각하십니까?',
+                        options: ['매우 효과 있을 것', '다소 효과 있을 것', '별로 효과 없을 것', '전혀 효과 없을 것', '모름/무응답']
+                    },
+                    {
+                        source: 'MBC 2월 (설특집 조사)',
+                        question: '이재명 정부의 부동산 정책이 앞으로 주택 가격 안정이나 주거 부담 완화에 실질적인 효과가 있을 것이라고 보십니까?',
+                        options: ['매우 효과 있을 것', '다소 효과 있을 것', '별로 효과 없을 것', '전혀 효과 없을 것', '모름/무응답']
+                    }
+                ]
+            },
+        },
+
+        /* ─── 6. 시계열 세부 항목 비교 (NBS vs MBC) ──── */
+        {
+            id: 'slide-06',
+            type: 'cross-tab',
+            data: {
+                title: '시계열 비교 — 10월 37% ▷ 2월 52%',
+                subtitle: '',
+                unit: '%',
+                orientation: 'horizontal',
+                source: 'NBS(25.10월) vs MBC(26.2월)',
+                categories: ['NBS 10월', 'MBC 2월'],
+                series: [
+                    { name: '매우 효과', data: [7, 19], color: '#1D4ED8' },
+                    { name: '어느정도(다소) 효과', data: [30, 33], color: '#3B82F6' },
+                    { name: '별로 효과없음', data: [30, 24], color: '#D4D4D8' },
+                    { name: '전혀 효과없음', data: [22, 20], color: '#A1A1AA' },
+                    { name: '모름/무응답', data: [11, 5], color: '#E5E7EB' },
+                ],
+            },
+        },
+
         /* ─── 7-1. 석 달 만의 변화 (연령별 변화) ──────── 
            [슬라이드 기획]
            차트 종류: bar-v-group (두 항목씩 묶어서 보여주는 세로 막대 차트)
@@ -190,6 +232,25 @@ const PRESENTATION_CONFIG = {
                 title: '시장 심리 변화',
                 subtitle: '주택가격전망 소비자동향지수(CSI) 추이 — 3년 7개월 만에 최대폭 하락',
                 src: 'data/house_csi_2602.jpg'
+            },
+        },
+
+        /* ─── 9. 소득수준별 평가 ──────────────────────── */
+        {
+            id: 'slide-09',
+            type: 'cross-tab',
+            data: {
+                title: '소득수준별 부동산 정책 평가',
+                subtitle: '주관적 소득계층에 따른 긍·부정 평가 (단위: %)',
+                unit: '%',
+                orientation: 'horizontal',
+                source: 'SBS 설특집 조사 (26.2월)',
+                categories: ['상층', '중상층', '중간층', '중하층', '하층'],
+                series: [
+                    { name: '긍정 (잘하고 있다)', data: [38, 51, 51, 56, 51], color: '#2563EB' },
+                    { name: '부정 (잘못하고 있다)', data: [55, 41, 40, 35, 37], color: '#DC2626' },
+                    { name: '모름/무응답', data: [7, 8, 9, 9, 12], color: '#9CA3AF' },
+                ],
             },
         },
 
