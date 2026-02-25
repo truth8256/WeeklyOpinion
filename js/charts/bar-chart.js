@@ -158,9 +158,11 @@ const BarChart = (() => {
 
   /**
    * 세로 막대 그룹(묶음) 차트 (10월 vs 2월 비교용 등)
+   * @param {string} containerId
    * @param {Object} data 
    *   categories: ['서울', '18~29세', '30대']
-   *   series: [ { name: '10월', data: [36, 29, 33] }, { name: '2월', data: [46, 37, 42] } ]
+   *   series: [ { name: '10월', data: [36, 29, 33], color: '#...' }, { name: '2월', data: [46, 37, 42] } ]
+   *   unit: '%'
    */
   function renderVerticalGroup(containerId, data) {
     const chart = ChartUtils.init(containerId);
@@ -186,7 +188,7 @@ const BarChart = (() => {
           ...ChartUtils.LABEL_STYLE,
           color: '#111827',
           fontSize: 32,
-          formatter: params => `${params.value.toFixed(1)}${unit}`,
+          formatter: params => `${params.value.toFixed(0)}${unit}`,
           distance: 12
         },
         emphasis: { disabled: true },
@@ -203,13 +205,13 @@ const BarChart = (() => {
         backgroundColor: 'rgba(255, 255, 255, 0.95)',
         borderColor: '#d1d5db',
         borderWidth: 1,
-        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', sans-serif" },
+        textStyle: { color: '#111827', fontSize: 28, fontFamily: "'Pretendard Variable', sans-serif" },
         formatter: params => {
-          let html = `<div style="margin-bottom:8px;color:#6b7280">${params[0].axisValue}</div>`;
+          let html = `<div style="margin-bottom:8px;color:#6b7280;font-size:24px;">${params[0].axisValue}</div>`;
           params.forEach(p => {
-            html += `<div style="display:flex;justify-content:space-between;gap:24px">
+            html += `<div style="display:flex;justify-content:space-between;gap:24px;align-items:center;">
               <span>${p.marker}${p.seriesName}</span>
-              <b style="font-family:'Pretendard Variable', sans-serif">${p.value?.toFixed(1)}${unit}</b>
+              <b style="font-family:'Pretendard Variable', sans-serif;font-size:28px;">${p.value?.toFixed(1)}${unit}</b>
             </div>`;
           });
           return html;
@@ -220,10 +222,10 @@ const BarChart = (() => {
         top: 0,
         right: 80,
         icon: 'circle',
-        itemWidth: 12,
-        itemHeight: 12,
-        itemGap: 28,
-        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', sans-serif" },
+        itemWidth: 16,
+        itemHeight: 16,
+        itemGap: 32,
+        textStyle: { color: '#111827', fontSize: 28, fontFamily: "'Pretendard Variable', sans-serif", fontWeight: '600' },
       },
 
       grid: { top: 120, right: 80, bottom: 100, left: 80 },
@@ -237,16 +239,22 @@ const BarChart = (() => {
           ...ChartUtils.TEXT_STYLE,
           color: '#111827',
           fontSize: 32,
-          fontFamily: "'Pretendard Variable', sans-serif",
+          fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+          fontWeight: '600',
           interval: 0,
         },
       },
 
       yAxis: {
         type: 'value',
+        min: 0,
         axisLine: { show: false },
         axisTick: { show: false },
-        axisLabel: { ...ChartUtils.TEXT_STYLE, fontSize: 18 },
+        axisLabel: {
+          ...ChartUtils.TEXT_STYLE,
+          fontSize: 20,
+          formatter: v => `${v}${unit}`
+        },
         splitLine: {
           lineStyle: { color: '#e5e7eb', type: 'dashed' },
         },
