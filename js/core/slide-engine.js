@@ -168,6 +168,18 @@ const SlideEngine = (() => {
         </div>`;
     },
 
+    /* 5-2. bar-v-group ─────────────────────── */
+    'bar-v-group'(slide, idx) {
+      const d = slide.data;
+      const chartId = `chart-bar-v-group-${idx}`;
+      setTimeout(() => BarChart.renderVerticalGroup(chartId, d), 50);
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body">
+          <div id="${chartId}" style="width:100%;height:100%;min-height:600px;"></div>
+        </div>`;
+    },
+
     /* 6. donut ─────────────────────────────── */
     donut(slide, idx) {
       const d = slide.data;
@@ -177,6 +189,27 @@ const SlideEngine = (() => {
         ${_buildTitleBar(d)}
         <div class="slide-body">
           <div id="${chartId}" style="width:100%;height:100%;min-height:600px;"></div>
+        </div>`;
+    },
+
+    /* 6-2. donut-detail ────────────────────── */
+    'donut-detail'(slide, idx) {
+      const d = slide.data;
+      const chartId = `chart-donut-detail-${idx}`;
+      setTimeout(() => DonutChart.render(chartId, d), 50);
+
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body">
+          <div class="layout-sidebar">
+            <div id="${chartId}" style="width:100%;height:100%;min-height:600px;"></div>
+            <div class="card" style="display:flex; flex-direction:column; justify-content:center; gap:24px; padding: 60px;">
+              <div>
+                <h3 style="font-size:24px; color:var(--text-accent); margin-bottom:24px; font-weight:700;">조사 문항</h3>
+                <p style="font-size:44px; line-height:1.45; font-weight:700; word-break:keep-all; color:var(--text-primary);">${d.question || ''}</p>
+              </div>
+            </div>
+          </div>
         </div>`;
     },
 
@@ -274,19 +307,19 @@ const SlideEngine = (() => {
       const colCount = Math.min(rows.length, 4);
       const isMany = rows.length > 2;
       return `
-        <div class="slide-body" style="flex-direction:column;justify-content:center;align-items:center;gap:${isMany ? '20px' : '40px'};">
-          <h2 class="text-headline-1 anim-seq" style="text-align:center">${d.title || '조사 개요'}</h2>
-          <div style="display:grid;grid-template-columns:repeat(${colCount},1fr);gap:${isMany ? '12px' : '32px'};width:100%;max-width:1800px;padding:0 ${isMany ? '20px' : '80px'};">
+        <div class="slide-body" style="flex-direction:column;justify-content:center;align-items:center;gap:40px;">
+          <h2 class="text-headline-1 anim-seq" style="text-align:center; font-size: 60px; margin-bottom: 20px;">${d.title || '조사 개요'}</h2>
+          <div style="display:grid;grid-template-columns:repeat(${colCount},1fr);gap:32px;width:100%;max-width:1800px;padding:0 40px;">
             ${rows.map((row, i) => `
-              <div class="card-elevated anim-seq" style="animation-delay:${i * 100}ms;padding:${isMany ? '20px 24px' : '40px 48px'};display:flex;flex-direction:column;gap:${isMany ? '12px' : '16px'};">
-                ${row.title ? `<div class="text-headline-2" style="color:var(--text-accent);font-size:${isMany ? '22px' : 'var(--size-h2)'};word-break:keep-all;line-height:1.4;margin-bottom:8px;">${row.title}</div>` : ''}
-                ${row.org ? `<div class="text-body" style="font-size:${isMany ? '17px' : 'var(--size-body)'};word-break:keep-all;"><span style="color:var(--text-secondary)">조사기관  </span>${row.org}</div>` : ''}
-                ${row.period ? `<div class="text-body" style="font-size:${isMany ? '17px' : 'var(--size-body)'};word-break:keep-all;"><span style="color:var(--text-secondary)">조사기간  </span>${row.period}</div>` : ''}
-                ${row.method ? `<div class="text-body" style="font-size:${isMany ? '17px' : 'var(--size-body)'};word-break:keep-all;"><span style="color:var(--text-secondary)">조사방법  </span>${row.method}</div>` : ''}
-                ${row.n ? `<div class="text-body" style="font-size:${isMany ? '17px' : 'var(--size-body)'};word-break:keep-all;"><span style="color:var(--text-secondary)">표본수  </span>${Format.sampleSize(row.n)}</div>` : ''}
+              <div class="card-elevated anim-seq" style="animation-delay:${i * 100}ms;padding:48px 40px;display:flex;flex-direction:column;gap:20px;min-height:400px;justify-content:center;">
+                ${row.title ? `<div class="text-headline-2" style="color:var(--text-accent);font-size:32px;word-break:keep-all;line-height:1.4;margin-bottom:12px;font-weight:800;">${row.title}</div>` : ''}
+                ${row.org ? `<div class="text-body" style="font-size:24px;word-break:keep-all;line-height:1.6;"><span style="color:var(--text-secondary);font-weight:600;">조사기관  </span>${row.org}</div>` : ''}
+                ${row.period ? `<div class="text-body" style="font-size:24px;word-break:keep-all;line-height:1.6;"><span style="color:var(--text-secondary);font-weight:600;">조사기간  </span>${row.period}</div>` : ''}
+                ${row.method ? `<div class="text-body" style="font-size:24px;word-break:keep-all;line-height:1.6;"><span style="color:var(--text-secondary);font-weight:600;">조사방법  </span>${row.method}</div>` : ''}
+                ${row.n ? `<div class="text-body" style="font-size:24px;word-break:keep-all;line-height:1.6;"><span style="color:var(--text-secondary);font-weight:600;">표본수  </span>${Format.sampleSize(row.n)}</div>` : ''}
               </div>`).join('')}
           </div>
-          ${d.disclaimer ? `<p class="text-caption anim-seq" style="max-width:1400px;text-align:center;color:var(--text-muted);margin-top:${isMany ? '12px' : '0'};">${d.disclaimer}</p>` : ''}
+          ${d.disclaimer ? `<p class="text-caption anim-seq" style="max-width:1400px;text-align:center;color:var(--text-muted);font-size:20px;margin-top:20px;">${d.disclaimer}</p>` : ''}
         </div>`;
     },
 
@@ -315,6 +348,17 @@ const SlideEngine = (() => {
             </div>
           `).join('')}
         </div>`;
+    },
+
+    /* 13. image ───────────────────────────── */
+    image(slide) {
+      const d = slide.data;
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body" style="display:flex; justify-content:center; align-items:center; padding: 20px;">
+          <img src="${d.src}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px;">
+        </div>
+      `;
     },
   };
 

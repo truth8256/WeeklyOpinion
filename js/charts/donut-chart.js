@@ -22,7 +22,8 @@ const DonutChart = (() => {
 
     // 중앙 텍스트: 최대값 항목
     const topItem = [...items].sort((a, b) => b.value - a.value)[0];
-    const centerLabel = data.centerLabel || `${topItem.value.toFixed(1)}${unit}`;
+    const formattedValue = Number.isInteger(topItem.value) ? topItem.value : topItem.value.toFixed(1);
+    const centerLabel = data.centerLabel || `${formattedValue}${unit}`;
     const centerSub = data.centerSub || topItem.label;
 
     const seriesData = items.map((item, i) => ({
@@ -61,7 +62,8 @@ const DonutChart = (() => {
         },
         formatter: name => {
           const item = items.find(i => i.label === name);
-          return item ? `${name}  {value|${item.value.toFixed(1)}${unit}}` : name;
+          const val = item ? (Number.isInteger(item.value) ? item.value : item.value.toFixed(1)) : '';
+          return item ? `${name}  {value|${val}${unit}}` : name;
         },
       },
 
@@ -87,7 +89,7 @@ const DonutChart = (() => {
 
       series: [{
         type: 'pie',
-        radius: ['42%', '70%'],
+        radius: ['48%', '82%'],
         center: ['38%', '50%'],
         avoidLabelOverlap: true,
         padAngle: 2,

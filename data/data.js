@@ -60,145 +60,142 @@ const PRESENTATION_CONFIG = {
             },
         },
 
-        /* ─── 4. 세부 정책 (SBS) ───────────────── */
+        /* ─── 4a. 공급 대책 효과 (SBS) ───────────────── */
         {
-            id: 'slide-04',
-            type: 'cross-tab',
+            id: 'slide-04a',
+            type: 'donut-detail',
             data: {
-                title: '세부 항목별 평가', // label -> title
-                subtitle: '부동산 정책별 의견', // title + subtitle -> subtitle
+                title: '세부 정책 평가 — 공급 대책',
+                subtitle: '주택 공급 확대 방안에 대한 실질적 기대감',
                 unit: '%',
-                orientation: 'horizontal',
                 source: 'SBS | 2026.02.12~14 | n=1,000',
-                categories: ['부동산 정책 전반', '공급대책 효과 기대', '양도세 중과 효과 기대', '보유세 인상 동의\n(다주택·고가 1주택자)'],
-                series: [
-                    { name: '긍정/동의', data: [52, 57, 57, 76], color: '#2563EB' },
-                    { name: '부정/비동의', data: [39, 38, 38, 19], color: '#DC2626' },
+                question: '정부는 1.29 부동산 대책을 통해 수도권 약 6만 가구 공급 계획을 발표했습니다. 정부의 부동산 공급 대책에 대해 어떻게 생각하십니까?',
+                options: [
+                    '당장 집값 안정에 효과가 있을 것',
+                    '중장기적으로 효과가 있을 것',
+                    '별로 또는 전혀 효과가 없을 것',
+                    '모름/무응답'
                 ],
+                items: [
+                    { label: '당장 효과', value: 6, color: '#A5B4FC' },
+                    { label: '중장기 효과', value: 51, color: '#2563EB' },
+                    { label: '효과 없음', value: 38, color: '#DC2626' },
+                    { label: '모름/무응답', value: 5, color: '#9CA3AF' },
+                ],
+                centerLabel: '57%',
+                centerSub: '긍정 평가'
             },
         },
 
-        /* ─── 5. 연령대별 (SBS) ───────────────── */
+        /* ─── 4b. 양도세 중과 효과 (SBS) ───────────────── */
         {
-            id: 'slide-05',
-            type: 'cross-tab',
+            id: 'slide-04b',
+            type: 'donut-detail',
             data: {
-                title: '세대별 교차분석', // label -> title
-                subtitle: '연령대별 부동산 정책 평가 — 40·50대가 끌어올린 52%', // title + subtitle -> subtitle
+                title: '세부 정책 평가 — 양도세 중과',
+                subtitle: '다주택자 양도세 중과 부활에 따른 시장 안정 기대',
                 unit: '%',
-                orientation: 'horizontal',
                 source: 'SBS | 2026.02.12~14 | n=1,000',
-                categories: ['18~29세', '30대', '40대', '50대', '60대', '70세 이상'],
-                series: [
-                    { name: '긍정 평가', data: [28, 37, 67, 70, 56, 47], color: '#2563EB' },
-                    { name: '부정 평가', data: [52, 50, 28, 25, 40, 42], color: '#DC2626' },
+                question: '다주택자 양도세 중과 부활이 오는 5월 9일 이후 적용됩니다. 집값 안정에 효과가 있을 것이라고 생각하십니까?',
+                options: [
+                    '효과가 있을 것',
+                    '효과가 없을 것',
+                    '모름/무응답'
                 ],
+                items: [
+                    { label: '효과 있을 것', value: 57, color: '#2563EB' },
+                    { label: '효과 없을 것', value: 38, color: '#DC2626' },
+                    { label: '모름/무응답', value: 5, color: '#9CA3AF' },
+                ],
+                centerLabel: '57%',
+                centerSub: '효과 기대'
             },
         },
 
-        /* ─── 6. 지역별 (SBS) ─────────────────── */
+        /* ─── 4c. 보유세 인상 평가 (SBS) ───────────────── */
         {
-            id: 'slide-06',
-            type: 'cross-tab',
+            id: 'slide-04c',
+            type: 'donut-detail',
             data: {
-                title: '지역별 교차분석',
-                subtitle: '권역별 부동산 정책 평가 — 정작 수도권은 박빙',
+                title: '세부 정책 평가 — 보유세 인상',
+                subtitle: '주택 보유세 인상에 대한 동의 및 방식 선호도',
                 unit: '%',
-                orientation: 'horizontal',
                 source: 'SBS | 2026.02.12~14 | n=1,000',
-                categories: ['서울', '인천·경기', '대전·충청·세종', '광주·전라', '대구·경북', '부산·울산·경남', '강원·제주'],
-                series: [
-                    { name: '긍정 평가', data: [46, 49, 60, 77, 45, 48, 55], color: '#2563EB' },
-                    { name: '부정 평가', data: [45, 40, 34, 16, 46, 45, 28], color: '#DC2626' },
+                question: '부동산 대책의 하나로 거론되는 주택 보유세 인상에 대해 어떻게 생각하십니까?',
+                options: [
+                    '다주택자와 고가 1주택 보유자 모두 인상',
+                    '다주택자만 선별적으로 인상',
+                    '세금 인상 자체가 불필요함',
+                    '모름/무응답'
                 ],
+                items: [
+                    { label: '다주택+고가1주택', value: 29, color: '#A5B4FC' },
+                    { label: '다주택자만 인상', value: 47, color: '#2563EB' },
+                    { label: '인상 불필요', value: 19, color: '#DC2626' },
+                    { label: '모름/무응답', value: 5, color: '#9CA3AF' },
+                ],
+                centerLabel: '76%',
+                centerSub: '인상 동의'
             },
         },
 
-        /* ─── 7. 석 달 만의 변화 (NBS vs SBS) ──────── */
+
+        /* ─── 7-1. 석 달 만의 변화 (연령별 변화) ──────── 
+           [슬라이드 기획]
+           차트 종류: bar-v-group (두 항목씩 묶어서 보여주는 세로 막대 차트)
+           의도: 앞선 전체 긍정 상승에 이어서, 각 연령대별 10월 조사와 2월 조사의 긍정 평가 수치를 나란히 비교합니다.
+        */
         {
-            id: 'slide-07',
-            type: 'cross-tab',
+            id: 'slide-07a',
+            type: 'bar-v-group',
             data: {
-                title: '시계열 비교 (10월 vs 2월)',
-                subtitle: '부동산 정책 긍정 평가 변동 현황 — 석 달 만에 37% → 52%',
+                title: '시계열 비교 — 연령별 긍정 평가',
+                subtitle: '',
                 unit: '%',
-                orientation: 'horizontal',
-                source: 'NBS(10월) vs SBS(2월)',
-                categories: ['10월 1주차', '2월 2주차'],
+                source: 'NBS(10월) vs MBC(2월)',
+                categories: ['18~29세', '30대', '40대', '50대'],
                 series: [
-                    { name: '긍정 평가', data: [37, 52], color: '#2563EB' },
-                    { name: '부정 평가', data: [55, 39], color: '#DC2626' },
+                    { name: '10월 긍정평가(NBS)', data: [29, 33, 47, 46], color: '#9CA3AF' },
+                    { name: '2월 긍정평가(MBC)', data: [37, 42, 62, 59], color: '#2563EB' },
                 ],
             },
         },
 
-        /* ─── 8. 라인 차트 (갤럽, NBS 혼합 시계열) ─ */
+        /* ─── 7-2. 석 달 만의 변화 (지역별 변화) ───── 
+           [슬라이드 기획]
+           차트 종류: bar-v-group (두 항목씩 묶어서 보여주는 세로 막대 차트)
+           의도: 지역별(핵심 서울 지역 포함)의 변화를 분리해서 집중 조명합니다.
+        */
+        {
+            id: 'slide-07b',
+            type: 'bar-v-group',
+            data: {
+                title: '시계열 비교 — 주요 지역별 긍정 평가',
+                subtitle: '',
+                unit: '%',
+                source: 'NBS(10월) vs MBC(2월)',
+                categories: ['서울', '인천·경기', '대전·충청·세종', '부산·울산·경남'],
+                series: [
+                    { name: '10월 긍정평가(NBS)', data: [36, 32, 45, 38], color: '#9CA3AF' },
+                    { name: '2월 긍정평가(MBC)', data: [51, 51, 51, 51], color: '#2563EB' },
+                ],
+            },
+        },
+
+        /* ─── 8. 주택가격전망지수 (CSI) ─ */
         {
             id: 'slide-08',
-            type: 'line',
+            type: 'image',
             data: {
-                title: '기대 vs 현재 수행 평가', // label -> title
-                subtitle: '직무 수행평가 및 정책 효과 기대 비교', // title + subtitle -> subtitle
-                unit: '%',
-                source: '한국갤럽 / NBS / SBS',
-                yMin: 0,
-                yMax: 80,
-                categories: ['9월', '10월', '11월', '12월', '1월', '2월'],
-                series: [
-                    { name: '향후 집값 상승 전망 (갤럽)', data: [42, 45, 48, 55, 50, 52], color: '#9CA3AF' },
-                    { name: '대통령 국정 긍정평가 (NBS)', data: [25, 22, 27, 20, 24, 26], color: '#DC2626' },
-                ],
+                title: '시장 심리 변화',
+                subtitle: '주택가격전망 소비자동향지수(CSI) 추이 — 3년 7개월 만에 최대폭 하락',
+                src: 'data/house_csi_2602.jpg'
             },
         },
 
-        /* ─── 9. 멀티 차트 (비교) ───────────────── */
-        {
-            id: 'slide-09',
-            type: 'multi-compare',
-            data: {
-                title: '여론 vs 현실 지표',
-                subtitle: '주택 가격 및 임대료 동향과 전망 — 여론이 움직여도 집값은 아직',
-                left: {
-                    title: '지수 전망 (갤럽, 1월)',
-                    unit: '%',
-                    source: '한국갤럽 | 2026.01',
-                    items: [
-                        { label: '향후 1년 집값 상승', value: 48, color: '#2563EB' },
-                        { label: '향후 1년 집값 하락', value: 19, color: '#DC2626' },
-                        { label: '향후 1년 임대료 상승', value: 58, color: '#2563EB' },
-                        { label: '향후 1년 임대료 하락', value: 10, color: '#DC2626' },
-                    ],
-                },
-                right: {
-                    title: '주택 매매비 상승률 (1월)',
-                    unit: '%',
-                    source: '한국부동산원 | 2026.01',
-                    items: [
-                        { label: '세종', value: 0.97, color: '#DC2626' },
-                        { label: '서울', value: 0.91, color: '#DC2626' },
-                        { label: '경기', value: 0.36, color: '#DC2626' },
-                        { label: '전국 평균', value: 0.28, color: '#DC2626' },
-                        { label: '인천', value: 0.07, color: '#DC2626' },
-                    ],
-                },
-            },
-        },
-
-        /* ─── 10. 부동산 시장 선행 신호 ────────────── */
+        /* ─── 10. 조사 개요 ──────────────────────── */
         {
             id: 'slide-10',
-            type: 'keyword',
-            data: {
-                label: '부동산 시장 선행 신호',
-                keyword: '5월 다주택자 양도세 중과,\n시장이 먼저 움직이기 시작했다',
-                context: '① 조정대상지역 매물 +10% 이상 증가 (송파 +20%)\n② 강남 3구 거래량 -20% 감소 / 서울 -11%\n③ 수도권 매매가격 변동률 3개월 연속 둔화',
-                source: '국토부 / KB 2월 리뷰',
-            },
-        },
-
-        /* ─── 11. 조사 개요 ──────────────────────── */
-        {
-            id: 'slide-11',
             type: 'source',
             data: {
                 title: '조사 개요',
@@ -229,16 +226,7 @@ const PRESENTATION_CONFIG = {
                         method: '무선 전화면접',
                         margin: '±3.1%p',
                         note: '만 18세 이상',
-                    },
-                    {
-                        title: '한국갤럽 자체 정기 조사',
-                        org: '한국갤럽',
-                        period: '26년 1월/25년 12월/25년 10월',
-                        n: 1000,
-                        method: '무선 전화면접',
-                        margin: '±3.1%p',
-                        note: '만 18세 이상',
-                    },
+                    }
                 ],
                 disclaimer: '그 밖의 사항은 중앙선거여론조사심의위원회 홈페이지 참조',
             },
