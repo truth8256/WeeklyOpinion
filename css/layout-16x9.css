@@ -17,8 +17,9 @@
 /* JS에서 transform: scale() 적용 */
 .slide-container {
   position: relative;
-  width: 1920px;
-  height: 1080px;
+  width: 100%;
+max-width: 1920px;
+aspect-ratio: 16 / 9;
   transform-origin: top left;
   overflow: hidden;
   background: var(--slide-bg, var(--bg-primary));
@@ -28,8 +29,9 @@
 .slide {
   position: absolute;
   inset: 0;
-  width: 1920px;
-  height: 1080px;
+   width: 100%;
+max-width: 1920px;
+aspect-ratio: 16 / 9;
   display: flex;
   flex-direction: column;
   opacity: 0;
