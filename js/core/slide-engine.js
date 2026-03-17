@@ -170,9 +170,22 @@ const SlideEngine = (() => {
 
     /* 5-2. bar-v-group ─────────────────────── */
     'bar-v-group'(slide, idx) {
+
       const d = slide.data;
       const chartId = `chart-bar-v-group-${idx}`;
       setTimeout(() => BarChart.renderVerticalGroup(chartId, d), 50);
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body">
+          <div id="${chartId}" style="width:100%;height:100%;min-height:600px;"></div>
+        </div>`;
+    },
+
+    /* 5-3. bar-h-group ─────────────────────── */
+    'bar-h-group'(slide, idx) {
+      const d = slide.data;
+      const chartId = `chart-bar-h-group-${idx}`;
+      setTimeout(() => BarChart.renderHorizontalGroup(chartId, d), 50);
       return `
         ${_buildTitleBar(d)}
         <div class="slide-body">
@@ -359,6 +372,19 @@ const SlideEngine = (() => {
           <img src="${d.src}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px;">
         </div>
       `;
+    },
+
+    /* 14. sankey ────────────────────────────── */
+    sankey(slide, idx) {
+      const d = slide.data;
+      const chartId = `chart-sankey-${idx}`;
+      setTimeout(() => SankeyChart.render(chartId, d), 50);
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body">
+          <div id="${chartId}" style="width:100%;height:100%;min-height:600px;"></div>
+        </div>
+        ${d.source ? `<div class="text-caption" style="text-align:center;padding:4px 60px 16px;color:var(--text-muted)">${d.source}</div>` : ''}`;
     },
   };
 
