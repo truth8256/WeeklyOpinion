@@ -47,7 +47,7 @@ const SankeyChart = (() => {
         emphasis: { focus: 'adjacency' },
         nodeWidth: data.nodeWidth || 24,
         nodeGap: data.nodeGap || 14,
-        layoutIterations: 32,
+        layoutIterations: data.layoutIterations ?? 32,
         orient: data.orient || 'horizontal',
         left: data.left ?? '8%',
         right: data.right ?? '8%',
@@ -55,7 +55,7 @@ const SankeyChart = (() => {
         bottom: data.bottom ?? '8%',
         label: {
           fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
-          fontSize: 28,
+          fontSize: 34,
           fontWeight: '600',
           color: '#111827',
         },
@@ -67,7 +67,81 @@ const SankeyChart = (() => {
       }],
     };
 
+    if (data.columnLabels) {
+      const { left: lbl, right: rbl } = data.columnLabels;
+      const leftPct  = data.left  ?? '8%';
+      const rightPct = data.right ?? '8%';
+      option.graphic = [
+        lbl && {
+          type: 'text',
+          left: leftPct,
+          top: 0,
+          style: {
+            text: lbl,
+            fontSize: 30,
+            fontWeight: '700',
+            fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+            fill: '#6b7280',
+          },
+        },
+        rbl && {
+          type: 'text',
+          right: rightPct,
+          top: 0,
+          style: {
+            text: rbl,
+            fontSize: 30,
+            fontWeight: '700',
+            fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+            fill: '#6b7280',
+            textAlign: 'right',
+          },
+        },
+      ].filter(Boolean);
+    }
+
     chart.setOption(option);
+
+    if (data.flowAnnotation) {
+      const ann = data.flowAnnotation;
+      const delay = ann.delay ?? (option.animationDuration ?? 1000) + 3500;
+      setTimeout(() => {
+        const width  = chart.getWidth();
+        const height = chart.getHeight();
+        chart.setOption({
+          graphic: [
+            ...(option.graphic || []),
+            {
+              type: 'group',
+              x: Math.round(width  * (ann.x ?? 0.5)),
+              y: Math.round(height * (ann.y ?? 0.7)),
+              children: [
+                {
+                  type: 'rect',
+                  shape: { x: 0, y: 0, width: ann.boxWidth ?? 220, height: ann.boxHeight ?? 72, r: 8 },
+                  style: { fill: ann.bgColor ?? 'rgba(26,35,126,0.10)', stroke: ann.borderColor ?? '#1a237e', lineWidth: ann.borderColor === 'transparent' ? 0 : 2 },
+                },
+                {
+                  type: 'text',
+                  x: (ann.boxWidth ?? 220) / 2,
+                  y: (ann.boxHeight ?? 72) / 2,
+                  style: {
+                    text: ann.text,
+                    textAlign: 'center',
+                    textVerticalAlign: 'middle',
+                    fontSize: ann.fontSize ?? 28,
+                    fontWeight: '700',
+                    fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+                    fill: ann.color ?? '#1a237e',
+                  },
+                },
+              ],
+            },
+          ],
+        });
+      }, delay);
+    }
+
     return chart;
   }
 

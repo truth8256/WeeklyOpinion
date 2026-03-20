@@ -48,7 +48,7 @@ const BarChart = (() => {
         axisLabel: {
           ...ChartUtils.TEXT_STYLE,
           color: '#111827',
-          fontSize: 32,
+          fontSize: 38,
           fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
           fontWeight: '600',
           margin: 20,
@@ -167,6 +167,8 @@ const BarChart = (() => {
   function renderVerticalGroup(containerId, data) {
     const chart = ChartUtils.init(containerId);
     const unit = data.unit || '%';
+    const labelUnit = data.labelUnit ?? '';
+    const labelDecimals = data.labelDecimals ?? 1;
     const categories = data.categories || [];
     const seriesData = data.series || [];
 
@@ -188,7 +190,7 @@ const BarChart = (() => {
           ...ChartUtils.LABEL_STYLE,
           color: '#111827',
           fontSize: 32,
-          formatter: params => `${params.value.toFixed(0)}${unit}`,
+          formatter: params => `${params.value.toFixed(labelDecimals)}${labelUnit}`,
           distance: 12
         },
         emphasis: { disabled: true },
@@ -225,7 +227,7 @@ const BarChart = (() => {
         itemWidth: 16,
         itemHeight: 16,
         itemGap: 32,
-        textStyle: { color: '#111827', fontSize: 28, fontFamily: "'Pretendard Variable', sans-serif", fontWeight: '600' },
+        textStyle: { color: '#111827', fontSize: 34, fontFamily: "'Pretendard Variable', sans-serif", fontWeight: '600' },
       },
 
       grid: { top: 120, right: 80, bottom: 100, left: 80 },
@@ -300,7 +302,7 @@ const BarChart = (() => {
           position: 'right',
           fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
           fontWeight: '600',
-          fontSize: 28,
+          fontSize: 34,
           color: '#111827',
           formatter: params => `${params.value.toFixed(1)}${unit}`,
           distance: 8,
@@ -339,7 +341,7 @@ const BarChart = (() => {
         itemWidth: 16,
         itemHeight: 16,
         itemGap: 32,
-        textStyle: { color: '#111827', fontSize: 28, fontFamily: "'Pretendard Variable', sans-serif", fontWeight: '600' },
+        textStyle: { color: '#111827', fontSize: 34, fontFamily: "'Pretendard Variable', sans-serif", fontWeight: '600' },
       },
 
       grid: { top: 80, right: data.gridRight || 180, bottom: 40, left: data.gridLeft || 360 },
@@ -365,7 +367,7 @@ const BarChart = (() => {
         axisLabel: {
           fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
           color: '#111827',
-          fontSize: 28,
+          fontSize: 38,
           fontWeight: '600',
           margin: 20,
         },

@@ -90,7 +90,7 @@ const ChartUtils = (() => {
   const LABEL_STYLE = {
     fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
     fontWeight: '600',
-    fontSize: 32, // 차트 라벨 최소 32px
+    fontSize: 38, // 차트 라벨 최소 38px
   };
 
   const TITLE_STYLE = {

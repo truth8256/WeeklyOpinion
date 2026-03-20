@@ -15,10 +15,8 @@ const PRESENTATION_CONFIG = {
             id: 'slide-00',
             type: 'title',
             data: {
-                eyebrow: 'Weekly Opinion · 2026년 3월',
                 title: "'뉴 이재명'",
                 subtitle: "확장된 지지층의 실체와 전망",
-                date: "한겨레·한국정당학회·에스티아이 2025–2026 유권자 패널조사 (1~3차)",
             },
         },
 
@@ -73,25 +71,35 @@ const PRESENTATION_CONFIG = {
             },
         },
 
-        /* ─── 3. '뉴 이재명' 정의 — Sankey ─────── */
+        /* ─── 3. '뉴 이재명' 정의와 규모 — Sankey ─── */
         {
             id: 'slide-03',
             type: 'sankey',
             data: {
                 title: "'뉴 이재명' 정의와 규모",
-                subtitle: "대선 비지지층 → 국정 지지 전환 · 3차 기준 21.9% (5명 중 1명)",
+                subtitle: "대선 투표 → 국정평가 · 비지지층 중 27.4%가 국정 긍정 전환",
+                layoutIterations: 0,
+                columnLabels: { left: '1차 (2025.5)', right: '3차 (2026.1)' },
+                flowAnnotation: {
+                    text: "✔️ '뉴 이재명' 유권자 (21.9%)",
+                    x: 0.38, y: 0.80,
+                    boxWidth: 380, boxHeight: 68,
+                    borderColor: 'transparent',
+                },
                 nodes: [
-                    { name: '이재명\n대선 지지',    itemStyle: { color: '#0052A3' } },
-                    { name: '비이재명\n대선 지지',   itemStyle: { color: '#9CA3AF' } },
-                    { name: '올드이재명\n(국정 지지)', itemStyle: { color: '#0052A3' } },
-                    { name: '뉴이재명\n(국정 지지)',  itemStyle: { color: '#60A5FA' } },
-                    { name: '국정\n불지지',          itemStyle: { color: '#E5E7EB' } },
+                    { name: '이재명 지지',      itemStyle: { color: '#1a237e' } },
+                    { name: '이재명 지지 안함', itemStyle: { color: '#9e9e9e' } },
+                    { name: '국정운영 부정',    itemStyle: { color: '#c62828' }, label: { position: 'left' } },
+                    { name: '잘 모름',          itemStyle: { color: '#cfd8dc' }, label: { position: 'left' } },
+                    { name: '국정운영 긍정',    itemStyle: { color: '#1a237e' }, label: { position: 'left' } },
                 ],
                 links: [
-                    { source: '이재명\n대선 지지',  target: '올드이재명\n(국정 지지)', value: 982 },
-                    { source: '이재명\n대선 지지',  target: '국정\n불지지',            value: 14  },
-                    { source: '비이재명\n대선 지지', target: '뉴이재명\n(국정 지지)',  value: 275 },
-                    { source: '비이재명\n대선 지지', target: '국정\n불지지',            value: 749 },
+                    { source: '이재명 지지',      target: '국정운영 긍정', value: 982 },
+                    { source: '이재명 지지',      target: '국정운영 부정', value: 43  },
+                    { source: '이재명 지지',      target: '잘 모름',       value: 14  },
+                    { source: '이재명 지지 안함', target: '국정운영 긍정', value: 275 },
+                    { source: '이재명 지지 안함', target: '국정운영 부정', value: 629 },
+                    { source: '이재명 지지 안함', target: '잘 모름',       value: 78  },
                 ],
                 source: '에스티아이 유권자 패널조사 3차(2025.12), n=2,020',
             },
@@ -127,7 +135,7 @@ const PRESENTATION_CONFIG = {
                     { name: '국민의힘',  data: [24.8,  1.1], color: '#E61E2B' },
                     { name: '개혁신당',  data: [13.6,  0.4], color: '#F47920' },
                     { name: '조국혁신당', data: [ 4.0,  7.8], color: '#007AC3' },
-                    { name: '없음/모름', data: [20.3,  2.8], color: '#9CA3AF' },
+                    { name: '기타/없음/모름', data: [23.6,  5.3], color: '#9CA3AF' },
                 ],
                 unit: '%',
             },
@@ -207,48 +215,40 @@ const PRESENTATION_CONFIG = {
             data: {
                 title: "지지정당 이동 흐름",
                 subtitle: "1차→3차 · 조국혁신·개혁·무당층에서 민주당으로 유입",
+                layoutIterations: 0,
+                columnLabels: { left: '1차 (2025.5)', right: '3차 (2026.1)' },
                 nodes: [
-                    /* 1차 */
-                    { name: '더불어민주당 (1차)', itemStyle: { color: '#0052A3' } },
-                    { name: '국민의힘 (1차)',     itemStyle: { color: '#E61E2B' } },
-                    { name: '개혁신당 (1차)',     itemStyle: { color: '#F47920' } },
-                    { name: '조국혁신당 (1차)',   itemStyle: { color: '#007AC3' } },
-                    { name: '없다 (1차)',         itemStyle: { color: '#6B7280' } },
-                    { name: '그 외 정당 (1차)',   itemStyle: { color: '#9CA3AF' } },
-                    { name: '잘 모르겠다 (1차)',  itemStyle: { color: '#B0B8C3' } },
-                    /* 3차 */
-                    { name: '더불어민주당 (3차)', itemStyle: { color: '#0052A3' } },
-                    { name: '국민의힘 (3차)',     itemStyle: { color: '#E61E2B' } },
-                    { name: '개혁신당 (3차)',     itemStyle: { color: '#F47920' } },
-                    { name: '조국혁신당 (3차)',   itemStyle: { color: '#007AC3' } },
-                    { name: '없다 (3차)',         itemStyle: { color: '#6B7280' } },
-                    { name: '그 외 정당 (3차)',   itemStyle: { color: '#9CA3AF' } },
-                    { name: '잘 모르겠다 (3차)',  itemStyle: { color: '#B0B8C3' } },
+                    /* 1차 (왼쪽) */
+                    { name: '더불어민주당',   itemStyle: { color: '#0052A3' } },
+                    { name: '국민의힘',       itemStyle: { color: '#E61E2B' } },
+                    { name: '조국혁신당',     itemStyle: { color: '#007AC3' } },
+                    { name: '개혁신당',       itemStyle: { color: '#F47920' } },
+                    { name: '기타/없음/모름', itemStyle: { color: '#9CA3AF' } },
+                    /* 3차 (오른쪽) — 내부명에 (3차) 유지, 표시는 formatter로 제거 */
+                    { name: '더불어민주당 (3차)', itemStyle: { color: '#0052A3' }, label: { position: 'left', formatter: '더불어민주당' } },
+                    { name: '국민의힘 (3차)',     itemStyle: { color: '#E61E2B' }, label: { position: 'left', formatter: '국민의힘' } },
+                    { name: '조국혁신당 (3차)',   itemStyle: { color: '#007AC3' }, label: { position: 'left', formatter: '조국혁신당' } },
+                    { name: '개혁신당 (3차)',     itemStyle: { color: '#F47920' }, label: { position: 'left', formatter: '개혁신당' } },
+                    { name: '기타/없음/모름 (3차)', itemStyle: { color: '#9CA3AF' }, label: { position: 'left', formatter: '기타/모름/없음' } },
                 ],
                 links: [
-                    { source: '더불어민주당 (1차)', target: '더불어민주당 (3차)', value: 856 },
-                    { source: '국민의힘 (1차)',     target: '국민의힘 (3차)',     value: 448 },
-                    { source: '개혁신당 (1차)',     target: '개혁신당 (3차)',     value: 69  },
-                    { source: '조국혁신당 (1차)',   target: '더불어민주당 (3차)', value: 68  },
-                    { source: '없다 (1차)',         target: '없다 (3차)',         value: 62  },
-                    { source: '조국혁신당 (1차)',   target: '조국혁신당 (3차)',   value: 48  },
-                    { source: '국민의힘 (1차)',     target: '없다 (3차)',         value: 47  },
-                    { source: '그 외 정당 (1차)',   target: '그 외 정당 (3차)',   value: 37  },
-                    { source: '국민의힘 (1차)',     target: '개혁신당 (3차)',     value: 34  },
-                    { source: '더불어민주당 (1차)', target: '조국혁신당 (3차)',   value: 33  },
-                    { source: '없다 (1차)',         target: '국민의힘 (3차)',     value: 29  },
-                    { source: '없다 (1차)',         target: '더불어민주당 (3차)', value: 25  },
-                    { source: '더불어민주당 (1차)', target: '없다 (3차)',         value: 23  },
-                    { source: '국민의힘 (1차)',     target: '더불어민주당 (3차)', value: 20  },
-                    { source: '개혁신당 (1차)',     target: '더불어민주당 (3차)', value: 18  },
-                    { source: '더불어민주당 (1차)', target: '국민의힘 (3차)',     value: 16  },
-                    { source: '잘 모르겠다 (1차)',  target: '없다 (3차)',         value: 15  },
-                    { source: '그 외 정당 (1차)',   target: '국민의힘 (3차)',     value: 14  },
-                    { source: '개혁신당 (1차)',     target: '국민의힘 (3차)',     value: 13  },
-                    { source: '국민의힘 (1차)',     target: '잘 모르겠다 (3차)',  value: 11  },
-                    { source: '잘 모르겠다 (1차)',  target: '국민의힘 (3차)',     value: 10  },
-                    { source: '잘 모르겠다 (1차)',  target: '잘 모르겠다 (3차)',  value: 10  },
-                    { source: '개혁신당 (1차)',     target: '없다 (3차)',         value: 10  },
+                    { source: '더불어민주당',   target: '더불어민주당 (3차)', value: 856 },
+                    { source: '더불어민주당',   target: '조국혁신당 (3차)',   value: 33  },
+                    { source: '더불어민주당',   target: '기타/없음/모름 (3차)', value: 23 },
+                    { source: '더불어민주당',   target: '국민의힘 (3차)',     value: 16  },
+                    { source: '국민의힘',       target: '국민의힘 (3차)',     value: 448 },
+                    { source: '국민의힘',       target: '기타/없음/모름 (3차)', value: 58 },
+                    { source: '국민의힘',       target: '개혁신당 (3차)',     value: 34  },
+                    { source: '국민의힘',       target: '더불어민주당 (3차)', value: 20  },
+                    { source: '조국혁신당',     target: '더불어민주당 (3차)', value: 68  },
+                    { source: '조국혁신당',     target: '조국혁신당 (3차)',   value: 48  },
+                    { source: '개혁신당',       target: '개혁신당 (3차)',     value: 69  },
+                    { source: '개혁신당',       target: '더불어민주당 (3차)', value: 18  },
+                    { source: '개혁신당',       target: '국민의힘 (3차)',     value: 13  },
+                    { source: '개혁신당',       target: '기타/없음/모름 (3차)', value: 10 },
+                    { source: '기타/없음/모름', target: '기타/없음/모름 (3차)', value: 124 },
+                    { source: '기타/없음/모름', target: '국민의힘 (3차)',     value: 53  },
+                    { source: '기타/없음/모름', target: '더불어민주당 (3차)', value: 25  },
                 ],
                 source: '에스티아이 유권자 패널조사 1차(2025.5) / 3차(2025.12), n=2,020',
             },
@@ -257,7 +257,7 @@ const PRESENTATION_CONFIG = {
         /* ─── 10. 정부가 잘한 분야 ──────────────── */
         {
             id: 'slide-10',
-            type: 'bar-h-group',
+            type: 'bar-v-group',
             data: {
                 title: "정부가 잘한 분야",
                 subtitle: "뉴: 외교·안보 65% · 내란극복 26% / 올드: 외교·안보 86% · 내란극복 33%",
@@ -282,7 +282,7 @@ const PRESENTATION_CONFIG = {
         /* ─── 11. 2년차 최우선 과제 ──────────────── */
         {
             id: 'slide-11',
-            type: 'bar-h-group',
+            type: 'bar-v-group',
             data: {
                 title: "2년차 최우선 과제",
                 subtitle: "뉴: 민생경제 53% · 내란극복 7% / 올드: 내란극복 30%",
@@ -307,7 +307,7 @@ const PRESENTATION_CONFIG = {
         /* ─── 12. 일 잘한다는 장관 ──────────────── */
         {
             id: 'slide-12',
-            type: 'bar-h-group',
+            type: 'bar-v-group',
             data: {
                 title: "잘하는 장관 평가",
                 subtitle: "뉴: 김정관>정은경>구윤철>조현 / 올드: 김정관>조현>정은경>구윤철",
@@ -334,14 +334,13 @@ const PRESENTATION_CONFIG = {
                 ],
                 unit: '%',
                 maxValue: 35,
-                gridLeft: 440,
             },
         },
 
         /* ─── 13. 기관 신뢰도 ────────────────────── */
         {
             id: 'slide-13',
-            type: 'bar-h-group',
+            type: 'bar-v-group',
             data: {
                 title: "기관 신뢰도",
                 subtitle: "법원·검찰만 뉴(5.4·4.3)가 올드(3.4·2.4)보다 높아 — 10점 만점",

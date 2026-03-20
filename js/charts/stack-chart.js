@@ -101,7 +101,7 @@ const StackChart = (() => {
         itemWidth: 12,
         itemHeight: 12,
         itemGap: 28,
-        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
+        textStyle: { color: '#111827', fontSize: 38, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
       },
 
       grid: isHorizontal

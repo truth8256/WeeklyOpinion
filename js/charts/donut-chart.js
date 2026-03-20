@@ -49,12 +49,12 @@ const DonutChart = (() => {
         itemGap: 24,
         textStyle: {
           color: '#111827',
-          fontSize: 32,
+          fontSize: 38,
           fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
           rich: {
             value: {
               color: '#6b7280',
-              fontSize: 32,
+              fontSize: 38,
               fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
               padding: [0, 0, 0, 12],
             },
@@ -82,7 +82,7 @@ const DonutChart = (() => {
         },
         subtextStyle: {
           color: '#6b7280',
-          fontSize: 32,
+          fontSize: 38,
           fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
         },
       },

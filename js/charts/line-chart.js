@@ -74,7 +74,7 @@ const LineChart = (() => {
         itemWidth: 12,
         itemHeight: 12,
         itemGap: 32,
-        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
+        textStyle: { color: '#111827', fontSize: 38, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
       },
 
       grid: { top: 120, right: 80, bottom: 60, left: 100 },

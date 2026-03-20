@@ -111,9 +111,9 @@ const SlideEngine = (() => {
       return `
         <div class="slide-body" style="flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:32px;padding:100px 120px;">
           ${d.eyebrow ? `<div class="text-headline-3 anim-seq" data-anim="animate-in" style="font-size:32px;color:var(--text-accent);margin-bottom:-16px">${d.eyebrow}</div>` : ''}
-          <h1 class="text-display-1 anim-seq" data-anim="animate-in" style="margin-top:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;">
-            <span>${d.title}</span>
-            ${d.subtitle ? `<span style="font-size:0.5em; font-weight:500; color:var(--text-secondary); line-height:1.4; word-break:keep-all;">${d.subtitle}</span>` : ''}
+          <h1 class="text-display-1 anim-seq" data-anim="animate-in" style="font-size:120px; margin-top:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;">
+            <span style="color:var(--text-accent)">${d.title}</span>
+            ${d.subtitle ? `<span style="font-size:0.6em; font-weight:500; color:var(--text-secondary); line-height:1.4; word-break:keep-all;">${d.subtitle}</span>` : ''}
           </h1>
           ${d.date ? `<div class="text-caption anim-seq" data-anim="animate-in" style="margin-top:16px">${d.date}</div>` : ''}
         </div>`;
