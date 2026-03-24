@@ -56,7 +56,7 @@ const LineChart = (() => {
           const rows = params.map(p =>
             `<div style="display:flex;justify-content:space-between;gap:24px">
               <span>${p.marker}${p.seriesName}</span>
-              <b style="font-family:'Pretendard Variable', sans-serif">${p.value !== null ? p.value.toFixed(1) + unit : '–'}</b>
+              <b style="font-family:'Pretendard Variable', sans-serif">${p.value != null ? Number(p.value).toFixed(1) + unit : '–'}</b>
             </div>`
           ).join('');
           return header + rows;

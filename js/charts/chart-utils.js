@@ -73,6 +73,7 @@ const ChartUtils = (() => {
     charts.forEach(el => {
       if (registry.has(el)) {
         const chart = registry.get(el);
+        chart.resize(); // 슬라이드 활성화 시 캔버스 크기 갱신 (tooltip 히트 영역 복구)
         const option = chart.getOption();
         chart.clear(); // 데이터 지우고 강제 초기화
         chart.setOption(option); // 속성 재주입을 통한 애니메이션 트리거

@@ -287,7 +287,31 @@ const SlideEngine = (() => {
         </div>`;
     },
 
-    /* 10. multi-compare ────────────────────── */
+    /* 10. dual-cross-tab ───────────────────── */
+    'dual-cross-tab'(slide, idx) {
+      const d = slide.data;
+      const idL = `chart-dct-l-${idx}`;
+      const idR = `chart-dct-r-${idx}`;
+      setTimeout(() => {
+        StackChart.render(idL, d.left);
+        StackChart.render(idR, d.right);
+      }, 50);
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body" style="gap:2px; padding-top:16px;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+            <div class="text-headline-3" style="color:var(--text-accent); text-align:center; padding:0 20px; font-size:30px;">${d.left.title}</div>
+            <div id="${idL}" style="flex:1; min-height:500px;"></div>
+          </div>
+          <div class="divider-v" style="margin:40px 0;"></div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+            <div class="text-headline-3" style="color:var(--text-accent); text-align:center; padding:0 20px; font-size:30px;">${d.right.title}</div>
+            <div id="${idR}" style="flex:1; min-height:500px;"></div>
+          </div>
+        </div>`;
+    },
+
+    /* 11. multi-compare ────────────────────── */
     'multi-compare'(slide, idx) {
       const d = slide.data;
       const idA = `chart-compare-a-${idx}`;
@@ -363,7 +387,72 @@ const SlideEngine = (() => {
         </div>`;
     },
 
-    /* 13. image ───────────────────────────── */
+    /* 13. panel-overview ───────────────────── */
+    'panel-overview'(slide) {
+      const d = slide.data;
+      const features = d.features || [];
+      const headers = d.headers || [];
+      const rows = d.rows || [];
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body" style="flex-direction:column; gap:20px; padding:16px 60px 12px; align-items:center; overflow:hidden;">
+          <div style="width:100%; max-width:1200px; display:flex; flex-direction:column; gap:20px; flex:1; min-height:0;">
+            <div class="card-elevated anim-seq" style="padding:28px 36px; display:flex; flex-direction:column; gap:12px; flex:0 0 auto;">
+              <div style="background:var(--text-accent); color:white; padding:4px 18px; border-radius:6px; font-size:24px; font-weight:700; width:fit-content; margin-bottom:4px;">개요</div>
+              ${(d.meta || []).map(m => `
+                <div style="display:flex; gap:16px; font-size:24px; line-height:1.5;">
+                  <span style="color:var(--text-secondary); font-weight:700; white-space:nowrap; min-width:100px;">${m.label}</span>
+                  <span style="color:var(--text-primary);">${m.value}</span>
+                </div>`).join('')}
+            </div>
+            <div class="anim-seq card-elevated" style="overflow:hidden; animation-delay:160ms; flex:1; min-height:0; display:flex; flex-direction:column;">
+              <table style="width:100%; border-collapse:collapse; font-size:24px;">
+                <thead>
+                  <tr style="background:var(--text-accent); color:white;">
+                    ${headers.map(h => `<th style="padding:12px 16px; font-weight:700; text-align:center; white-space:nowrap;">${h}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows.map((row, i) => `
+                    <tr style="background:${i % 2 === 0 ? 'var(--bg-primary)' : 'var(--bg-secondary)'}; ${row.dim ? 'opacity:0.45;' : ''}">
+                      ${row.cells.map(c => `<td style="padding:11px 16px; text-align:center; border-bottom:1px solid var(--border-default);">${c}</td>`).join('')}
+                    </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+            ${d.disclaimer ? `<p class="text-caption anim-seq" style="text-align:right; color:var(--text-muted); font-size:19px; padding:0 4px; margin-top:-8px;">${d.disclaimer}</p>` : ''}
+          </div>
+        </div>`;
+    },
+
+    /* 15. two-box ──────────────────────────── */
+    'two-box'(slide) {
+      const d = slide.data;
+      const boxes = d.boxes || [];
+      return `
+        ${_buildTitleBar(d)}
+        <div class="slide-body" style="flex-direction:column; gap:24px; padding:36px 80px 48px; align-items:center; justify-content:flex-start; overflow:hidden;">
+          <div style="width:100%; max-width:1600px; display:flex; flex-direction:row; gap:24px; height:540px;">
+            ${boxes.map((box, i) => `
+              <div class="card-elevated anim-seq" style="flex:1; display:flex; flex-direction:column; animation-delay:${i * 150}ms; overflow:hidden;">
+                <div style="background:var(--text-accent); color:white; padding:16px 32px; font-size:38px; font-weight:700; letter-spacing:-0.3px; flex-shrink:0;">
+                  ${box.heading}
+                </div>
+                <div style="padding:28px 32px; display:flex; flex-direction:column; justify-content:space-around; flex:1;">
+                  ${(box.bullets || []).map(b => `
+                    <div style="display:flex; gap:16px; align-items:flex-start; font-size:34px; line-height:1.5; word-break:keep-all; min-height:96px;">
+                      <span style="color:${b.color || 'var(--text-accent)'}; font-weight:800; flex-shrink:0; padding-top:2px;">${b.name}</span>
+                      <span style="color:var(--text-secondary);">${b.text}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+    },
+
+    /* 14. image ───────────────────────────── */
     image(slide) {
       const d = slide.data;
       return `
