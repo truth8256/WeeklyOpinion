@@ -279,9 +279,11 @@ const PRESENTATION_CONFIG = {
                         color: '#0052A3',
                     },
                     {
-                        name: '올드이재명 민주당 지지율 (참고)',
+                        name: '올드이재명 민주당 지지율 (3차 기준)',
                         data: [85.5, 85.5, 85.5],
-                        color: '#D1D5DB',
+                        color: '#9CA3AF',
+                        lineType: 'dashed',
+                        labelIndices: [2],
                     },
                 ],
                 unit: '%',

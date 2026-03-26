@@ -21,20 +21,36 @@ const LineChart = (() => {
     const validSeries = ChartUtils.validateData(data.series || [], 5);
     const seriesList = validSeries.map((s, i) => {
       const color = s.color || ColorMap.get(s.name, i);
+      const isDashed = s.lineType === 'dashed';
       return {
         name: s.name,
         type: 'line',
         smooth: false,
         symbol: 'circle',
         symbolSize: 10,
-        lineStyle: { color, width: 4 },
+        lineStyle: { color, width: isDashed ? 3 : 4, type: isDashed ? 'dashed' : 'solid' },
         itemStyle: { color },
+        label: {
+          show: true,
+          position: 'top',
+          color: '#111827',
+          fontSize: 32,
+          fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
+          fontWeight: '600',
+          formatter: params => params.value != null ? `${params.value}${unit}` : '',
+          distance: 10,
+        },
+        data: s.labelIndices
+          ? s.data.map((v, idx) => ({
+              value: v,
+              label: { show: s.labelIndices.includes(idx) },
+            }))
+          : s.data,
         emphasis: {
           focus: 'series',
-          lineStyle: { width: 5 },
+          lineStyle: { width: isDashed ? 3 : 5 },
           symbolSize: 14,
         },
-        data: s.data,
         connectNulls: false,
       };
     });
