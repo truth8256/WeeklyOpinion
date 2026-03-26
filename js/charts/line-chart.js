@@ -31,7 +31,7 @@ const LineChart = (() => {
         lineStyle: { color, width: isDashed ? 3 : 4, type: isDashed ? 'dashed' : 'solid' },
         itemStyle: { color },
         label: {
-          show: true,
+          show: data.showLabel !== false,
           position: 'top',
           color: '#111827',
           fontSize: 32,
