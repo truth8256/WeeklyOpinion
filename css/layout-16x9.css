@@ -82,12 +82,7 @@
 }
 
 .slide-title-bar::before {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 5px;
-  background: var(--header-accent, var(--accent-blue));
-  border-radius: 3px;
+  display: none;
 }
 
 /* ── 배지 (슬라이드 번호, 카테고리) ── */

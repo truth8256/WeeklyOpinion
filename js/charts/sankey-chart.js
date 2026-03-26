@@ -23,15 +23,7 @@ const SankeyChart = (() => {
       animationEasing: 'cubicOut',
 
       tooltip: {
-        trigger: 'item',
-        backgroundColor: 'rgba(255,255,255,0.95)',
-        borderColor: '#d1d5db',
-        borderWidth: 1,
-        textStyle: {
-          color: '#111827',
-          fontSize: 28,
-          fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif",
-        },
+        show: false,
         formatter: params => {
           if (params.dataType === 'edge') {
             return `${params.data.source} → ${params.data.target}<br><b>${params.data.value.toLocaleString()}</b>`;

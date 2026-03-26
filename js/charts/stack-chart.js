@@ -75,24 +75,7 @@ const StackChart = (() => {
     const option = {
       animation: false, // 사용자 요청에 따라 막대/라인 외 차트는 애니메이션 제거
 
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' },
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderColor: '#d1d5db',
-        borderWidth: 1,
-        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
-        formatter: params => {
-          const header = `<div style="margin-bottom:8px;color:#6b7280">${params[0].axisValue}</div>`;
-          const rows = params.map(p =>
-            `<div style="display:flex;justify-content:space-between;gap:24px">
-              <span>${p.marker}${p.seriesName}</span>
-              <b style="font-family:'Pretendard Variable', sans-serif">${p.value?.toFixed(1)}${unit}</b>
-            </div>`
-          ).join('');
-          return header + rows;
-        },
-      },
+      tooltip: { show: false },
 
       legend: {
         top: 0,

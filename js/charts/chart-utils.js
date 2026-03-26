@@ -107,15 +107,8 @@ const ChartUtils = (() => {
   }
 
   /* ── 공통 툴팁 ── */
-  function tooltipOption(formatter) {
-    return {
-      trigger: 'item',
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      borderColor: '#d1d5db',
-      borderWidth: 1,
-      textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
-      formatter,
-    };
+  function tooltipOption() {
+    return { show: false };
   }
 
   /* ── 애니메이션 (점잖고 매끄러운 모션) ── */

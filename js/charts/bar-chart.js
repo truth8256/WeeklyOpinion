@@ -201,24 +201,7 @@ const BarChart = (() => {
       ...ChartUtils.ANIMATION_DEFAULTS,
       animationDelay: idx => idx * 100,
 
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' },
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderColor: '#d1d5db',
-        borderWidth: 1,
-        textStyle: { color: '#111827', fontSize: 28, fontFamily: "'Pretendard Variable', sans-serif" },
-        formatter: params => {
-          let html = `<div style="margin-bottom:8px;color:#6b7280;font-size:24px;">${params[0].axisValue}</div>`;
-          params.forEach(p => {
-            html += `<div style="display:flex;justify-content:space-between;gap:24px;align-items:center;">
-              <span>${p.marker}${p.seriesName}</span>
-              <b style="font-family:'Pretendard Variable', sans-serif;font-size:28px;">${p.value?.toFixed(1)}${unit}</b>
-            </div>`;
-          });
-          return html;
-        }
-      },
+      tooltip: { show: false },
 
       legend: {
         top: 0,
@@ -315,24 +298,7 @@ const BarChart = (() => {
       ...ChartUtils.ANIMATION_DEFAULTS,
       animationDelay: idx => idx * 80,
 
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' },
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderColor: '#d1d5db',
-        borderWidth: 1,
-        textStyle: { color: '#111827', fontSize: 28, fontFamily: "'Pretendard Variable', sans-serif" },
-        formatter: params => {
-          let html = `<div style="margin-bottom:8px;color:#6b7280;font-size:24px;">${params[0].axisValue}</div>`;
-          params.forEach(p => {
-            html += `<div style="display:flex;justify-content:space-between;gap:24px;align-items:center;">
-              <span>${p.marker}${p.seriesName}</span>
-              <b style="font-family:'Pretendard Variable', sans-serif;font-size:28px;">${p.value?.toFixed(1)}${unit}</b>
-            </div>`;
-          });
-          return html;
-        },
-      },
+      tooltip: { show: false },
 
       legend: {
         top: 0,

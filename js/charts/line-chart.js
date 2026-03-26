@@ -46,25 +46,7 @@ const LineChart = (() => {
       animationDelay: idx => idx * 200, // 데이터 포인트별 등장 간격 소폭 축소
 
       tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        borderColor: '#d1d5db',
-        borderWidth: 1,
-        textStyle: { color: '#111827', fontSize: 32, fontFamily: "'Pretendard Variable', 'Pretendard', sans-serif" },
-        formatter: params => {
-          const header = `<div style="margin-bottom:8px;color:#6b7280">${params[0].axisValue}</div>`;
-          const rows = params.map(p =>
-            `<div style="display:flex;justify-content:space-between;gap:24px">
-              <span>${p.marker}${p.seriesName}</span>
-              <b style="font-family:'Pretendard Variable', sans-serif">${p.value != null ? Number(p.value).toFixed(1) + unit : '–'}</b>
-            </div>`
-          ).join('');
-          return header + rows;
-        },
-        axisPointer: {
-          type: 'line',
-          lineStyle: { color: 'rgba(37,99,235,0.4)', type: 'dashed', width: 1 },
-        },
+        show: false,
       },
 
       legend: {
